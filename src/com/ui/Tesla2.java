@@ -106,7 +106,7 @@ public class Tesla2 extends JFrame {
 						}
 						if (jComboColNames != null) {
 							contentPane.remove(jComboColNames);
-							jComboColNames = null;
+							jComboColNames = null; 
 						}
 						jComboColNames = new JComboBox(colNames);
 						jComboColNames.setBounds(148, 69, 110, 20);
