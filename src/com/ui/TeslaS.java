@@ -117,7 +117,7 @@ public class TeslaS extends JFrame {
 				 * textUrl.getText(), textDbName.getText(),
 				 * textUserName.getText(), textPassword.getText());
 				 */
-				tableNames = Controller.getTables("testschema", "", "", "root",
+				tableNames = Controller.getTables("test", "", "", "root",
 						"Welcome123");
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;

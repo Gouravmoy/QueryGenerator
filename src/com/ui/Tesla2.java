@@ -37,13 +37,13 @@ public class Tesla2 extends JFrame {
 	private int yBound;
 
 	/*
-	 * String[] columnNames = { "First Name", "Last Name", "Sport",
-	 * "# of Years", "Vegetarian" }; Object[][] data = { { "Kathy", "Smith",
-	 * "Snowboarding", new Integer(5), new Boolean(false) }, { "John", "Doe",
-	 * "Rowing", new Integer(3), new Boolean(true) }, { "Sue", "Black",
-	 * "Knitting", new Integer(2), new Boolean(false) }, { "Jane", "White",
-	 * "Speed reading", new Integer(20), new Boolean(true) }, { "Joe", "Brown",
-	 * "Pool", new Integer(10), new Boolean(false) } };
+	 * String[] columnNames = { "First Name", "Last Name", "Sport", "# of Years"
+	 * , "Vegetarian" }; Object[][] data = { { "Kathy", "Smith", "Snowboarding",
+	 * new Integer(5), new Boolean(false) }, { "John", "Doe", "Rowing", new
+	 * Integer(3), new Boolean(true) }, { "Sue", "Black", "Knitting", new
+	 * Integer(2), new Boolean(false) }, { "Jane", "White", "Speed reading", new
+	 * Integer(20), new Boolean(true) }, { "Joe", "Brown", "Pool", new
+	 * Integer(10), new Boolean(false) } };
 	 */
 
 	/**
@@ -95,22 +95,24 @@ public class Tesla2 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				JComboBox comboBox = (JComboBox) event.getSource();
-				String selectedTableName = comboBox.getSelectedItem()
-						.toString();
+				String selectedTableName = comboBox.getSelectedItem().toString();
 				for (Tables table : tables) {
-					if (table.getTableName()
-							.equalsIgnoreCase(selectedTableName)) {
+					if (table.getTableName().equalsIgnoreCase(selectedTableName)) {
 						List<Column> columns = table.getColumnList();
 						int j = 0;
 						colNames = new String[columns.size()];
 						for (Column column : columns) {
 							colNames[j++] = column.getColName();
 						}
+						if (jComboColNames != null) {
+							contentPane.remove(jComboColNames);
+							jComboColNames = null;
+						}
 						jComboColNames = new JComboBox(colNames);
 						jComboColNames.setBounds(148, 69, 110, 20);
-						jComboColNames.setMaximumSize(jComboColNames
-								.getPreferredSize());
+						jComboColNames.setMaximumSize(jComboColNames.getPreferredSize());
 						contentPane.add(jComboColNames);
+						contentPane.repaint();
 					}
 				}
 			}
@@ -155,8 +157,7 @@ public class Tesla2 extends JFrame {
 					jComboColNames = new JComboBox(colNames);
 
 					jComboColNames.setBounds(148, yBound, 110, 20);
-					jComboColNames.setMaximumSize(jComboColNames
-							.getPreferredSize());
+					jComboColNames.setMaximumSize(jComboColNames.getPreferredSize());
 					contentPane.add(jComboColNames);
 				}
 			}
