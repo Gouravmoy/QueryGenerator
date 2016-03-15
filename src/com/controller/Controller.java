@@ -78,8 +78,8 @@ public class Controller {
 				table.setTableName(tableName);
 				while (res.next()) {
 					column = new Column();
-					column.setColName(res.getString(1));
-					column.setDataType(res.getString(2));
+					column.setColName(res.getString(1).toUpperCase());
+					column.setDataType(res.getString(2).toUpperCase());
 					columns.add(column);
 				}
 				table.setColumnList(columns);
