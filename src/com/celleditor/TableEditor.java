@@ -19,6 +19,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 	private static final long serialVersionUID = 1L;
 	private POJOTable table;
 	private List<POJOTable> listTable;
+	private int rowValue;
 
 	public TableEditor(List<POJOTable> listTable) {
 		super();
@@ -33,6 +34,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 	@Override
 	public Component getTableCellEditorComponent(JTable jTable, Object value,
 			boolean isSelected, int row, int column) {
+		rowValue = row;
 		if (value instanceof POJOTable) {
 			this.table = (POJOTable) value;
 		}
@@ -60,8 +62,9 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 		@SuppressWarnings("unchecked")
 		JComboBox<POJOTable> comboCountry = (JComboBox<POJOTable>) event
 				.getSource();
+		MasterCommon.tableHolder.put(rowValue, comboCountry.getSelectedItem()
+				.toString());
 		this.table = (POJOTable) comboCountry.getSelectedItem();
-		ColsUtil.getColumnsForTable(table.getTableName());
 		new ColumnCellEditor(MasterCommon.listPojoCols);
 		System.out.println(comboCountry.getSelectedItem().toString());
 

@@ -10,11 +10,12 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+import com.controller.MasterCommon;
 import com.pojo.POJOColumn;
 import com.util.ColsUtil;
 
-public class ColumnCellEditor extends AbstractCellEditor implements TableCellEditor,
-		ActionListener {
+public class ColumnCellEditor extends AbstractCellEditor implements
+		TableCellEditor, ActionListener {
 	private POJOColumn column;
 	private List<POJOColumn> listColumn;
 
@@ -34,7 +35,7 @@ public class ColumnCellEditor extends AbstractCellEditor implements TableCellEdi
 		if (value instanceof POJOColumn) {
 			this.column = (POJOColumn) value;
 		}
-
+		ColsUtil.getColumnsForTable(MasterCommon.tableHolder.get(row));
 		JComboBox<POJOColumn> comboCol = new JComboBox<POJOColumn>();
 
 		for (POJOColumn cols : listColumn) {
@@ -54,7 +55,8 @@ public class ColumnCellEditor extends AbstractCellEditor implements TableCellEdi
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		JComboBox<POJOColumn> comboLang = (JComboBox<POJOColumn>) event.getSource();
+		JComboBox<POJOColumn> comboLang = (JComboBox<POJOColumn>) event
+				.getSource();
 		this.column = (POJOColumn) comboLang.getSelectedItem();
 		System.out.println(comboLang.getSelectedItem().toString());
 

@@ -32,6 +32,7 @@ public class Tesla2 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ArrayList<Tables> tables;
+	private JTable table;
 
 	// private JTable table;
 
@@ -45,7 +46,7 @@ public class Tesla2 extends JFrame {
 	}
 
 	private void initialize() {
-		JTable table = new JTable();
+		table = new JTable();
 		List<POJORow> listRow = new ArrayList<>();
 		scrollpane = new JScrollPane(table);
 		tableModel = new TableModel(listRow);
@@ -70,6 +71,14 @@ public class Tesla2 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				tableModel.updateUI(createRow());
+				TableColumn countryColumn = table.getColumn("TableName");
+				countryColumn.setCellRenderer(new TableCellRenderer());
+				countryColumn.setCellEditor(new TableEditor(
+						MasterCommon.listPojoTable));
+				TableColumn languageColumn = table.getColumn("ColumnName");
+				languageColumn.setCellRenderer(new ColumnCellRenderer());
+				languageColumn.setCellEditor(new ColumnCellEditor(
+						MasterCommon.listPojoCols));
 				validate();
 				scrollpane.repaint();
 			}

@@ -1,6 +1,7 @@
 package com.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -16,10 +17,11 @@ public class MasterCommon {
 	public static String password;
 	public static String dbName;
 	public static Properties queriesProps;
-	
+
 	public static List<POJOTable> listPojoTable = new ArrayList<>();
 	public static ArrayList<POJOColumn> listPojoCols = new ArrayList<POJOColumn>();
-	public static ArrayList<Tables> listTable=new ArrayList<Tables>(); 
+	public static ArrayList<Tables> listTable = new ArrayList<Tables>();
+	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 
 	public static void updateDBCredentials(String schemaName2, String url,
 			String dbName2, String userName2, String password2) {
@@ -30,3 +32,6 @@ public class MasterCommon {
 		dbName = dbName2;
 	}
 }
+
+
+
