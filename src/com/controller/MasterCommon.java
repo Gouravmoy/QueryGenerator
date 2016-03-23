@@ -31,7 +31,7 @@ public class MasterCommon {
 		password = password2;
 		dbName = dbName2;
 	}
+
+	public static String[] joinTypes = { "INNER JOIN", "LEFT OUTER JOIN",
+			"RIGHT INNER JOIN" };
 }
-
-
-

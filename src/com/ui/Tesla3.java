@@ -15,11 +15,13 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
 import com.celleditor.ColumnCellEditor;
+import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.model.InnerJoinTableModel;
 import com.pojo.InnerJoinRow;
 import com.renderer.ColumnCellRenderer;
+import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.util.ColsUtil;
 
@@ -30,7 +32,7 @@ public class Tesla3 extends JFrame {
 	private JTable table;
 
 	public Tesla3() {
-		//ColsUtil.setPOJOClass();
+		// ColsUtil.setPOJOClass();
 		initialize();
 	}
 
@@ -73,6 +75,11 @@ public class Tesla3 extends JFrame {
 		col1Column.setCellRenderer(new ColumnCellRenderer());
 		col1Column
 				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+
+		TableColumn joinTypeColumn = table.getColumn("Join Type");
+		joinTypeColumn.setCellRenderer(new DropDownRenderer());
+		joinTypeColumn.setCellEditor(new DropDownCellEditor(
+				MasterCommon.joinTypes));
 
 		TableColumn table2Column = table.getColumn("TableName2");
 		table2Column.setCellRenderer(new TableCellRenderer());

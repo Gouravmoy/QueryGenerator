@@ -74,9 +74,10 @@ public class Tesla2 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				tableModel.updateUI();
-				/*
-				 * dispose(); new Tesla3().setVisible(true);
-				 */
+
+				// dispose();
+				// new Tesla3().setVisible(true);
+
 			}
 
 		});
