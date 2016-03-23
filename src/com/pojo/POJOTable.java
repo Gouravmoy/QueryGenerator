@@ -5,12 +5,13 @@ public class POJOTable {
 	private POJOColumn column;
 
 	public POJOTable() {
-		this.column = new POJOColumn("Select Column");
+		this.column = null;
+		this.column = new POJOColumn("select Column");
 	}
 
-	public POJOTable(String tableName, POJOColumn column) {
-		this.tableName = tableName;
-		this.column = column;
+	public POJOTable(String _tableName, POJOColumn _column) {
+		this.tableName = _tableName;
+		this.column = _column;
 	}
 
 	public String getTableName() {

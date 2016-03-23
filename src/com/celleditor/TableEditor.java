@@ -12,7 +12,6 @@ import javax.swing.table.TableCellEditor;
 
 import com.controller.MasterCommon;
 import com.pojo.POJOTable;
-import com.util.ColsUtil;
 
 public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 		ActionListener {
@@ -45,7 +44,6 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 			comboCountry.addItem(aTable);
 		}
 
-		comboCountry.setSelectedItem(table);
 		comboCountry.addActionListener(this);
 
 		if (isSelected) {
@@ -66,7 +64,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 				.toString());
 		this.table = (POJOTable) comboCountry.getSelectedItem();
 		new ColumnCellEditor(MasterCommon.listPojoCols);
-		System.out.println(comboCountry.getSelectedItem().toString());
+		//System.out.println(comboCountry.getSelectedItem().toString());
 
 	}
 

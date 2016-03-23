@@ -16,6 +16,7 @@ import com.util.ColsUtil;
 
 public class ColumnCellEditor extends AbstractCellEditor implements
 		TableCellEditor, ActionListener {
+	private static final long serialVersionUID = 1L;
 	private POJOColumn column;
 	private List<POJOColumn> listColumn;
 
@@ -55,10 +56,11 @@ public class ColumnCellEditor extends AbstractCellEditor implements
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		@SuppressWarnings("unchecked")
 		JComboBox<POJOColumn> comboLang = (JComboBox<POJOColumn>) event
 				.getSource();
 		this.column = (POJOColumn) comboLang.getSelectedItem();
-		System.out.println(comboLang.getSelectedItem().toString());
+		//System.out.println(comboLang.getSelectedItem().toString());
 
 	}
 

@@ -5,7 +5,6 @@ public class POJORow {
 	String elementname;
 
 	public POJORow(POJOTable table, String elementname) {
-		super();
 		this.table = table;
 		this.elementname = elementname;
 	}

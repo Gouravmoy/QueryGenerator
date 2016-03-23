@@ -11,6 +11,7 @@ import com.pojo.POJOTable;
 
 public class TableModel extends AbstractTableModel {
 
+	int i = 0;
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "No.", "TableName", "ColumnName",
 			"ElementName" };
@@ -20,8 +21,27 @@ public class TableModel extends AbstractTableModel {
 		this.listRow = listRow;
 	}
 
-	public void updateUI(POJORow row) {
-		this.listRow.add(row);
+	public void updateUI() {
+
+		POJOColumn column = new POJOColumn(null);
+		POJOTable pojoTable = new POJOTable(null, column);
+
+		for (POJORow listRowddddd : listRow) {
+			System.out.println("For " + (++i) + " Row in UI");
+			System.out.println(listRowddddd.getTable().getTableName());
+			System.out.println(listRowddddd.getTable().hashCode());
+			System.out.println(listRowddddd.getTable().getColumn()
+					.getColumnName());
+			System.out.println(listRowddddd.getTable().getColumn().hashCode());
+		}
+		System.out.println("------------------------------------------------");
+
+		// System.out.println("Column -> " + column.hashCode());
+
+		POJORow row2 = null;
+		row2 = new POJORow(pojoTable, "");
+		this.listRow.add(row2);
+		this.fireTableDataChanged();
 	}
 
 	@Override
@@ -33,6 +53,7 @@ public class TableModel extends AbstractTableModel {
 		return columnNames[column];
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Class getColumnClass(int column) {
 		Class obj = null;
 		obj = getValueAt(0, column).getClass();
@@ -46,11 +67,20 @@ public class TableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		POJORow row = listRow.get(rowIndex);
+		POJORow row = null;
+		String tableName = "";
+		POJOTable p = null;
+		try {
+			p = (POJOTable) value;
+			tableName = p.getTableName();
+		} catch (Exception e) {
 
+		}
+
+		row = listRow.get(rowIndex);
 		switch (columnIndex) {
 		case 1:
-			row.setTable((POJOTable) value);
+			row.setTable(new POJOTable(tableName, new POJOColumn("")));
 			break;
 		case 2:
 			row.getTable().setColumn((POJOColumn) value);
@@ -58,14 +88,14 @@ public class TableModel extends AbstractTableModel {
 		case 3:
 			row.setElementname((String) value);
 			break;
-
 		}
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Object returnValue = null;
-		POJORow row = listRow.get(rowIndex);
+		POJORow row = null;
+		row = listRow.get(rowIndex);
 
 		switch (columnIndex) {
 		case 0:
@@ -86,6 +116,6 @@ public class TableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return columnIndex > 0;
+		return true;
 	}
 }

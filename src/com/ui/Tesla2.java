@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
@@ -30,7 +29,6 @@ public class Tesla2 extends JFrame {
 	private TableModel tableModel;
 	private JScrollPane scrollpane;
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
 	private ArrayList<Tables> tables;
 	private JTable table;
 
@@ -70,17 +68,7 @@ public class Tesla2 extends JFrame {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tableModel.updateUI(createRow());
-				TableColumn countryColumn = table.getColumn("TableName");
-				countryColumn.setCellRenderer(new TableCellRenderer());
-				countryColumn.setCellEditor(new TableEditor(
-						MasterCommon.listPojoTable));
-				TableColumn languageColumn = table.getColumn("ColumnName");
-				languageColumn.setCellRenderer(new ColumnCellRenderer());
-				languageColumn.setCellEditor(new ColumnCellEditor(
-						MasterCommon.listPojoCols));
-				validate();
-				scrollpane.repaint();
+				tableModel.updateUI();
 			}
 
 		});
@@ -89,12 +77,6 @@ public class Tesla2 extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-		validate();
-		repaint();
 	}
 
-	private POJORow createRow() {
-		return new POJORow(MasterCommon.listPojoTable.get(0), "");
-
-	}
 }
