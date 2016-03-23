@@ -24,8 +24,11 @@ import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.util.ColsUtil;
 
+import java.awt.Color;
+
 public class Tesla2 extends JFrame {
 
+	JFrame frame;
 	private TableModel tableModel;
 	private JScrollPane scrollpane;
 	private static final long serialVersionUID = 1L;
@@ -35,6 +38,7 @@ public class Tesla2 extends JFrame {
 	// private JTable table;
 
 	public Tesla2(ArrayList<String> tables) {
+		setBackground(Color.GRAY);
 		this.tables = Controller.getTablesMetaInfo(tables);
 		MasterCommon.listTable.clear();
 		MasterCommon.listTable.addAll(this.tables);
@@ -44,6 +48,7 @@ public class Tesla2 extends JFrame {
 	}
 
 	private void initialize() {
+
 		table = new JTable();
 		List<POJORow> listRow = new ArrayList<>();
 		scrollpane = new JScrollPane(table);
@@ -69,6 +74,9 @@ public class Tesla2 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				tableModel.updateUI();
+				/*
+				 * dispose(); new Tesla3().setVisible(true);
+				 */
 			}
 
 		});
@@ -77,6 +85,7 @@ public class Tesla2 extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
+
 	}
 
 }
