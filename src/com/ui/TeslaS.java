@@ -150,7 +150,8 @@ public class TeslaS extends JFrame {
 								selectedTableNames.add(checkBox.getText());
 						}
 						frame.dispose();
-						new Tesla2(selectedTableNames).setVisible(true);
+						new Tesla2_1(selectedTableNames);
+						
 						
 					}
 				});
