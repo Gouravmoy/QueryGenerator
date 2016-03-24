@@ -91,7 +91,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			row.getJoinTable1().setColumn((POJOColumn) value);
 			break;
 		case 3:
-			row.setInnerJoinType((String) value);
+			row.setInnerJoinType(new String((String) value));
 			break;
 		case 4:
 			row.setJoinTable2(new POJOTable(tableName, new POJOColumn("")));

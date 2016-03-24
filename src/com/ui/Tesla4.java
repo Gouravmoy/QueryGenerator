@@ -30,7 +30,6 @@ public class Tesla4 extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
-	private JScrollPane scrollpane;
 	private InnerJoinTableModel innerJoinTableModel;
 
 	/**
@@ -56,7 +55,6 @@ public class Tesla4 extends JFrame {
 
 		table = new JTable();
 		List<InnerJoinRow> innerJoinRows = new ArrayList<InnerJoinRow>();
-		scrollpane = new JScrollPane(table);
 		innerJoinTableModel = new InnerJoinTableModel(innerJoinRows);
 		table.setModel(innerJoinTableModel);
 
@@ -77,7 +75,7 @@ public class Tesla4 extends JFrame {
 		});
 		btnAddCoulmn.setBounds(232, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
-		
+
 		JLabel lblQuery = new JLabel("QUERY");
 		lblQuery.setBounds(10, 240, 46, 14);
 		contentPane.add(lblQuery);

@@ -48,13 +48,11 @@ public class Tesla2 extends JFrame {
 	}
 
 	private void initialize() {
-
 		table = new JTable();
 		List<POJORow> listRow = new ArrayList<>();
 		scrollpane = new JScrollPane(table);
 		tableModel = new TableModel(listRow);
 		table.setModel(tableModel);
-
 		TableColumn countryColumn = table.getColumn("TableName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
 		countryColumn
