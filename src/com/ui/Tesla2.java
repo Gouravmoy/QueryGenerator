@@ -73,10 +73,10 @@ public class Tesla2 extends JFrame {
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tableModel.updateUI();
+				// tableModel.updateUI();
 
-				// dispose();
-				// new Tesla3().setVisible(true);
+				dispose();
+				new Tesla3().setVisible(true);
 
 			}
 

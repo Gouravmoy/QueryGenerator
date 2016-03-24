@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
@@ -14,8 +15,6 @@ public class InnerJoinTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "No.", "TableName1", "ColumnName1",
 			"Join Type", "TableName2", "ColumnName2" };
-	private String[] joinTypes = { "INNER JOIN", "LEFT OUTER JOIN",
-			"RIGHT INNER JOIN" };
 	private List<InnerJoinRow> innerJoinRow = new ArrayList<InnerJoinRow>();
 
 	public InnerJoinTableModel(List<InnerJoinRow> _innerJoinRow) {
@@ -43,7 +42,8 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		// System.out.println("Column -> " + column.hashCode());
 
 		InnerJoinRow row = null;
-		row = new InnerJoinRow(pojoTable1, pojoTable2, joinTypes[0]);
+		row = new InnerJoinRow(pojoTable1, pojoTable2,
+				MasterCommon.joinTypes[0]);
 		this.innerJoinRow.add(row);
 		this.fireTableDataChanged();
 
@@ -119,7 +119,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			returnValue = row.getJoinTable1().getColumn();
 			break;
 		case 3:
-			returnValue = joinTypes[0];
+			returnValue = row.getInnerJoinType();
 			break;
 		case 4:
 			returnValue = row.getJoinTable2();
