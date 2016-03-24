@@ -76,7 +76,7 @@ public class Tesla2 extends JFrame {
 				// tableModel.updateUI();
 
 				dispose();
-				new Tesla3().setVisible(true);
+				new Tesla4().setVisible(true);
 
 			}
 
