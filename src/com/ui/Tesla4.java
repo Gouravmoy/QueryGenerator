@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,7 +24,8 @@ import com.pojo.InnerJoinRow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
-import javax.swing.JLabel;
+import com.util.QueryUtil;
+import javax.swing.JTextArea;
 
 public class Tesla4 extends JFrame {
 
@@ -31,6 +33,8 @@ public class Tesla4 extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private InnerJoinTableModel innerJoinTableModel;
+	public static JTextArea textArea;
+	List<InnerJoinRow> innerJoinRows;
 
 	/**
 	 * Create the frame.
@@ -49,12 +53,8 @@ public class Tesla4 extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 254, 621, 192);
-		contentPane.add(panel_1);
-
 		table = new JTable();
-		List<InnerJoinRow> innerJoinRows = new ArrayList<InnerJoinRow>();
+		innerJoinRows = new ArrayList<InnerJoinRow>();
 		innerJoinTableModel = new InnerJoinTableModel(innerJoinRows);
 		table.setModel(innerJoinTableModel);
 
@@ -66,19 +66,45 @@ public class Tesla4 extends JFrame {
 		panel.setBounds(10, 11, 621, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
+		JLabel lblQuery = new JLabel("QUERY");
+		lblQuery.setBounds(10, 240, 46, 14);
+		contentPane.add(lblQuery);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 265, 621, 198);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+
+		textArea = new JTextArea();
+		textArea.setBounds(10, 11, 601, 176);
+		textArea.setLineWrap(true);
+		panel_1.add(textArea);
+
 		JButton btnAddCoulmn = new JButton("ADD COULMN");
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.updateUI();
+				table.editCellAt(-1, -1);
+				QueryUtil.updateInnerJoinMap(innerJoinRows);
+				textArea.setText(QueryUtil.buildQuery().toString());
 			}
 		});
+
 		btnAddCoulmn.setBounds(232, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
 
-		JLabel lblQuery = new JLabel("QUERY");
-		lblQuery.setBounds(10, 240, 46, 14);
-		contentPane.add(lblQuery);
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				innerJoinTableModel.removeFromUI();
+				textArea.setText(QueryUtil.buildQuery().toString());
+			}
+		});
+		btnDelete.setBounds(358, 221, 89, 23);
+		contentPane.add(btnDelete);
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
