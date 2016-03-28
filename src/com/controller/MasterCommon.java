@@ -34,6 +34,6 @@ public class MasterCommon {
 		dbName = dbName2;
 	}
 
-	public static String[] joinTypes = { "INNER JOIN", "LEFT OUTER JOIN",
-			"RIGHT INNER JOIN" };
+	public static String[] joinTypes = { "SELECT JOIN", "INNER JOIN",
+			"LEFT OUTER JOIN", "RIGHT INNER JOIN" };
 }

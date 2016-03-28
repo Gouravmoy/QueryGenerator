@@ -71,6 +71,8 @@ public class Tesla2 {
 		tableModel = new TableModel(listRow);
 		table.setModel(tableModel);
 
+		table.setRowHeight(25);
+
 		JButton btnNext = new JButton("NEXT");
 		btnNext.addMouseListener(new MouseAdapter() {
 			@Override

@@ -151,8 +151,7 @@ public class TeslaS extends JFrame {
 						}
 						frame.dispose();
 						new Tesla2(selectedTableNames);
-						
-						
+
 					}
 				});
 				btnFetchColumns.setBounds(347, 421, 119, 31);
