@@ -1,8 +1,6 @@
 package com.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -10,8 +8,10 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
 
 import com.celleditor.ColumnCellEditor;
@@ -23,47 +23,63 @@ import com.pojo.InnerJoinRow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
-import com.util.ColsUtil;
+import javax.swing.JLabel;
 
 public class Tesla3 extends JFrame {
-	private static final long serialVersionUID = 1L;
-	private InnerJoinTableModel innerJoinTableModel;
-	private JScrollPane scrollpane;
-	private JTable table;
 
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTable table;
+	private InnerJoinTableModel innerJoinTableModel;
+
+	/**
+	 * Create the frame.
+	 */
 	public Tesla3() {
 		// ColsUtil.setPOJOClass();
 		initialize();
+
 	}
 
 	private void initialize() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 657, 512);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 254, 621, 192);
+		contentPane.add(panel_1);
+
 		table = new JTable();
 		List<InnerJoinRow> innerJoinRows = new ArrayList<InnerJoinRow>();
-		scrollpane = new JScrollPane(table);
 		innerJoinTableModel = new InnerJoinTableModel(innerJoinRows);
 		table.setModel(innerJoinTableModel);
 
 		initilizeColumns();
 
 		table.setRowHeight(25);
-		scrollpane = new JScrollPane(table);
 
-		scrollpane.setPreferredSize(new Dimension(400, 200));
-		getContentPane().add(scrollpane, BorderLayout.CENTER);
+		JScrollPane panel = new JScrollPane(table);
+		panel.setBounds(10, 11, 621, 199);
+		contentPane.add(panel, BorderLayout.CENTER);
 
-		JButton btnAdd = new JButton("ADD");
-		btnAdd.addMouseListener(new MouseAdapter() {
+		JButton btnAddCoulmn = new JButton("ADD COULMN");
+		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.updateUI();
 			}
-
 		});
-		scrollpane.setRowHeaderView(btnAdd);
+		btnAddCoulmn.setBounds(232, 221, 116, 23);
+		contentPane.add(btnAddCoulmn);
+
+		JLabel lblQuery = new JLabel("QUERY");
+		lblQuery.setBounds(10, 240, 46, 14);
+		contentPane.add(lblQuery);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 
 	private void initilizeColumns() {

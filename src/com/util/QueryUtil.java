@@ -10,7 +10,7 @@ public class QueryUtil extends MasterCommon {
 	public static StringBuilder buildQuery() {
 
 		StringBuilder stringBuilder = new StringBuilder();
-
+		stringBuilder.append(completeQuery + "\n");
 		for (int i = 0; i < innerJoinMap.size(); i++) {
 			stringBuilder.append(innerJoinMap.get(i) + "\n");
 		}

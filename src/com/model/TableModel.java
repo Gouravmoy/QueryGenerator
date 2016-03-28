@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.controller.MasterCommon;
 import com.pojo.POJOColumn;
 import com.pojo.POJORow;
 import com.pojo.POJOTable;
+import com.ui.Tesla2;
 
 public class TableModel extends AbstractTableModel {
 
@@ -25,19 +27,6 @@ public class TableModel extends AbstractTableModel {
 
 		POJOColumn column = new POJOColumn(null);
 		POJOTable pojoTable = new POJOTable(null, column);
-
-		for (POJORow listRowddddd : listRow) {
-			System.out.println("For " + (++i) + " Row in UI");
-			System.out.println(listRowddddd.getTable().getTableName());
-			System.out.println(listRowddddd.getTable().hashCode());
-			System.out.println(listRowddddd.getTable().getColumn()
-					.getColumnName());
-			System.out.println(listRowddddd.getTable().getColumn().hashCode());
-		}
-		System.out.println("------------------------------------------------");
-
-		// System.out.println("Column -> " + column.hashCode());
-
 		POJORow row2 = null;
 		row2 = new POJORow(pojoTable, "");
 		this.listRow.add(row2);
@@ -70,16 +59,11 @@ public class TableModel extends AbstractTableModel {
 		POJORow row = null;
 		String tableName = "";
 		POJOTable p = null;
-		try {
-			p = (POJOTable) value;
-			tableName = p.getTableName();
-		} catch (Exception e) {
-
-		}
-
 		row = listRow.get(rowIndex);
 		switch (columnIndex) {
 		case 1:
+			p = (POJOTable) value;
+			tableName = p.getTableName();
 			row.setTable(new POJOTable(tableName, new POJOColumn("")));
 			break;
 		case 2:
@@ -87,6 +71,13 @@ public class TableModel extends AbstractTableModel {
 			break;
 		case 3:
 			row.setElementname((String) value);
+			MasterCommon.selectQueryHolder.put(rowIndex, row.getTable()
+					.getTableName()
+					+ "."
+					+ row.getTable().getColumn().getColumnName()
+					+ " as '"
+					+ row.getElementname() + "' ,");
+			Tesla2.displyQuery();
 			break;
 		}
 	}
@@ -96,10 +87,9 @@ public class TableModel extends AbstractTableModel {
 		Object returnValue = null;
 		POJORow row = null;
 		row = listRow.get(rowIndex);
-
 		switch (columnIndex) {
 		case 0:
-			returnValue = rowIndex + 1;
+			returnValue = rowIndex + 1 + "";
 			break;
 		case 1:
 			returnValue = row.getTable();

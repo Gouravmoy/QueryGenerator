@@ -150,9 +150,8 @@ public class TeslaS extends JFrame {
 								selectedTableNames.add(checkBox.getText());
 						}
 						frame.dispose();
-						new Tesla2_1(selectedTableNames);
-						
-						
+						new Tesla2(selectedTableNames);
+
 					}
 				});
 				btnFetchColumns.setBounds(347, 421, 119, 31);
