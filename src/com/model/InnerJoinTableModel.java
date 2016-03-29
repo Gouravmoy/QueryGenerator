@@ -9,6 +9,7 @@ import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
+import com.util.QueryUtil;
 
 public class InnerJoinTableModel extends AbstractTableModel {
 
@@ -28,25 +29,24 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		POJOTable pojoTable1 = new POJOTable(null, column1);
 		POJOTable pojoTable2 = new POJOTable(null, column2);
 
-		/*
-		 * for (InnerJoinRow listRowddddd : innerJoinRow) {
-		 * System.out.println("For " + (++i) + " Row in UI");
-		 * System.out.println(listRowddddd.getTable().getTableName());
-		 * System.out.println(listRowddddd.getTable().hashCode());
-		 * System.out.println(listRowddddd.getTable().getColumn()
-		 * .getColumnName());
-		 * System.out.println(listRowddddd.getTable().getColumn().hashCode()); }
-		 */
-		// System.out.println("------------------------------------------------");
-
-		// System.out.println("Column -> " + column.hashCode());
-
 		InnerJoinRow row = null;
 		row = new InnerJoinRow(pojoTable1, pojoTable2,
 				MasterCommon.joinTypes[0]);
 		this.innerJoinRow.add(row);
 		this.fireTableDataChanged();
 
+	}
+
+	public void removeFromUI() {
+		InnerJoinRow row;
+		if (innerJoinRow.size() > 0) {
+			row = innerJoinRow.get(innerJoinRow.size() - 1);
+			if (!row.getInnerJoinType().equals("SELECT JOIN")) {
+				QueryUtil.removeLastFromInnerJoinMap();
+			}
+			innerJoinRow.remove(innerJoinRow.size() - 1);
+		}
+		this.fireTableDataChanged();
 	}
 
 	@Override

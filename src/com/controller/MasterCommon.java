@@ -22,6 +22,9 @@ public class MasterCommon {
 	public static ArrayList<POJOColumn> listPojoCols = new ArrayList<POJOColumn>();
 	public static ArrayList<Tables> listTable = new ArrayList<Tables>();
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
+
+	public static HashMap<Integer, String> innerJoinMap = new HashMap<Integer, String>();
+
 	public static HashMap<Integer, String> selectQueryHolder = new HashMap<Integer, String>();
 	public static String completeQuery;
 
