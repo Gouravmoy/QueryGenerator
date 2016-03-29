@@ -80,7 +80,7 @@ public class Tesla2 {
 				table.editCellAt(-1, -1);
 				tableModel.updateUI();
 				frmQuerybuilder.dispose();
-				new Tesla3().setVisible(true);
+				new Tesla4().setVisible(true);
 			}
 		});
 		btnNext.setBounds(702, 302, 89, 23);
