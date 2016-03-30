@@ -1,6 +1,9 @@
 package com.pojo;
 
-public class POJOColumn {
+import java.io.Serializable;
+
+public class POJOColumn implements Serializable {
+	private static final long serialVersionUID = 1L;
 	String columnName;
 
 	public POJOColumn(String columnName) {

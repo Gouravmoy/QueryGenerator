@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import com.entity.Tables;
 import com.pojo.POJOColumn;
+import com.pojo.POJORow;
 import com.pojo.POJOTable;
 
 public class MasterCommon {
@@ -21,6 +22,8 @@ public class MasterCommon {
 	public static List<POJOTable> listPojoTable = new ArrayList<>();
 	public static ArrayList<POJOColumn> listPojoCols = new ArrayList<POJOColumn>();
 	public static ArrayList<Tables> listTable = new ArrayList<Tables>();
+	public static ArrayList<POJORow> selectRows = new ArrayList<POJORow>();
+	public static HashMap<String, ArrayList<POJORow>> completeRows = new HashMap<String, ArrayList<POJORow>>();
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 
 	public static HashMap<Integer, String> innerJoinMap = new HashMap<Integer, String>();

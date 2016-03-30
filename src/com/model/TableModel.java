@@ -13,7 +13,6 @@ import com.ui.Tesla2;
 
 public class TableModel extends AbstractTableModel {
 
-	int i = 0;
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "No.", "TableName", "ColumnName",
 			"ElementName" };
@@ -65,20 +64,30 @@ public class TableModel extends AbstractTableModel {
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 			row.setTable(new POJOTable(tableName, new POJOColumn("")));
+			String valueQuery = row.getTable().getTableName() + "."
+					+ row.getTable().getColumn().getColumnName() + " as '"
+					+ row.getElementname() + "' ,";
+			Tesla2.displyQuery(rowIndex, valueQuery);
 			break;
 		case 2:
 			row.getTable().setColumn((POJOColumn) value);
+			String valueQuery1 = row.getTable().getTableName() + "."
+					+ row.getTable().getColumn().getColumnName() + " as '"
+					+ row.getElementname() + "' ,";
+			Tesla2.displyQuery(rowIndex, valueQuery1);
+
 			break;
 		case 3:
 			row.setElementname((String) value);
-			MasterCommon.selectQueryHolder.put(rowIndex, row.getTable()
-					.getTableName()
-					+ "."
-					+ row.getTable().getColumn().getColumnName()
-					+ " as '"
-					+ row.getElementname() + "' ,");
-			Tesla2.displyQuery();
+			String valueQuery2 = row.getTable().getTableName() + "."
+					+ row.getTable().getColumn().getColumnName() + " as '"
+					+ row.getElementname() + "' ,";
+			Tesla2.displyQuery(rowIndex, valueQuery2);
+			MasterCommon.selectRows.add(row);
 			break;
+		}
+		if (rowIndex < MasterCommon.selectRows.size()) {
+			MasterCommon.selectRows.set(rowIndex, row);
 		}
 	}
 
@@ -89,7 +98,7 @@ public class TableModel extends AbstractTableModel {
 		row = listRow.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
-			returnValue = rowIndex + 1 + "";
+			returnValue = rowIndex + 1;
 			break;
 		case 1:
 			returnValue = row.getTable();
@@ -101,7 +110,6 @@ public class TableModel extends AbstractTableModel {
 			returnValue = row.getElementname();
 			break;
 		}
-
 		return returnValue;
 	}
 
