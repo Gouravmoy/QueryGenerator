@@ -47,7 +47,7 @@ public class Tesla4 extends JFrame {
 
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 657, 512);
+		setBounds(100, 100, 828, 520);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -63,7 +63,7 @@ public class Tesla4 extends JFrame {
 		table.setRowHeight(25);
 
 		JScrollPane panel = new JScrollPane(table);
-		panel.setBounds(10, 11, 621, 199);
+		panel.setBounds(10, 11, 792, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
 		JLabel lblQuery = new JLabel("QUERY");
@@ -71,12 +71,12 @@ public class Tesla4 extends JFrame {
 		contentPane.add(lblQuery);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 265, 621, 198);
+		panel_1.setBounds(10, 265, 792, 198);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
 		textArea = new JTextArea();
-		textArea.setBounds(10, 11, 601, 176);
+		textArea.setBounds(10, 11, 772, 176);
 		textArea.setLineWrap(true);
 		panel_1.add(textArea);
 
@@ -87,22 +87,24 @@ public class Tesla4 extends JFrame {
 				innerJoinTableModel.updateUI();
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(innerJoinRows);
-				textArea.setText(QueryUtil.buildQuery().toString());
+				QueryUtil.buildQuery();
+				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
 
-		btnAddCoulmn.setBounds(232, 221, 116, 23);
+		btnAddCoulmn.setBounds(293, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
 
-		JButton btnDelete = new JButton("Delete");
+		JButton btnDelete = new JButton("CLEAR ALL");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.removeFromUI();
-				textArea.setText(QueryUtil.buildQuery().toString());
+				//innerJoinRows = new ArrayList<InnerJoinRow>();
+				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
-		btnDelete.setBounds(358, 221, 89, 23);
+		btnDelete.setBounds(484, 221, 105, 23);
 		contentPane.add(btnDelete);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

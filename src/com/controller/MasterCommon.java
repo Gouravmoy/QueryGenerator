@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import com.entity.Query;
 import com.entity.Tables;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
@@ -23,7 +24,9 @@ public class MasterCommon {
 	public static ArrayList<Tables> listTable = new ArrayList<Tables>();
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 
-	public static HashMap<Integer, String> innerJoinMap = new HashMap<Integer, String>();
+	public static HashMap<String, String> innerJoinMap = new HashMap<String, String>();
+
+	public static Query mainQuery = new Query();
 
 	public static HashMap<Integer, String> selectQueryHolder = new HashMap<Integer, String>();
 	public static String completeQuery;
@@ -39,4 +42,5 @@ public class MasterCommon {
 
 	public static String[] joinTypes = { "SELECT JOIN", "INNER JOIN",
 			"LEFT OUTER JOIN", "RIGHT INNER JOIN" };
+
 }

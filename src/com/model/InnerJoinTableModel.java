@@ -1,11 +1,13 @@
 package com.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.controller.MasterCommon;
+import com.entity.Query;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
@@ -39,6 +41,10 @@ public class InnerJoinTableModel extends AbstractTableModel {
 
 	public void removeFromUI() {
 		InnerJoinRow row;
+		// innerJoinRow = new ArrayList<InnerJoinRow>();
+		// MasterCommon.mainQuery.setJoinStmts(new ArrayList<String>());
+		// MasterCommon.innerJoinMap = new HashMap<String, String>();
+
 		if (innerJoinRow.size() > 0) {
 			row = innerJoinRow.get(innerJoinRow.size() - 1);
 			if (!row.getInnerJoinType().equals("SELECT JOIN")) {
@@ -46,6 +52,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			}
 			innerJoinRow.remove(innerJoinRow.size() - 1);
 		}
+
 		this.fireTableDataChanged();
 	}
 
