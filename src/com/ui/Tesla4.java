@@ -95,18 +95,17 @@ public class Tesla4 extends JFrame {
 		btnAddCoulmn.setBounds(293, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
 
-		JButton btnDelete = new JButton("CLEAR ALL");
+		JButton btnDelete = new JButton("DELETE LAST");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.removeFromUI();
-				//innerJoinRows = new ArrayList<InnerJoinRow>();
+				// innerJoinRows = new ArrayList<InnerJoinRow>();
 				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
-		btnDelete.setBounds(484, 221, 105, 23);
+		btnDelete.setBounds(484, 221, 146, 23);
 		contentPane.add(btnDelete);
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
