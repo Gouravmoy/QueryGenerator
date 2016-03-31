@@ -28,7 +28,10 @@ public class ColsUtil extends MasterCommon {
 			POJOColumn pojoColumn = new POJOColumn("Select Column");
 			pojoTable.setTableName(tableEntity.getTableName());
 			pojoTable.setColumn(pojoColumn);
-			listPojoTable.add(pojoTable);
+			if(!listPojoTable.toString().contains(tableEntity.getTableName())){
+				listPojoTable.add(pojoTable);
+			}
+			
 		}
 	}
 }

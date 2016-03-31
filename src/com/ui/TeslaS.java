@@ -152,9 +152,13 @@ public class TeslaS extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String filePath = "C:/Users/VBasidon/Desktop/abc.txt";
 				frame.dispose();
-				for (JCheckBox checkBox : tablesCheckBoxList) {
-					if (checkBox.isSelected())
-						selectedTableNames.add(checkBox.getText());
+				tableNames = Controller.getTables("testschema", "", "", "root",
+						"welcome123");
+				if (tablesCheckBoxList != null) {
+					for (JCheckBox checkBox : tablesCheckBoxList) {
+						if (checkBox.isSelected())
+							selectedTableNames.add(checkBox.getText());
+					}
 				}
 				new Tesla2(selectedTableNames, filePath);
 			}

@@ -98,7 +98,11 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			break;
 		case 5:
 			row.getJoinTable2().setColumn((POJOColumn) value);
+			MasterCommon.joinRows.add(row);
 			break;
+		}
+		if (rowIndex < MasterCommon.joinRows.size()) {
+			MasterCommon.joinRows.set(rowIndex, row);
 		}
 	}
 

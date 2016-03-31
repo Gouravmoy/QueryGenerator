@@ -34,9 +34,10 @@ public class Tesla2 {
 	private static JTextArea textArea = new JTextArea();;
 	List<POJORow> listRow = new ArrayList<>();
 
+	@SuppressWarnings("unchecked")
 	public Tesla2(ArrayList<String> tables, String filePath) {
 		if (!filePath.equals("")) {
-			listRow = FileIO.getFromTextFile("Select");
+			listRow = (ArrayList<POJORow>) FileIO.getFromTextFile("Select");
 		}
 		tables.addAll(FileIO.valueHolder);
 		this.tables = Controller.getTablesMetaInfo(tables);
