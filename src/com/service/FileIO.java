@@ -68,6 +68,7 @@ public class FileIO extends MasterCommon {
 		joinRows.addAll(reconMap.getConditionRows());
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
+			
 		}
 		QueryUtil.updateInnerJoinMap(joinRows);
 		QueryUtil.buildQuery();
