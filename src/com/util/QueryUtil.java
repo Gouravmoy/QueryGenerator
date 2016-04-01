@@ -53,12 +53,13 @@ public class QueryUtil extends MasterCommon {
 			if (innerJoinMap.containsKey(table1Name + "|" + table2Name + "|"
 					+ i)
 					|| innerJoinMap.containsKey(table2Name + "|" + table1Name
-							+ "|" + i)) {
+							+ "|" + i) || joinRow.isStatus()) {
 				continue;
 			} else {
 				if (innerJoinMap.size() == 0) {
 					innerJoinMap.put(table1Name + "|" + table2Name + "|" + i,
 							getInnerJoinValue(joinRow, 2));
+					joinRow.setStatus(true);
 					System.out.println("Condition Map Size is zero - 2");
 					continue;
 				}
@@ -87,6 +88,7 @@ public class QueryUtil extends MasterCommon {
 								innerJoinMap.put(table2Name + "|" + table1Name
 										+ "|" + keyRow, prevVal + "\n"
 										+ newJoinCond);
+								joinRow.setStatus(true);
 								match = true;
 								System.out
 										.println("Condition Existing in Reverse");
@@ -94,6 +96,7 @@ public class QueryUtil extends MasterCommon {
 								innerJoinMap.put(table1Name + "|" + table2Name
 										+ "|" + keyRow, prevVal + "\n"
 										+ newJoinCond);
+								joinRow.setStatus(true);
 								match = true;
 								System.out.println("Condition Existing");
 							}
@@ -127,7 +130,7 @@ public class QueryUtil extends MasterCommon {
 								.equals(mapTable2))) {
 							tempMap.put(
 									table1Name + "|" + table2Name + "|" + i,
-									getInnerJoinValue(joinRow, 3));
+									getInnerJoinValue(joinRow, 4));
 							/*
 							 * innerJoinMap.put(table1Name + "|" + table2Name +
 							 * "|" + i, getInnerJoinValue(joinRow, 4));
@@ -138,6 +141,7 @@ public class QueryUtil extends MasterCommon {
 						}
 					}
 					if (match == true) {
+						joinRow.setStatus(true);
 						innerJoinMap.putAll(tempMap);
 					}
 				}
@@ -177,7 +181,7 @@ public class QueryUtil extends MasterCommon {
 			joinTbale1 = table2Name;
 			joinTbale2 = table1Name;
 			joinCol1 = col2Name;
-			joinCol1 = col2Name;
+			joinCol2 = col1Name;
 		}
 		if (condition == 4) {
 			joinTbale1 = table1Name;

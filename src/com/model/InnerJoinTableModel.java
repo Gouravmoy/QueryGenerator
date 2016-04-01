@@ -1,13 +1,11 @@
 package com.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.controller.MasterCommon;
-import com.entity.Query;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
