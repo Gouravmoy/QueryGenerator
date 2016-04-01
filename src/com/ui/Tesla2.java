@@ -22,6 +22,7 @@ import com.model.TableModel;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
+import com.service.FileIO;
 import com.util.ColsUtil;
 
 public class Tesla2 {
@@ -30,9 +31,11 @@ public class Tesla2 {
 	private TableModel tableModel;
 	private ArrayList<Tables> tables;
 	private JTable table;
-	private static JTextArea textArea;
+	private static JTextArea textArea = new JTextArea();;
+	List<POJORow> listRow = new ArrayList<>();
 
 	public Tesla2(ArrayList<String> tables) {
+		tables.addAll(FileIO.valueHolder);
 		this.tables = Controller.getTablesMetaInfo(tables);
 		MasterCommon.listTable.clear();
 		MasterCommon.listTable.addAll(this.tables);
@@ -47,11 +50,8 @@ public class Tesla2 {
 		panel.setBounds(22, 338, 769, 81);
 		frmQuerybuilder.getContentPane().add(panel);
 		panel.setLayout(null);
-
-		textArea = new JTextArea();
 		textArea.setBounds(0, 0, 769, 81);
 		panel.add(textArea);
-
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(0, 0, 769, 81);
 		panel.add(scrollPane_1);
@@ -67,10 +67,8 @@ public class Tesla2 {
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.setBounds(298, 302, 108, 25);
 		frmQuerybuilder.getContentPane().add(btnAdd);
-		List<POJORow> listRow = new ArrayList<>();
-		tableModel = new TableModel(listRow);
+		tableModel = new TableModel(MasterCommon.selectRows);
 		table.setModel(tableModel);
-
 		table.setRowHeight(25);
 
 		JButton btnNext = new JButton("NEXT");
@@ -78,7 +76,8 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				tableModel.updateUI();
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						.replaceAll(", $", "").toUpperCase() + " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
@@ -107,7 +106,8 @@ public class Tesla2 {
 		frmQuerybuilder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public static void displyQuery() {
+	public static void displyQuery(int j, String valueQuery) {
+		MasterCommon.selectQueryHolder.put(j, valueQuery);
 		MasterCommon.completeQuery = "Select \n";
 		textArea.setText("Select \n");
 		for (int i = 0; i < MasterCommon.selectQueryHolder.size(); i++) {

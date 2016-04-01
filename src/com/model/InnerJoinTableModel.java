@@ -39,6 +39,10 @@ public class InnerJoinTableModel extends AbstractTableModel {
 
 	public void removeFromUI() {
 		InnerJoinRow row;
+		// innerJoinRow = new ArrayList<InnerJoinRow>();
+		// MasterCommon.mainQuery.setJoinStmts(new ArrayList<String>());
+		// MasterCommon.innerJoinMap = new HashMap<String, String>();
+
 		if (innerJoinRow.size() > 0) {
 			row = innerJoinRow.get(innerJoinRow.size() - 1);
 			if (!row.getInnerJoinType().equals("SELECT JOIN")) {
@@ -46,6 +50,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			}
 			innerJoinRow.remove(innerJoinRow.size() - 1);
 		}
+
 		this.fireTableDataChanged();
 	}
 
@@ -99,6 +104,9 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		case 5:
 			row.getJoinTable2().setColumn((POJOColumn) value);
 			break;
+		}
+		if (rowIndex < MasterCommon.joinRows.size()) {
+			MasterCommon.joinRows.set(rowIndex, row);
 		}
 	}
 

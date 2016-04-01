@@ -24,8 +24,13 @@ import com.pojo.InnerJoinRow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
+import com.service.FileIO;
 import com.util.QueryUtil;
+
 import javax.swing.JTextArea;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Tesla4 extends JFrame {
 
@@ -47,15 +52,28 @@ public class Tesla4 extends JFrame {
 
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 657, 512);
+		setBounds(100, 100, 828, 520);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 265, 792, 198);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+
+		textArea = new JTextArea();
+		textArea.setBounds(10, 11, 772, 176);
+		textArea.setLineWrap(true);
+		panel_1.add(textArea);
+
 		table = new JTable();
 		innerJoinRows = new ArrayList<InnerJoinRow>();
-		innerJoinTableModel = new InnerJoinTableModel(innerJoinRows);
+		innerJoinTableModel = new InnerJoinTableModel(MasterCommon.joinRows);
+		QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
+		QueryUtil.buildQuery();
+		textArea.setText(MasterCommon.mainQuery.toString());
 		table.setModel(innerJoinTableModel);
 
 		initilizeColumns();
@@ -63,22 +81,12 @@ public class Tesla4 extends JFrame {
 		table.setRowHeight(25);
 
 		JScrollPane panel = new JScrollPane(table);
-		panel.setBounds(10, 11, 621, 199);
+		panel.setBounds(10, 11, 792, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
 		JLabel lblQuery = new JLabel("QUERY");
 		lblQuery.setBounds(10, 240, 46, 14);
 		contentPane.add(lblQuery);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 265, 621, 198);
-		contentPane.add(panel_1);
-		panel_1.setLayout(null);
-
-		textArea = new JTextArea();
-		textArea.setBounds(10, 11, 601, 176);
-		textArea.setLineWrap(true);
-		panel_1.add(textArea);
 
 		JButton btnAddCoulmn = new JButton("ADD COULMN");
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
@@ -86,25 +94,37 @@ public class Tesla4 extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.updateUI();
 				table.editCellAt(-1, -1);
-				QueryUtil.updateInnerJoinMap(innerJoinRows);
-				textArea.setText(QueryUtil.buildQuery().toString());
+				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
+				QueryUtil.buildQuery();
+				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
+		
+		
 
-		btnAddCoulmn.setBounds(232, 221, 116, 23);
+		btnAddCoulmn.setBounds(152, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
 
-		JButton btnDelete = new JButton("Delete");
+		JButton btnDelete = new JButton("DELETE LAST");
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				innerJoinTableModel.removeFromUI();
-				textArea.setText(QueryUtil.buildQuery().toString());
+				// innerJoinRows = new ArrayList<InnerJoinRow>();
+				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
-		btnDelete.setBounds(358, 221, 89, 23);
+		btnDelete.setBounds(371, 221, 146, 23);
 		contentPane.add(btnDelete);
 
+		JButton btnNewButton = new JButton("Next");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FileIO.writeToText();
+			}
+		});
+		btnNewButton.setBounds(607, 221, 121, 23);
+		contentPane.add(btnNewButton);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 

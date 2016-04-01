@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.controller.Controller;
+import com.service.FileIO;
 
 public class TeslaS extends JFrame {
 
@@ -119,6 +120,7 @@ public class TeslaS extends JFrame {
 				 */
 				tableNames = Controller.getTables("test", "", "", "root",
 						"Welcome123");
+				frame.repaint();
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;
 				for (int i = 0; i < tableNames.size(); i++) {
@@ -128,20 +130,8 @@ public class TeslaS extends JFrame {
 					loc += 20;
 					tablesCheckBoxList[i].setVisible(true);
 					tablesCheckBoxList[i].setFocusTraversalKeysEnabled(false);
-					/*
-					 * tablesCheckBoxList[i].addItemListener(new ItemListener()
-					 * {
-					 * 
-					 * @Override public void itemStateChanged(ItemEvent arg0) {
-					 * if (tablesCheckBoxList[i].isSelected()) {
-					 * selectedTableNames.add(tablesCheckBoxList[i] .getText());
-					 * } else { selectedTableNames.remove(tablesCheckBoxList[i]
-					 * .getText()); } System.out.println(selectedTableNames); }
-					 * });
-					 */
 					frame.getContentPane().add(tablesCheckBoxList[i]);
 				}
-				btnFetchColumns = new JButton("Fetch Columns");
 				btnFetchColumns = new JButton("Fetch Columns");
 				btnFetchColumns.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
@@ -156,10 +146,9 @@ public class TeslaS extends JFrame {
 				});
 				btnFetchColumns.setBounds(347, 421, 119, 31);
 				frame.getContentPane().add(btnFetchColumns);
+				frame.getContentPane().add(btnFetchColumns);
 				frame.repaint();
-				System.out.println("Here");
 			}
-			// }
 		});
 		button.setBounds(671, 58, 86, 22);
 		frame.getContentPane().add(button);
@@ -172,6 +161,28 @@ public class TeslaS extends JFrame {
 		JLabel label = new JLabel("SCHEMA");
 		label.setBounds(10, 58, 46, 14);
 		frame.getContentPane().add(label);
+
+		JButton btnNewButton = new JButton("Brows File");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FileBrowse fileBrowse = new FileBrowse();
+				String filePath = fileBrowse.getFilePath();
+				tableNames = Controller.getTables("testschema", "", "", "root",
+						"Welcome123");
+				if (tablesCheckBoxList != null) {
+					for (JCheckBox checkBox : tablesCheckBoxList) {
+						if (checkBox.isSelected())
+							selectedTableNames.add(checkBox.getText());
+					}
+				}
+				FileIO.getFromTextFile(filePath);
+				frame.dispose();
+				new Tesla2(selectedTableNames);
+
+			}
+		});
+		btnNewButton.setBounds(655, 86, 122, 38);
+		frame.getContentPane().add(btnNewButton);
 
 	}
 }
