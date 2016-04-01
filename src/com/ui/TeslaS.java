@@ -107,7 +107,7 @@ public class TeslaS extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.repaint();
 				tableNames = Controller.getTables("testschema", "", "", "root",
-						"welcome123");
+						"Welcome123");
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;
 				for (int i = 0; i < tableNames.size(); i++) {
@@ -155,7 +155,7 @@ public class TeslaS extends JFrame {
 				FileBrowse fileBrowse = new FileBrowse();
 				String filePath = fileBrowse.getFilePath();
 				tableNames = Controller.getTables("testschema", "", "", "root",
-						"welcome123");
+						"Welcome123");
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {
 						if (checkBox.isSelected())
