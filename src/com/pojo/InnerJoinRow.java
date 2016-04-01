@@ -1,6 +1,10 @@
 package com.pojo;
 
-public class InnerJoinRow {
+import java.io.Serializable;
+
+public class InnerJoinRow implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	POJOTable joinTable1;
 	POJOTable joinTable2;
 	String innerJoinType;
