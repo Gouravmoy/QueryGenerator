@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.controller.MasterCommon;
+import com.pojo.InnerJoinRow;
 import com.pojo.POJORow;
 import com.ui.Tesla2;
 import com.util.QueryIOUtil;
@@ -26,8 +27,7 @@ public class FileIO extends MasterCommon {
 		queryUtil = new QueryIOUtil();
 		FileOutputStream fout;
 		try {
-			String path = System.getProperty("user.home")
-					+ "//Desktop//Query//Query" + form.format(d) + ".txt";
+			String path = System.getProperty("user.home") + "//Desktop//Query//Query" + form.format(d) + ".txt";
 			File file = new File(path);
 			if (!file.exists()) {
 				file.createNewFile();
@@ -66,7 +66,11 @@ public class FileIO extends MasterCommon {
 		}
 		selectRows.addAll(reconMap.getSelectRows());
 		joinRows.addAll(reconMap.getConditionRows());
+		for (InnerJoinRow innerJoinRow : joinRows) {
+			innerJoinRow.setStatus(false);
+		}
 		QueryUtil.updateInnerJoinMap(joinRows);
+		QueryUtil.buildQuery();
 		for (int i = 0; i < selectRows.size(); i++) {
 			POJORow row = (POJORow) selectRows.get(i);
 			tableHolder.put(i, row.getTable().getTableName());
@@ -76,9 +80,8 @@ public class FileIO extends MasterCommon {
 				valueHolder.add(row.getTable().getTableName());
 				listPojoTable.add(row.getTable());
 			}
-			String valueQuery = row.getTable().getTableName() + "."
-					+ row.getTable().getColumn().getColumnName() + " as '"
-					+ row.getElementname() + "' ,";
+			String valueQuery = row.getTable().getTableName() + "." + row.getTable().getColumn().getColumnName()
+					+ " as '" + row.getElementname() + "' ,";
 			Tesla2.displyQuery(i, valueQuery);
 		}
 
