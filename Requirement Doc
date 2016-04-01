@@ -1,0 +1,21 @@
+Requirement Document – ETL Query Builder V1.0
+
+Release Date : 12th April 2016
+
+Screen 1 – DB Selector
+•	Store DB Credentials
+•	Browse Query Models
+•	Select Tables for Query Generation
+Screen 2 – Select UI
+•	Select statements
+•	Transformations: Case only
+•	SQL Editor Implementation
+Screen 3 – Join UI
+•	Joins Handled
+•	SQL Editor Implementation
+Screen 4 – Where/OrderBy/GroupBy UI
+•	Where, Order By, Group By
+•	SQL Editor Implementation
+•	Save Query Model
+•	Export Query as Text
+•	Test Query
