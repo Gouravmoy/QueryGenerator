@@ -3,6 +3,7 @@ package com.ui;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 public class FileBrowse extends JFrame {
@@ -11,6 +12,11 @@ public class FileBrowse extends JFrame {
 	JFileChooser fileChooser;
 
 	public FileBrowse() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 782, 455);
 		contentPane = new JPanel();
@@ -34,6 +40,6 @@ public class FileBrowse extends JFrame {
 	}
 
 	public void saveFile() {
-		
+
 	}
 }

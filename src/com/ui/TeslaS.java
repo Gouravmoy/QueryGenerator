@@ -11,6 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import com.controller.Controller;
 import com.service.FileIO;
@@ -36,6 +37,11 @@ public class TeslaS extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+		      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		    }
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -118,7 +124,7 @@ public class TeslaS extends JFrame {
 				 * textUrl.getText(), textDbName.getText(),
 				 * textUserName.getText(), textPassword.getText());
 				 */
-				tableNames = Controller.getTables("test", "", "", "root",
+				tableNames = Controller.getTables("testschema", "", "", "root",
 						"Welcome123");
 				frame.repaint();
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
