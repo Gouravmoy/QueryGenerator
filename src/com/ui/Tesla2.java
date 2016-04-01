@@ -34,11 +34,7 @@ public class Tesla2 {
 	private static JTextArea textArea = new JTextArea();;
 	List<POJORow> listRow = new ArrayList<>();
 
-	@SuppressWarnings("unchecked")
-	public Tesla2(ArrayList<String> tables, String filePath) {
-		if (!filePath.equals("")) {
-			listRow = (ArrayList<POJORow>) FileIO.getFromTextFile("Select");
-		}
+	public Tesla2(ArrayList<String> tables) {
 		tables.addAll(FileIO.valueHolder);
 		this.tables = Controller.getTablesMetaInfo(tables);
 		MasterCommon.listTable.clear();
@@ -56,7 +52,6 @@ public class Tesla2 {
 		panel.setLayout(null);
 		textArea.setBounds(0, 0, 769, 81);
 		panel.add(textArea);
-
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(0, 0, 769, 81);
 		panel.add(scrollPane_1);
@@ -72,7 +67,7 @@ public class Tesla2 {
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.setBounds(298, 302, 108, 25);
 		frmQuerybuilder.getContentPane().add(btnAdd);
-		tableModel = new TableModel(listRow);
+		tableModel = new TableModel(MasterCommon.selectRows);
 		table.setModel(tableModel);
 		table.setRowHeight(25);
 
@@ -81,11 +76,9 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				tableModel.updateUI();
 				MasterCommon.completeQuery = MasterCommon.completeQuery
 						.replaceAll(", $", "").toUpperCase() + " FROM \n";
 				frmQuerybuilder.dispose();
-				FileIO.writeToText("Select");
 				new Tesla4().setVisible(true);
 			}
 		});

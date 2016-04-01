@@ -83,7 +83,6 @@ public class TableModel extends AbstractTableModel {
 					+ row.getTable().getColumn().getColumnName() + " as '"
 					+ row.getElementname() + "' ,";
 			Tesla2.displyQuery(rowIndex, valueQuery2);
-			MasterCommon.selectRows.add(row);
 			break;
 		}
 		if (rowIndex < MasterCommon.selectRows.size()) {

@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import com.controller.Controller;
+import com.service.FileIO;
 
 public class TeslaS extends JFrame {
 
@@ -104,8 +105,9 @@ public class TeslaS extends JFrame {
 		Button button = new Button("Fetch Tables");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				frame.repaint();
 				tableNames = Controller.getTables("testschema", "", "", "root",
-						"Welcome123");
+						"welcome123");
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;
 				for (int i = 0; i < tableNames.size(); i++) {
@@ -125,7 +127,7 @@ public class TeslaS extends JFrame {
 								selectedTableNames.add(checkBox.getText());
 						}
 						frame.dispose();
-						new Tesla2(selectedTableNames, "");
+						new Tesla2(selectedTableNames);
 
 					}
 				});
@@ -150,20 +152,23 @@ public class TeslaS extends JFrame {
 		JButton btnNewButton = new JButton("Brows File");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String filePath = "C:/Users/VBasidon/Desktop/abc.txt";
-				frame.dispose();
+				FileBrowse fileBrowse = new FileBrowse();
+				String filePath = fileBrowse.getFilePath();
 				tableNames = Controller.getTables("testschema", "", "", "root",
-						"Welcome123");
+						"welcome123");
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {
 						if (checkBox.isSelected())
 							selectedTableNames.add(checkBox.getText());
 					}
 				}
-				new Tesla2(selectedTableNames, filePath);
+				FileIO.getFromTextFile(filePath);
+				frame.dispose();
+				new Tesla2(selectedTableNames);
+
 			}
 		});
-		btnNewButton.setBounds(668, 107, 122, 38);
+		btnNewButton.setBounds(655, 86, 122, 38);
 		frame.getContentPane().add(btnNewButton);
 
 	}

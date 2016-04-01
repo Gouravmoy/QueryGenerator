@@ -1,13 +1,11 @@
 package com.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.controller.MasterCommon;
-import com.entity.Query;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJOTable;
@@ -105,7 +103,6 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			break;
 		case 5:
 			row.getJoinTable2().setColumn((POJOColumn) value);
-			MasterCommon.joinRows.add(row);
 			break;
 		}
 		if (rowIndex < MasterCommon.joinRows.size()) {
