@@ -1,6 +1,7 @@
 package com.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,8 +18,18 @@ public class QueryUtil extends MasterCommon {
 		StringBuilder stringBuilder = new StringBuilder();
 		ArrayList<String> joinStmts = new ArrayList<>();
 		stringBuilder.append(completeQuery + "\n");
+		ArrayList<Integer> queryorder = new ArrayList<Integer>();
 
-		for (int i = 0; i < innerJoinMap.size(); i++) {
+		Iterator it2 = innerJoinMap.entrySet().iterator();
+		while (it2.hasNext()) {
+			Map.Entry pair = (Map.Entry) it2.next();
+			String key = pair.getKey() + "";
+			queryorder.add(Integer.parseInt(key.split("\\|")[2]));
+		}
+
+		Collections.sort(queryorder);
+
+		for (int i : queryorder) {
 			Iterator it = innerJoinMap.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
@@ -28,7 +39,6 @@ public class QueryUtil extends MasterCommon {
 				}
 			}
 		}
-
 		mainQuery.setJoinStmts(joinStmts);
 	}
 
@@ -55,6 +65,10 @@ public class QueryUtil extends MasterCommon {
 				continue;
 			} else if (table1Name.equals(table2Name)) {
 				Iterator it = innerJoinMap.entrySet().iterator();
+				if (innerJoinMap.size() == 0) {
+					innerJoinMap.put(table1Name + "|" + table1Name + "|0", getInnerJoinValue(joinRow, 4));
+					continue;
+				}
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					String key = (String) pair.getKey();
@@ -62,7 +76,8 @@ public class QueryUtil extends MasterCommon {
 					if (mapTable.split("\\|")[0].equals(table1Name) || mapTable.split("\\|")[1].equals(table1Name)) {
 						String prevVal = innerJoinMap.get(key);
 						String newJoinCond = getInnerJoinValue(joinRow, 1);
-						innerJoinMap.put(key, prevVal + "\n" + newJoinCond);
+						if (!prevVal.contains(newJoinCond))
+							innerJoinMap.put(key, prevVal + "\n" + newJoinCond);
 						match = true;
 					}
 				}
@@ -105,8 +120,10 @@ public class QueryUtil extends MasterCommon {
 
 						}
 					}
+					// Add modificaton here
 				}
 				if (match == false) {
+					// Add modificaton here
 					Iterator it2 = innerJoinMap.entrySet().iterator();
 					HashMap<String, String> tempMap = new HashMap<String, String>();
 					while (it2.hasNext()) {
@@ -117,21 +134,17 @@ public class QueryUtil extends MasterCommon {
 						// String keyRow = key.split("\\|")[2];
 						if ((table1Name.equals(mapTable1) || table1Name.equals(mapTable2))) {
 							tempMap.put(table1Name + "|" + table2Name + "|" + i, getInnerJoinValue(joinRow, 3));
-							/*
-							 * innerJoinMap.put(table1Name + "|" + table2Name +
-							 * "|" + i, getInnerJoinValue(joinRow, 3));
-							 */
+							joinRow.setStatus(true);
 							match = true;
 							System.out.println("Condition One Table - Table 1 is Existing");
+							break;
 						}
 						if ((table2Name.equals(mapTable1) || table2Name.equals(mapTable2))) {
 							tempMap.put(table1Name + "|" + table2Name + "|" + i, getInnerJoinValue(joinRow, 4));
-							/*
-							 * innerJoinMap.put(table1Name + "|" + table2Name +
-							 * "|" + i, getInnerJoinValue(joinRow, 4));
-							 */
+							joinRow.setStatus(true);
 							match = true;
 							System.out.println("Condition One Table - Table 2 is Existing");
+							break;
 						}
 					}
 					if (match == true) {
