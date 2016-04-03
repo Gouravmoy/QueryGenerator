@@ -148,6 +148,12 @@ public class QueryUtil extends MasterCommon {
 
 	}
 
+	public static void reinitilizeJoinRows(ArrayList<InnerJoinRow> joinRows) {
+		for (InnerJoinRow innerJoinRow : joinRows) {
+			innerJoinRow.setStatus(false);
+		}
+	}
+
 	private static String getInnerJoinValue(InnerJoinRow joinRow, int condition) {
 		final String space = " ";
 		String value = "";

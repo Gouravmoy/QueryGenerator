@@ -38,10 +38,10 @@ public class TeslaS extends JFrame {
 	 */
 	public static void main(String[] args) {
 		try {
-		      UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		    } catch (Exception e) {
-		      e.printStackTrace();
-		    }
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -124,14 +124,12 @@ public class TeslaS extends JFrame {
 				 * textUrl.getText(), textDbName.getText(),
 				 * textUserName.getText(), textPassword.getText());
 				 */
-				tableNames = Controller.getTables("test", "", "", "root",
-						"Welcome123");
+				tableNames = Controller.getTables("test", "", "", "root", "Welcome123");
 				frame.repaint();
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;
 				for (int i = 0; i < tableNames.size(); i++) {
-					tablesCheckBoxList[i] = new JCheckBox(tableNames.get(i)
-							.toUpperCase());
+					tablesCheckBoxList[i] = new JCheckBox(tableNames.get(i).toUpperCase());
 					tablesCheckBoxList[i].setBounds(39, loc, 150, 23);
 					loc += 20;
 					tablesCheckBoxList[i].setVisible(true);
@@ -173,8 +171,7 @@ public class TeslaS extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				FileBrowse fileBrowse = new FileBrowse();
 				String filePath = fileBrowse.getFilePath();
-				tableNames = Controller.getTables("test", "", "", "root",
-						"Welcome123");
+				tableNames = Controller.getTables("test", "", "", "root", "Welcome123");
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {
 						if (checkBox.isSelected())

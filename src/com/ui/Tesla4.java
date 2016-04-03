@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -99,10 +100,8 @@ public class Tesla4 extends JFrame {
 				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
-		
-		
 
-		btnAddCoulmn.setBounds(152, 221, 116, 23);
+		btnAddCoulmn.setBounds(277, 221, 132, 33);
 		contentPane.add(btnAddCoulmn);
 
 		JButton btnDelete = new JButton("DELETE LAST");
@@ -114,19 +113,36 @@ public class Tesla4 extends JFrame {
 				textArea.setText(MasterCommon.mainQuery.toString());
 			}
 		});
-		btnDelete.setBounds(371, 221, 146, 23);
+		btnDelete.setBounds(82, 221, 132, 33);
 		contentPane.add(btnDelete);
 
-		JButton btnNewButton = new JButton("Next");
+		JButton btnNewButton = new JButton("NEXT");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				FileIO.writeToText();
 			}
 		});
-		btnNewButton.setBounds(607, 221, 121, 23);
+		btnNewButton.setBounds(637, 221, 132, 33);
 		contentPane.add(btnNewButton);
+
+		JButton btnRefresh = new JButton("REFRESH");
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				MasterCommon.innerJoinMap = new HashMap<String, String>();
+				QueryUtil.reinitilizeJoinRows(MasterCommon.joinRows);
+				table.editCellAt(-1, -1);
+				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
+				QueryUtil.buildQuery();
+				textArea.setText(MasterCommon.mainQuery.toString());
+			}
+		});
+		btnRefresh.setBounds(469, 221, 132, 33);
+		contentPane.add(btnRefresh);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
+	
 
 	private void initilizeColumns() {
 		TableColumn table1Column = table.getColumn("TableName1");
@@ -135,13 +151,11 @@ public class Tesla4 extends JFrame {
 
 		TableColumn col1Column = table.getColumn("ColumnName1");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
-		col1Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col1Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
 		TableColumn joinTypeColumn = table.getColumn("Join Type");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
-		joinTypeColumn.setCellEditor(new DropDownCellEditor(
-				MasterCommon.joinTypes));
+		joinTypeColumn.setCellEditor(new DropDownCellEditor(MasterCommon.joinTypes));
 
 		TableColumn table2Column = table.getColumn("TableName2");
 		table2Column.setCellRenderer(new TableCellRenderer());
@@ -149,7 +163,6 @@ public class Tesla4 extends JFrame {
 
 		TableColumn col2Column = table.getColumn("ColumnName2");
 		col2Column.setCellRenderer(new ColumnCellRenderer());
-		col2Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col2Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 	}
 }
