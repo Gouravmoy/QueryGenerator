@@ -14,6 +14,7 @@ import java.util.Date;
 import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJORow;
+import com.pojo.POJOTable;
 import com.ui.Tesla2;
 import com.util.QueryIOUtil;
 import com.util.QueryUtil;
@@ -36,6 +37,7 @@ public class FileIO extends MasterCommon {
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			queryUtil.setSelectRows(selectRows);
 			queryUtil.setConditionRows(joinRows);
+			queryUtil.setSelectTables(listPojoTable);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
@@ -66,20 +68,20 @@ public class FileIO extends MasterCommon {
 		}
 		selectRows.addAll(reconMap.getSelectRows());
 		joinRows.addAll(reconMap.getConditionRows());
+		listPojoTable.addAll(reconMap.getSelectTables());
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
 		QueryUtil.updateInnerJoinMap(joinRows);
 		QueryUtil.buildQuery();
+		for (int i = 0; i < listPojoTable.size(); i++) {
+			POJOTable table = (POJOTable) listPojoTable.get(i);
+			tableHolder.put(i, table.getTableName());
+			valueHolder.add(table.getTableName());
+
+		}
 		for (int i = 0; i < selectRows.size(); i++) {
 			POJORow row = (POJORow) selectRows.get(i);
-			tableHolder.put(i, row.getTable().getTableName());
-			if (valueHolder.contains(row.getTable().getTableName())) {
-
-			} else {
-				valueHolder.add(row.getTable().getTableName());
-				listPojoTable.add(row.getTable());
-			}
 			String valueQuery = row.getTable().getTableName() + "." + row.getTable().getColumn().getColumnName()
 					+ " as '" + row.getElementname() + "' ,";
 			Tesla2.displyQuery(i, valueQuery);
