@@ -28,7 +28,8 @@ public class FileIO extends MasterCommon {
 		queryUtil = new QueryIOUtil();
 		FileOutputStream fout;
 		try {
-			String path = System.getProperty("user.home") + "//Desktop//Query//Query" + form.format(d) + ".txt";
+			String path = System.getProperty("user.home")
+					+ "//Desktop//Query//Query" + form.format(d) + ".txt";
 			File file = new File(path);
 			if (!file.exists()) {
 				file.createNewFile();
@@ -38,6 +39,7 @@ public class FileIO extends MasterCommon {
 			queryUtil.setSelectRows(selectRows);
 			queryUtil.setConditionRows(joinRows);
 			queryUtil.setSelectTables(listPojoTable);
+			queryUtil.setWhereRows(whereRows);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
@@ -69,6 +71,7 @@ public class FileIO extends MasterCommon {
 		selectRows.addAll(reconMap.getSelectRows());
 		joinRows.addAll(reconMap.getConditionRows());
 		listPojoTable.addAll(reconMap.getSelectTables());
+		whereRows.addAll(reconMap.getWhereRows());
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
@@ -82,8 +85,9 @@ public class FileIO extends MasterCommon {
 		}
 		for (int i = 0; i < selectRows.size(); i++) {
 			POJORow row = (POJORow) selectRows.get(i);
-			String valueQuery = row.getTable().getTableName() + "." + row.getTable().getColumn().getColumnName()
-					+ " as '" + row.getElementname() + "' ,";
+			String valueQuery = row.getTable().getTableName() + "."
+					+ row.getTable().getColumn().getColumnName() + " as '"
+					+ row.getElementname() + "' ,";
 			Tesla2.displyQuery(i, valueQuery);
 		}
 

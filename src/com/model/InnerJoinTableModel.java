@@ -84,7 +84,6 @@ public class InnerJoinTableModel extends AbstractTableModel {
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 		} catch (Exception e) {
-
 		}
 
 		row = innerJoinRow.get(rowIndex);

@@ -43,7 +43,6 @@ public class Query {
 	public String toString() {
 		final String newLine = "\n";
 		final String comma = ",";
-		int whereCount = 0;
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT " + newLine);
 		for (String selectStmt : selectStmts) {
@@ -55,11 +54,7 @@ public class Query {
 		}
 		query.append("WHERE " + newLine);
 		for (String whereStmt : whereStmts) {
-			whereCount++;
-			if (whereCount > 1)
-				query.append(whereStmt + newLine + "AND ");
-			else
-				query.append(whereStmt + newLine);
+			query.append(whereStmt + newLine);
 		}
 		return query.toString();
 	}

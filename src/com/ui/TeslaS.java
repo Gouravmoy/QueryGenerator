@@ -1,6 +1,5 @@
 package com.ui;
 
-import java.awt.Button;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +37,8 @@ public class TeslaS extends JFrame {
 	 */
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager
+					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -108,7 +108,7 @@ public class TeslaS extends JFrame {
 		frame.getContentPane().add(textPassword);
 		textPassword.setColumns(10);
 
-		Button button = new Button("Fetch Tables");
+		JButton button = new JButton("Fetch Tables");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				/*
@@ -124,12 +124,14 @@ public class TeslaS extends JFrame {
 				 * textUrl.getText(), textDbName.getText(),
 				 * textUserName.getText(), textPassword.getText());
 				 */
-				tableNames = Controller.getTables("employee", "", "", "root", "Welcome123");
+				tableNames = Controller.getTables("testschema", "", "", "root",
+						"Welcome123");
 				frame.repaint();
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
 				int loc = 106;
 				for (int i = 0; i < tableNames.size(); i++) {
-					tablesCheckBoxList[i] = new JCheckBox(tableNames.get(i).toUpperCase());
+					tablesCheckBoxList[i] = new JCheckBox(tableNames.get(i)
+							.toUpperCase());
 					tablesCheckBoxList[i].setBounds(39, loc, 150, 23);
 					loc += 20;
 					tablesCheckBoxList[i].setVisible(true);
@@ -154,7 +156,7 @@ public class TeslaS extends JFrame {
 				frame.repaint();
 			}
 		});
-		button.setBounds(671, 58, 86, 22);
+		button.setBounds(656, 69, 122, 43);
 		frame.getContentPane().add(button);
 
 		textSchemaName = new JTextField();
@@ -171,7 +173,8 @@ public class TeslaS extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				FileBrowse fileBrowse = new FileBrowse();
 				String filePath = fileBrowse.getFilePath();
-				tableNames = Controller.getTables("employee", "", "", "root", "Welcome123");
+				tableNames = Controller.getTables("testschema", "", "", "root",
+						"Welcome123");
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {
 						if (checkBox.isSelected())
@@ -184,7 +187,7 @@ public class TeslaS extends JFrame {
 
 			}
 		});
-		btnNewButton.setBounds(655, 86, 122, 38);
+		btnNewButton.setBounds(656, 143, 122, 38);
 		frame.getContentPane().add(btnNewButton);
 
 	}
