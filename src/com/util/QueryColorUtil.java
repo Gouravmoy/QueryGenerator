@@ -1,8 +1,5 @@
 package com.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.controller.MasterCommon;
 
 public class QueryColorUtil extends MasterCommon {
@@ -40,12 +37,8 @@ public class QueryColorUtil extends MasterCommon {
 					Query = Query + queryPartsSplit[k]+" ";
 				}
 			}
-			/*
-			 * String htmlText = query .replace("SELECT",
-			 * "<font size=\"3\" face=\"verdana\" color=\"red\">SELECT\n</font>"
-			 * );
-			 */
-			finalQuery = finalQuery + Query + "\n";
+			
+			finalQuery = finalQuery + Query + "<p></p>";
 
 		}
 		System.out.println(finalQuery);

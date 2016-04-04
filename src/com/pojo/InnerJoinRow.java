@@ -1,9 +1,14 @@
 package com.pojo;
 
-public class InnerJoinRow {
+import java.io.Serializable;
+
+public class InnerJoinRow implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	POJOTable joinTable1;
 	POJOTable joinTable2;
 	String innerJoinType;
+	boolean status;
 
 	public POJOTable getJoinTable1() {
 		return joinTable1;
@@ -29,10 +34,19 @@ public class InnerJoinRow {
 		this.innerJoinType = innerJoinType;
 	}
 
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "InnerJoinRow [joinTable1=" + joinTable1 + ", joinTable2="
-				+ joinTable2 + ", innerJoinType=" + innerJoinType + "]";
+				+ joinTable2 + ", innerJoinType=" + innerJoinType + ", status="
+				+ status + "]";
 	}
 
 	public InnerJoinRow(POJOTable joinTable1, POJOTable joinTable2,
