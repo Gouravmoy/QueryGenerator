@@ -24,6 +24,8 @@ import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.ColsUtil;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Tesla2 {
 
@@ -33,6 +35,7 @@ public class Tesla2 {
 	private JTable table;
 	private static JTextArea textArea = new JTextArea();;
 	List<POJORow> listRow = new ArrayList<>();
+	int caseCount = 0;
 
 	public Tesla2(ArrayList<String> tables) {
 		tables.addAll(FileIO.valueHolder);
@@ -84,6 +87,16 @@ public class Tesla2 {
 		});
 		btnNext.setBounds(702, 302, 89, 23);
 		frmQuerybuilder.getContentPane().add(btnNext);
+
+		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
+		btnAddTransformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//frmQuerybuilder.setVisible(false);
+				new TeslaCase(caseCount++);
+			}
+		});
+		btnAddTransformation.setBounds(469, 302, 166, 23);
+		frmQuerybuilder.getContentPane().add(btnAddTransformation);
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
