@@ -21,6 +21,7 @@ public class MasterCommon {
 	public static String password;
 	public static String dbName;
 	public static Properties queriesProps;
+	public static Properties keywordsProps;
 
 	public static List<POJOTable> listPojoTable = new ArrayList<>();
 	public static ArrayList<POJOColumn> listPojoCols = new ArrayList<POJOColumn>();

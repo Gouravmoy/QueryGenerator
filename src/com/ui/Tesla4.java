@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableColumn;
+import javax.swing.text.html.HTMLEditorKit;
 
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.DropDownCellEditor;
@@ -24,8 +25,10 @@ import com.pojo.InnerJoinRow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
+import com.util.QueryColorUtil;
 import com.util.QueryUtil;
-import javax.swing.JTextArea;
+
+import javax.swing.JTextPane;
 
 public class Tesla4 extends JFrame {
 
@@ -33,8 +36,9 @@ public class Tesla4 extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private InnerJoinTableModel innerJoinTableModel;
-	public static JTextArea textArea;
+	public static JTextPane textArea;
 	List<InnerJoinRow> innerJoinRows;
+	QueryColorUtil colorUtil = null;
 
 	/**
 	 * Create the frame.
@@ -75,22 +79,34 @@ public class Tesla4 extends JFrame {
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
-		textArea = new JTextArea();
+		textArea = new JTextPane();
 		textArea.setBounds(10, 11, 772, 176);
-		textArea.setLineWrap(true);
-		panel_1.add(textArea);
+		// textArea.setLineWrap(true);
 
+		textArea.setEditorKit(new HTMLEditorKit());
 		JButton btnAddCoulmn = new JButton("ADD COULMN");
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				colorUtil = new QueryColorUtil();
 				innerJoinTableModel.updateUI();
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(innerJoinRows);
 				QueryUtil.buildQuery();
-				textArea.setText(MasterCommon.mainQuery.toString());
+			
+				textArea.setText(colorUtil
+						.queryColorChange(MasterCommon.mainQuery.toString()));
 			}
+
 		});
+		panel_1.add(textArea);
+
+		panel_1.setVisible(true);
+		/*
+		 * String b = textArea.getText().toString(); String htmlText =
+		 * b.replace("select","<font color='#c5c5c5'>select</font>");
+		 * System.out.println(htmlText); textArea.setText(htmlText);
+		 */
 
 		btnAddCoulmn.setBounds(293, 221, 116, 23);
 		contentPane.add(btnAddCoulmn);
@@ -102,6 +118,7 @@ public class Tesla4 extends JFrame {
 				innerJoinTableModel.removeFromUI();
 				// innerJoinRows = new ArrayList<InnerJoinRow>();
 				textArea.setText(MasterCommon.mainQuery.toString());
+
 			}
 		});
 		btnDelete.setBounds(484, 221, 146, 23);

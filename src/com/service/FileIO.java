@@ -21,7 +21,7 @@ public class FileIO extends MasterCommon {
 		FileOutputStream fout;
 		try {
 			fout = new FileOutputStream(
-					"C:/Users/GMohanty/Desktop/Temp/abc.txt");
+					"C:/Users/ssinghal/Desktop/Temp/abc.txt");
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
 			queryUtil.setSelectRows(selectRows);
 			queryUtil.setConditionRows(joinRows);
