@@ -12,6 +12,7 @@ import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJORow;
 import com.pojo.POJOTable;
+import com.pojo.WhereRow;
 import com.util.QueryIOUtil;
 
 public class MasterCommon {
@@ -22,6 +23,7 @@ public class MasterCommon {
 	public static String password;
 	public static String dbName;
 	public static Properties queriesProps;
+	public static Properties keywordsProps;
 
 	public static List<POJOTable> listPojoTable = new ArrayList<>();
 	public static ArrayList<POJOColumn> listPojoCols = new ArrayList<POJOColumn>();
@@ -29,6 +31,7 @@ public class MasterCommon {
 	public static ArrayList<POJORow> selectRows = new ArrayList<POJORow>();
 	public static ArrayList<InnerJoinRow> joinRows = new ArrayList<InnerJoinRow>();
 	public static ArrayList<CaseRow> caseRows = new ArrayList<CaseRow>();
+	public static ArrayList<WhereRow> whereRows = new ArrayList<WhereRow>();
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 
 	public static HashMap<String, String> innerJoinMap = new HashMap<String, String>();
@@ -38,7 +41,7 @@ public class MasterCommon {
 	// public static HashMap<Integer, String> innerJoinMap = new
 	// HashMap<Integer, String>();
 	public static HashMap<Integer, String> selectQueryHolder = new HashMap<Integer, String>();
-	public static String completeQuery;
+	public static String completeQuery = "";
 	public static QueryIOUtil queryUtil;
 
 	public static void updateDBCredentials(String schemaName2, String url,
@@ -52,5 +55,9 @@ public class MasterCommon {
 
 	public static String[] joinTypes = { "SELECT JOIN", "INNER JOIN",
 			"LEFT OUTER JOIN", "RIGHT INNER JOIN" };
+	public static String[] relationalOps = { "SELECT RELATION", "EQUAL",
+			"GREATER THAN", "GREATER THAN EQ TO", "LESS THAN",
+			"LESS THAN EQ TO", "BETWEEN", "NOT EQUAL" };
+	public static String[] andOrs = { "SELECT", "AND", "OR", "" };
 
 }
