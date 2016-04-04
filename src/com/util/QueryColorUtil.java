@@ -4,7 +4,8 @@ import com.controller.MasterCommon;
 
 public class QueryColorUtil extends MasterCommon {
 
-	public String queryColorChange(String query) {
+	public static String queryColorChange(String query) {
+	
 		String[] queryParts = query.split("\n");
 		String finalQuery = "";
 
@@ -12,10 +13,10 @@ public class QueryColorUtil extends MasterCommon {
 		String[] parts = keyWords.split(",");
 		for (int j = 0; j < queryParts.length; j++) {
 			String Query = "";
-			System.out.println(queryParts[j]);
+			
 			String[] queryPartsSplit = queryParts[j].split(" ");
 			for (int k = 0; k < queryPartsSplit.length; k++) {
-				System.out.println(queryPartsSplit.length);
+			
 				int count = 0;
 				for (int i = 0; i < parts.length; i++) {
 					/*
@@ -23,12 +24,19 @@ public class QueryColorUtil extends MasterCommon {
 					 * System.out.println("BBKBK"); }
 					 */
 					if ((queryPartsSplit[k].trim()).equalsIgnoreCase(parts[i])) {
-						System.out.println(parts[i]);
+					
 
 						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
 								+ queryPartsSplit[k] + "</font>";
 						Query = Query + queryPartsSplit[k]+" ";
-						System.out.println(Query);
+					
+						count++;
+
+					}else if((queryPartsSplit[k].startsWith("'"))){
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"green\">"
+								+ queryPartsSplit[k] + "</font>";
+						Query = Query + queryPartsSplit[k]+" ";
+				
 						count++;
 
 					}
@@ -38,12 +46,12 @@ public class QueryColorUtil extends MasterCommon {
 				}
 			}
 			
-			finalQuery = finalQuery + Query + "<p></p>";
+			finalQuery = finalQuery + Query + "<br>";
 
 		}
 		System.out.println(finalQuery);
 		finalQuery = "<html>" + finalQuery + "</html>";
-		System.out.println(finalQuery);
+		//System.out.println(finalQuery);
 		return finalQuery;
 
 	}

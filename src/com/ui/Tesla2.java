@@ -10,8 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.table.TableColumn;
+import javax.swing.text.html.HTMLEditorKit;
 
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
@@ -24,6 +25,7 @@ import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.ColsUtil;
+import com.util.QueryColorUtil;
 
 public class Tesla2 {
 
@@ -31,7 +33,7 @@ public class Tesla2 {
 	private TableModel tableModel;
 	private ArrayList<Tables> tables;
 	private JTable table;
-	private static JTextArea textArea = new JTextArea();;
+	private static JTextPane textArea = new JTextPane();;
 	List<POJORow> listRow = new ArrayList<>();
 
 	public Tesla2(ArrayList<String> tables) {
@@ -50,8 +52,12 @@ public class Tesla2 {
 		panel.setBounds(22, 338, 769, 81);
 		frmQuerybuilder.getContentPane().add(panel);
 		panel.setLayout(null);
+		textArea.setEditorKit(new HTMLEditorKit());
 		textArea.setBounds(0, 0, 769, 81);
 		panel.add(textArea);
+		
+		
+		
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(0, 0, 769, 81);
 		panel.add(scrollPane_1);
@@ -109,11 +115,13 @@ public class Tesla2 {
 	public static void displyQuery(int j, String valueQuery) {
 		MasterCommon.selectQueryHolder.put(j, valueQuery);
 		MasterCommon.completeQuery = "Select \n";
-		textArea.setText("Select \n");
 		for (int i = 0; i < MasterCommon.selectQueryHolder.size(); i++) {
-			textArea.append(MasterCommon.selectQueryHolder.get(i) + " \n");
+			textArea.setText("Select \n");
 			MasterCommon.completeQuery = MasterCommon.completeQuery
 					+ MasterCommon.selectQueryHolder.get(i) + " \n";
+			textArea.setText(QueryColorUtil
+					.queryColorChange(MasterCommon.completeQuery) + " \n");
+
 		}
 	}
 }

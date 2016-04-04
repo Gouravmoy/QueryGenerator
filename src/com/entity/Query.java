@@ -43,11 +43,10 @@ public class Query {
 	public String toString() {
 		final String newLine = "\n";
 		final String comma = ",";
-		int whereCount = 0;
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT " + newLine);
 		for (String selectStmt : selectStmts) {
-			query.append(selectStmt + comma + newLine);
+			query.append(selectStmt  + newLine);
 		}
 		query.append("FROM " + newLine);
 		for (String joinStmt : joinStmts) {
@@ -55,11 +54,7 @@ public class Query {
 		}
 		query.append("WHERE " + newLine);
 		for (String whereStmt : whereStmts) {
-			whereCount++;
-			if (whereCount > 1)
-				query.append(whereStmt + newLine + "AND ");
-			else
-				query.append(whereStmt + newLine);
+			query.append(whereStmt + newLine);
 		}
 		return query.toString();
 	}

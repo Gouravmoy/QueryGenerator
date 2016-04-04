@@ -1,13 +1,8 @@
 package com.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,30 +19,23 @@ import com.celleditor.ColumnCellEditor;
 import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
-import com.model.InnerJoinTableModel;
-import com.pojo.InnerJoinRow;
+import com.model.WhereModel;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
-import com.util.QueryColorUtil;
+import com.service.FileIO;
 import com.util.QueryUtil;
 
-public class Tesla4 extends JFrame {
+public class Tesla5 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
-	private InnerJoinTableModel innerJoinTableModel;
+	private WhereModel whereModel;
 	public static JTextPane textArea;
-	List<InnerJoinRow> innerJoinRows;
-	QueryColorUtil colorUtil = null;
 
-	/**
-	 * Create the frame.
-	 */
-	public Tesla4() {
+	public Tesla5() {
 		initialize();
-
 	}
 
 	private void initialize() {
@@ -58,7 +46,7 @@ public class Tesla4 extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JScrollPane panel_1 = new JScrollPane();
+		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 265, 792, 198);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
@@ -71,15 +59,12 @@ public class Tesla4 extends JFrame {
 		scrollPane_1.setBounds(1, 1, 791, 197);
 		panel_1.add(scrollPane_1);
 
-		table = new JTable();
-		innerJoinRows = new ArrayList<InnerJoinRow>();
-		innerJoinTableModel = new InnerJoinTableModel(MasterCommon.joinRows);
-		QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
 		QueryUtil.updateQuery(textArea);
-		table.setModel(innerJoinTableModel);
 
+		table = new JTable();
+		whereModel = new WhereModel(MasterCommon.whereRows);
+		table.setModel(whereModel);
 		initilizeColumns();
-
 		table.setRowHeight(25);
 
 		JScrollPane panel = new JScrollPane(table);
@@ -90,28 +75,15 @@ public class Tesla4 extends JFrame {
 		lblQuery.setBounds(10, 240, 46, 14);
 		contentPane.add(lblQuery);
 
-		// textArea.setLineWrap(true);
-
-		JButton btnAddCoulmn = new JButton("ADD COULMN");
+		JButton btnAddCoulmn = new JButton("ADD CONDITION");
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
-				colorUtil = new QueryColorUtil();
-				innerJoinTableModel.updateUI();
+			public void mouseClicked(MouseEvent arg0) {
+				whereModel.updateUI();
 				table.editCellAt(-1, -1);
-				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
 				QueryUtil.updateQuery(textArea);
 			}
-
 		});
-
-		panel_1.setVisible(true);
-		/*
-		 * String b = textArea.getText().toString(); String htmlText =
-		 * b.replace("select","<font color='#c5c5c5'>select</font>");
-		 * System.out.println(htmlText); textArea.setText(htmlText);
-		 */
-
 		btnAddCoulmn.setBounds(277, 221, 132, 33);
 		contentPane.add(btnAddCoulmn);
 
@@ -119,20 +91,18 @@ public class Tesla4 extends JFrame {
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				innerJoinTableModel.removeFromUI();
-				textArea.setText(MasterCommon.mainQuery.toString());
-
+				whereModel.removeFromUI();
+				QueryUtil.updateQuery(textArea);
 			}
 		});
 		btnDelete.setBounds(82, 221, 132, 33);
 		contentPane.add(btnDelete);
 
-		JButton btnNewButton = new JButton("NEXT");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				table.editCellAt(-1, -1);
-				dispose();
-				new Tesla5().setVisible(true);
+		JButton btnNewButton = new JButton("SAVE");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				FileIO.writeToText();
 			}
 		});
 		btnNewButton.setBounds(637, 221, 132, 33);
@@ -141,11 +111,8 @@ public class Tesla4 extends JFrame {
 		JButton btnRefresh = new JButton("REFRESH");
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				MasterCommon.innerJoinMap = new HashMap<String, String>();
-				QueryUtil.reinitilizeJoinRows(MasterCommon.joinRows);
+			public void mouseClicked(MouseEvent e) {
 				table.editCellAt(-1, -1);
-				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
 				QueryUtil.updateQuery(textArea);
 			}
 		});
@@ -155,27 +122,23 @@ public class Tesla4 extends JFrame {
 	}
 
 	private void initilizeColumns() {
-		TableColumn table1Column = table.getColumn("TableName1");
+		TableColumn table1Column = table.getColumn("TableName");
 		table1Column.setCellRenderer(new TableCellRenderer());
 		table1Column.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 
-		TableColumn col1Column = table.getColumn("ColumnName1");
+		TableColumn col1Column = table.getColumn("ColumnName");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
 		col1Column
 				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
-		TableColumn joinTypeColumn = table.getColumn("Join Type");
+		TableColumn joinTypeColumn = table.getColumn("Condition");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
 		joinTypeColumn.setCellEditor(new DropDownCellEditor(
-				MasterCommon.joinTypes));
+				MasterCommon.relationalOps));
 
-		TableColumn table2Column = table.getColumn("TableName2");
-		table2Column.setCellRenderer(new TableCellRenderer());
-		table2Column.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
-
-		TableColumn col2Column = table.getColumn("ColumnName2");
-		col2Column.setCellRenderer(new ColumnCellRenderer());
-		col2Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		TableColumn col2Column = table.getColumn("And/Or");
+		col2Column.setCellRenderer(new DropDownRenderer());
+		col2Column.setCellEditor(new DropDownCellEditor(MasterCommon.andOrs));
 	}
+
 }
