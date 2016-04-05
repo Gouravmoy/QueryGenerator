@@ -128,8 +128,8 @@ public class TeslaS extends JFrame {
 				 * textUrl.getText(), textDbName.getText(),
 				 * textUserName.getText(), textPassword.getText());
 				 */
-				tableNames = Controller.getTables("testschema", "", "", "root",
-						"Welcome123");
+				/*tableNames = Controller.getTables("test", "", "", "root",
+						"Welcome123");*/
 
 				frame.repaint();
 				tablesCheckBoxList = new JCheckBox[tableNames.size()];
@@ -178,8 +178,8 @@ public class TeslaS extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse();
 				String filePath = fileBrowse.getFilePath();
-				tableNames = Controller.getTables("testschema", "", "", "root",
-						"Welcome123");
+				/*tableNames = Controller.getTables("test", "", "", "root",
+						"Welcome123");*/
 
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {

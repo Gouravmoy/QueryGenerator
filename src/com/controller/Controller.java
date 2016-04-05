@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.entity.Column;
+import com.entity.DBDetails;
 import com.entity.Tables;
 import com.extra.Keys;
 import com.util.DBUtil;
@@ -14,23 +15,21 @@ import com.util.PropsLoader;
 
 public class Controller {
 
-	public static ArrayList<String> getTables(String schemaName, String url,
-			String dbName, String userName, String password) {
-		MasterCommon.updateDBCredentials(schemaName, url, dbName, userName,
-				password);
+	public static ArrayList<String> getTables(DBDetails dbDetails) {
+		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(), dbDetails.getHostName(), dbDetails.getDatabase(),
+				dbDetails.getUserName(), dbDetails.getPassword());
 		PropsLoader.loadProps();
 		ArrayList<String> tableNames = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement preparedStatement;
 		ResultSet res;
 		try {
-			String sql = MasterCommon.queriesProps
-					.getProperty(Keys.KEY_SQL_TABLE_LIST);
+			String sql = MasterCommon.queriesProps.getProperty(Keys.KEY_SQL_TABLE_LIST);
 			System.out.println("Connecting to Database");
 			conn = DBUtil.getSQLConnection();
 			System.out.println("Connected to Database");
 			preparedStatement = conn.prepareStatement(sql);
-			preparedStatement.setString(1, schemaName);
+			preparedStatement.setString(1, dbDetails.getDbSchema());
 			res = preparedStatement.executeQuery();
 			while (res.next()) {
 				tableNames.add(res.getString(1));
@@ -51,8 +50,7 @@ public class Controller {
 		return tableNames;
 	}
 
-	public static ArrayList<Tables> getTablesMetaInfo(
-			ArrayList<String> selectedTableNames) {
+	public static ArrayList<Tables> getTablesMetaInfo(ArrayList<String> selectedTableNames) {
 		ArrayList<Tables> tables = new ArrayList<Tables>();
 		ArrayList<Column> columns = new ArrayList<Column>();
 		Column column = new Column();
@@ -62,8 +60,7 @@ public class Controller {
 		ResultSet res;
 
 		try {
-			String sql = MasterCommon.queriesProps
-					.getProperty(Keys.KEY_SQL_META_QUERY);
+			String sql = MasterCommon.queriesProps.getProperty(Keys.KEY_SQL_META_QUERY);
 			System.out.println("Connecting to Database");
 			conn = DBUtil.getSQLConnection();
 			System.out.println("Connected to Database");

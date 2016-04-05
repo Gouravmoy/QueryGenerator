@@ -1,9 +1,12 @@
 package com.ui;
 
+import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Panel;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -13,18 +16,22 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableColumn;
 
-import com.celleditor.TableEditor;
+import com.celleditor.CheckBoxCellEditor;
 import com.controller.Controller;
-import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.model.DBConnectionsModel;
-import com.renderer.TableCellRenderer;
+import com.model.TableNameModel;
+import com.renderer.CheckBoxCellRender;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
 import com.util.PropsLoader;
@@ -33,22 +40,27 @@ public class Tesla0 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private ArrayList<String> tableNames;
+	public static ArrayList<String> tableNames = new ArrayList<String>();
 	private ArrayList<String> selectedTableNames = new ArrayList<String>();
 	private ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
 	// private ArrayList<String> dbConnectionNames = new ArrayList<String>();
 	private JCheckBox[] tablesCheckBoxList;
 	JScrollPane dbNamesPane;
+	JScrollPane tableNameScrollPane;
 	JTable connNamesTable;
+	JTable tablenameTable;
 	DBConnectionsModel dbConnectionsModel;
+	TableNameModel tableNameModel;
+	JMenuItem mntmConnect;
+	JPopupMenu popupMenu;
+	StringBuilder selectedDB = new StringBuilder();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,9 +100,7 @@ public class Tesla0 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse();
 				String filePath = fileBrowse.getFilePath();
-				tableNames = Controller.getTables("testschema", "", "", "root",
-						"Welcome123");
-
+				tableNames = Controller.getTables(DBConnectionUtil.getDBDetails(selectedDB, dbConnection));
 				if (tablesCheckBoxList != null) {
 					for (JCheckBox checkBox : tablesCheckBoxList) {
 						if (checkBox.isSelected())
@@ -102,16 +112,14 @@ public class Tesla0 extends JFrame {
 				new Tesla2(selectedTableNames);
 			}
 		});
-		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/db.png")));
+		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/db.png")));
 		mnFile.add(mntmLoadQuery);
 
 		JMenu mnDatabase = new JMenu("Database");
 		menuBar.add(mnDatabase);
 
 		JMenuItem mntmAddDatabase = new JMenuItem("New Database Conncetion");
-		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/plus.png")));
+		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class.getResource("/png/plus.png")));
 		mntmAddDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new TeslaDBDetails().setVisible(true);
@@ -128,19 +136,104 @@ public class Tesla0 extends JFrame {
 		connNamesTable.setRowHeight(25);
 
 		/*
-		 * TableColumn connNamesTableName = connNamesTable
-		 * .getColumn("Connection Names");
-		 * connNamesTableName.setCellRenderer(new TableCellRenderer());
-		 * connNamesTableName.setCellEditor(new TableEditor(
-		 * MasterCommon.listPojoTable));
+		 * TableColumn connNamesTableName = connNamesTable .getColumn(
+		 * "Connection Names"); connNamesTableName.setCellRenderer(new
+		 * TableCellRenderer()); connNamesTableName.setCellEditor(new
+		 * TableEditor( MasterCommon.listPojoTable));
 		 */
 
 		dbNamesPane = new JScrollPane(connNamesTable);
+
+		popupMenu = new JPopupMenu();
+		addPopup(connNamesTable, popupMenu);
+
+		mntmConnect = new JMenuItem("Connect");
+		mntmConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				tableNames = Controller.getTables(DBConnectionUtil.getDBDetails(selectedDB, dbConnection));
+				tableNameModel = new TableNameModel(tableNames);
+				tablenameTable.setModel(tableNameModel);
+			}
+		});
+
+		mntmConnect.setIcon(new ImageIcon(Tesla0.class.getResource("/png/connect-no.png")));
+		popupMenu.add(mntmConnect);
+
+		JMenuItem mntmEditConnection = new JMenuItem("Edit Connection");
+		popupMenu.add(mntmEditConnection);
+
+		JMenuItem mntmDeleteConnection = new JMenuItem("Delete Connection");
+		popupMenu.add(mntmDeleteConnection);
+
+		popupMenu.addPopupMenuListener(new PopupMenuListener() {
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						int rowAtPoint = connNamesTable
+								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), connNamesTable));
+						if (rowAtPoint > -1) {
+							connNamesTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+							selectedDB.setLength(0);
+							selectedDB.append(connNamesTable.getValueAt(rowAtPoint, 0));
+						}
+					}
+				});
+
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+
+			}
+
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent e) {
+
+			}
+		});
+
 		dbNamesPane.setBounds(10, 67, 191, 389);
 		contentPane.add(dbNamesPane);
 
-		Panel panel_1 = new Panel();
-		panel_1.setBounds(207, 67, 477, 389);
-		contentPane.add(panel_1);
+		tableNameModel = new TableNameModel(tableNames);
+
+		tablenameTable = new JTable();
+		tablenameTable.setModel(tableNameModel);
+		tablenameTable.setRowHeight(25);
+
+		initilizeRows();
+
+		tableNameScrollPane = new JScrollPane(tablenameTable);
+		tableNameScrollPane.setBounds(211, 67, 473, 388);
+		contentPane.add(tableNameScrollPane);
+	}
+
+	private void initilizeRows() {
+		TableColumn table1Column = tablenameTable.getColumn("Table Names");
+		table1Column.setCellRenderer(new CheckBoxCellRender());
+		table1Column.setCellEditor(new CheckBoxCellEditor());
+	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
