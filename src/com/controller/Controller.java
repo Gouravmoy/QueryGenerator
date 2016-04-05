@@ -37,7 +37,7 @@ public class Controller {
 			}
 			preparedStatement.close();
 			conn.close();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
@@ -86,7 +86,7 @@ public class Controller {
 			}
 			preparedStatement.close();
 			conn.close();
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {

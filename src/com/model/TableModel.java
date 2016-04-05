@@ -9,7 +9,6 @@ import com.controller.MasterCommon;
 import com.pojo.POJOColumn;
 import com.pojo.POJORow;
 import com.pojo.POJOTable;
-import com.ui.Tesla2;
 
 public class TableModel extends AbstractTableModel {
 
@@ -30,6 +29,17 @@ public class TableModel extends AbstractTableModel {
 		row2 = new POJORow(pojoTable, "");
 		this.listRow.add(row2);
 		this.fireTableDataChanged();
+	}
+
+	public POJORow updateUI1() {
+
+		POJOColumn column = new POJOColumn("Transform");
+		POJOTable pojoTable = new POJOTable("Transform", column);
+		POJORow row2 = null;
+		row2 = new POJORow(pojoTable, "");
+		this.listRow.add(row2);
+		this.fireTableDataChanged();
+		return row2;
 	}
 
 	@Override
@@ -64,25 +74,12 @@ public class TableModel extends AbstractTableModel {
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 			row.setTable(new POJOTable(tableName, new POJOColumn("")));
-			String valueQuery = row.getTable().getTableName() + "."
-					+ row.getTable().getColumn().getColumnName() + " as '"
-					+ row.getElementname() + "' ,";
-			Tesla2.displyQuery(rowIndex, valueQuery);
 			break;
 		case 2:
 			row.getTable().setColumn((POJOColumn) value);
-			String valueQuery1 = row.getTable().getTableName() + "."
-					+ row.getTable().getColumn().getColumnName() + " as '"
-					+ row.getElementname() + "' ,";
-			Tesla2.displyQuery(rowIndex, valueQuery1);
-
 			break;
 		case 3:
 			row.setElementname((String) value);
-			String valueQuery2 = row.getTable().getTableName() + "."
-					+ row.getTable().getColumn().getColumnName() + " as '"
-					+ row.getElementname() + "' ,";
-			Tesla2.displyQuery(rowIndex, valueQuery2);
 			break;
 		}
 		if (rowIndex < MasterCommon.selectRows.size()) {

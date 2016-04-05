@@ -1,5 +1,7 @@
 package com.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -10,8 +12,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.table.TableColumn;
+import javax.swing.text.html.HTMLEditorKit;
 
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
@@ -19,11 +22,13 @@ import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.Tables;
 import com.model.TableModel;
+import com.pojo.CaseRow;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.ColsUtil;
+import com.util.QueryColorUtil;
 
 public class Tesla2 {
 
@@ -31,8 +36,9 @@ public class Tesla2 {
 	private TableModel tableModel;
 	private ArrayList<Tables> tables;
 	private JTable table;
-	private static JTextArea textArea = new JTextArea();;
+	private static JTextPane textArea = new JTextPane();;
 	List<POJORow> listRow = new ArrayList<>();
+	int caseCount = 0;
 
 	public Tesla2(ArrayList<String> tables) {
 		tables.addAll(FileIO.valueHolder);
@@ -50,6 +56,7 @@ public class Tesla2 {
 		panel.setBounds(22, 338, 769, 81);
 		frmQuerybuilder.getContentPane().add(panel);
 		panel.setLayout(null);
+		textArea.setEditorKit(new HTMLEditorKit());
 		textArea.setBounds(0, 0, 769, 81);
 		panel.add(textArea);
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
@@ -84,6 +91,16 @@ public class Tesla2 {
 		});
 		btnNext.setBounds(702, 302, 89, 23);
 		frmQuerybuilder.getContentPane().add(btnNext);
+
+		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
+		btnAddTransformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				POJORow rowCase = tableModel.updateUI1();
+				new TeslaCase(rowCase);
+			}
+		});
+		btnAddTransformation.setBounds(469, 302, 166, 23);
+		frmQuerybuilder.getContentPane().add(btnAddTransformation);
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
@@ -96,7 +113,9 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
+				displyQuery();
 				tableModel.updateUI();
+
 			}
 
 		});
@@ -106,14 +125,39 @@ public class Tesla2 {
 		frmQuerybuilder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public static void displyQuery(int j, String valueQuery) {
-		MasterCommon.selectQueryHolder.put(j, valueQuery);
+	public static void displyQuery() {
+		textArea.setText("");
 		MasterCommon.completeQuery = "Select \n";
-		textArea.setText("Select \n");
-		for (int i = 0; i < MasterCommon.selectQueryHolder.size(); i++) {
-			textArea.append(MasterCommon.selectQueryHolder.get(i) + " \n");
-			MasterCommon.completeQuery = MasterCommon.completeQuery
-					+ MasterCommon.selectQueryHolder.get(i) + " \n";
+		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
+			POJORow r = MasterCommon.selectRows.get(i);
+			if (r.getCaseRow().size() == 0) {
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						+ r.getTable().getTableName() + "."
+						+ r.getTable().getColumn().getColumnName() + " as '"
+						+ r.getElementname() + "', \n";
+			} else {
+				String value = "";
+				String caseQuery = "Case \n";
+				for (int j = 0; j < r.getCaseRow().size(); j++) {
+					CaseRow r1 = r.getCaseRow().get(j);
+					if (r1.getValueString().equals("")) {
+						value = r1.getTableTwo().getTableName() + "."
+								+ r1.getTableTwo().getTableName() + " \n";
+					} else {
+						value = r1.getValueString();
+					}
+					caseQuery = caseQuery + " When "
+							+ r1.getTableOne().getTableName() + "."
+							+ r1.getTableOne().getTableName()
+							+ r1.getConditionString() + " Then" + value;
+				}
+				caseQuery = caseQuery + " End Case \n";
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						+ caseQuery;
+			}
 		}
+		textArea.setText(QueryColorUtil
+				.queryColorChange(MasterCommon.completeQuery));
 	}
+
 }

@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.controller.MasterCommon;
+import com.entity.DBDetails;
+import com.exceptions.DBAlreadyExists;
 import com.pojo.InnerJoinRow;
-import com.pojo.POJORow;
 import com.pojo.POJOTable;
 import com.ui.Tesla2;
 import com.util.QueryIOUtil;
@@ -28,7 +29,9 @@ public class FileIO extends MasterCommon {
 		queryUtil = new QueryIOUtil();
 		FileOutputStream fout;
 		try {
-			String path = System.getProperty("user.home") + "//Desktop//Query//Query" + form.format(d) + ".txt";
+
+			String path = masterPath + "Query" + form.format(d) + ".txt";
+
 			File file = new File(path);
 			if (!file.exists()) {
 				file.createNewFile();
@@ -38,17 +41,39 @@ public class FileIO extends MasterCommon {
 			queryUtil.setSelectRows(selectRows);
 			queryUtil.setConditionRows(joinRows);
 			queryUtil.setSelectTables(listPojoTable);
+			queryUtil.setWhereRows(whereRows);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void saveDBDetails(DBDetails dbDetails)
+			throws DBAlreadyExists {
+		FileOutputStream fout;
+		String path = masterPath + "DBCredentials//"
+				+ dbDetails.getConnectionName() + ".txt";
+
+		File file = new File(path);
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+				fout = new FileOutputStream(file);
+				ObjectOutputStream oos = new ObjectOutputStream(fout);
+				oos.writeObject(dbDetails);
+				fout.close();
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new DBAlreadyExists("Duplicate Connection Name");
+		}
 	}
 
 	public static void getFromTextFile(String input) {
@@ -69,6 +94,7 @@ public class FileIO extends MasterCommon {
 		selectRows.addAll(reconMap.getSelectRows());
 		joinRows.addAll(reconMap.getConditionRows());
 		listPojoTable.addAll(reconMap.getSelectTables());
+		whereRows.addAll(reconMap.getWhereRows());
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
@@ -78,14 +104,36 @@ public class FileIO extends MasterCommon {
 			POJOTable table = (POJOTable) listPojoTable.get(i);
 			tableHolder.put(i, table.getTableName());
 			valueHolder.add(table.getTableName());
-
 		}
-		for (int i = 0; i < selectRows.size(); i++) {
-			POJORow row = (POJORow) selectRows.get(i);
-			String valueQuery = row.getTable().getTableName() + "." + row.getTable().getColumn().getColumnName()
-					+ " as '" + row.getElementname() + "' ,";
-			Tesla2.displyQuery(i, valueQuery);
-		}
+		Tesla2.displyQuery();
 
+	}
+
+	public static ArrayList<DBDetails> getDBConnectionsFromText() {
+		ArrayList<DBDetails> dbDetails = new ArrayList<>();
+		DBDetails dbDetail;
+		File folder = new File(masterPath + "DBCredentials//");
+		FileInputStream fin = null;
+		for (File fileEntry : folder.listFiles()) {
+			if (fileEntry.isFile()) {
+				dbDetail = new DBDetails();
+				try {
+					fin = new FileInputStream(fileEntry);
+					ObjectInputStream ois = new ObjectInputStream(fin);
+					dbDetail = (DBDetails) ois.readObject();
+					dbDetails.add(dbDetail);
+					fin.close();
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						fin.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return dbDetails;
 	}
 }
