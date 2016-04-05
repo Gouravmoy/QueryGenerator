@@ -30,8 +30,7 @@ public class FileIO extends MasterCommon {
 		FileOutputStream fout;
 		try {
 
-			String path = System.getProperty("user.home")
-					+ "//Desktop//Query//Query" + form.format(d) + ".txt";
+			String path = masterPath + "Query" + form.format(d) + ".txt";
 
 			File file = new File(path);
 			if (!file.exists()) {
@@ -47,10 +46,8 @@ public class FileIO extends MasterCommon {
 			fout.close();
 			oos.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -59,8 +56,7 @@ public class FileIO extends MasterCommon {
 	public static void saveDBDetails(DBDetails dbDetails)
 			throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = System.getProperty("user.home")
-				+ "//Desktop//Query//DBCredentials//"
+		String path = masterPath + "DBCredentials//"
 				+ dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
@@ -110,6 +106,34 @@ public class FileIO extends MasterCommon {
 			valueHolder.add(table.getTableName());
 		}
 		Tesla2.displyQuery();
-		
+
+	}
+
+	public static ArrayList<DBDetails> getDBConnectionsFromText() {
+		ArrayList<DBDetails> dbDetails = new ArrayList<>();
+		DBDetails dbDetail;
+		File folder = new File(masterPath + "DBCredentials//");
+		FileInputStream fin = null;
+		for (File fileEntry : folder.listFiles()) {
+			if (fileEntry.isFile()) {
+				dbDetail = new DBDetails();
+				try {
+					fin = new FileInputStream(fileEntry);
+					ObjectInputStream ois = new ObjectInputStream(fin);
+					dbDetail = (DBDetails) ois.readObject();
+					dbDetails.add(dbDetail);
+					fin.close();
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						fin.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return dbDetails;
 	}
 }

@@ -13,9 +13,11 @@ public class DBDetails implements Serializable {
 	String port;
 	String database;
 	String dbType;
+	String dbSchema;
 
 	public DBDetails(String connectionName, String userName, String password,
-			String hostName, String port, String database, String dbType) {
+			String hostName, String port, String database, String dbType,
+			String dbSchema) {
 		super();
 		this.connectionName = connectionName;
 		this.userName = userName;
@@ -24,6 +26,18 @@ public class DBDetails implements Serializable {
 		this.port = port;
 		this.database = database;
 		this.dbType = dbType;
+		this.dbSchema = dbSchema;
+	}
+
+	public DBDetails() {
+	}
+
+	public String getDbSchema() {
+		return dbSchema;
+	}
+
+	public void setDbSchema(String dbSchema) {
+		this.dbSchema = dbSchema;
 	}
 
 	public String getConnectionName() {
@@ -91,7 +105,7 @@ public class DBDetails implements Serializable {
 		return "DBDetails [connectionName=" + connectionName + ", userName="
 				+ userName + ", password=" + password + ", hostName="
 				+ hostName + ", port=" + port + ", database=" + database
-				+ ", dbType=" + dbType + "]";
+				+ ", dbType=" + dbType + ", dbSchema=" + dbSchema + "]";
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
@@ -28,6 +27,7 @@ import com.model.DBConnectionsModel;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
+import com.util.PropsLoader;
 
 public class Tesla0 extends JFrame {
 
@@ -36,7 +36,7 @@ public class Tesla0 extends JFrame {
 	private ArrayList<String> tableNames;
 	private ArrayList<String> selectedTableNames = new ArrayList<String>();
 	private ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
-	private ArrayList<String> dbConnectionNames = new ArrayList<String>();
+	// private ArrayList<String> dbConnectionNames = new ArrayList<String>();
 	private JCheckBox[] tablesCheckBoxList;
 	JScrollPane dbNamesPane;
 	JTable connNamesTable;
@@ -55,6 +55,7 @@ public class Tesla0 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					PropsLoader.loadProps();
 					Tesla0 frame = new Tesla0();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -119,24 +120,20 @@ public class Tesla0 extends JFrame {
 
 		mnDatabase.add(mntmAddDatabase);
 
-		Panel dbConnectionView = new Panel();
-		dbConnectionView.setBounds(10, 67, 191, 389);
-		contentPane.add(dbConnectionView);
-
 		dbConnection = DBConnectionUtil.getAllConnection();
-		dbConnection = new ArrayList<>();// to change
-		dbConnectionNames = DBConnectionUtil.getAllConnectionNames();
 
 		dbConnectionsModel = new DBConnectionsModel(dbConnection);
 		connNamesTable = new JTable();
 		connNamesTable.setModel(dbConnectionsModel);
 		connNamesTable.setRowHeight(25);
 
-		TableColumn connNamesTableName = connNamesTable
-				.getColumn("Connection Names");
-		connNamesTableName.setCellRenderer(new TableCellRenderer());
-		connNamesTableName.setCellEditor(new TableEditor(
-				MasterCommon.listPojoTable));
+		/*
+		 * TableColumn connNamesTableName = connNamesTable
+		 * .getColumn("Connection Names");
+		 * connNamesTableName.setCellRenderer(new TableCellRenderer());
+		 * connNamesTableName.setCellEditor(new TableEditor(
+		 * MasterCommon.listPojoTable));
+		 */
 
 		dbNamesPane = new JScrollPane(connNamesTable);
 		dbNamesPane.setBounds(10, 67, 191, 389);

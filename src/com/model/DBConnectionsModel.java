@@ -10,7 +10,7 @@ public class DBConnectionsModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private String[] columnNames = { "Connection Names", "saddsad" };
+	private String[] columnNames = { "Connection Names" };
 	private ArrayList<DBDetails> dbDtlsList;
 
 	public DBConnectionsModel(ArrayList<DBDetails> dbDtlsList) {
@@ -43,10 +43,6 @@ public class DBConnectionsModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		DBDetails dbDetail = dbDtlsList.get(rowIndex);
 		return dbDetail.getConnectionName();
-	}
-
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return true;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.ui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -29,17 +31,20 @@ public class TeslaDBDetails extends JFrame {
 	private JTextField hostNameText;
 	private JTextField portNameText;
 	private JTextField databaseNameText;
+	private JTextField schemaNameText;
 	private JLabel lblConnectionName;
 	private JLabel lblHostName;
 	private JLabel lblUserName;
 	private JLabel lblPassword;
 	private JLabel lblPortName;
 	private JLabel lblDatabase;
+	private JLabel lblDbType;
+	private JLabel lblSchema;
 	private JButton btnClear;
 	private JButton btnTest;
 	private JButton btnCancel;
 	private DBDetails dbDetails;
-	private JLabel lblDbType;
+
 	@SuppressWarnings("rawtypes")
 	JComboBox dbType;
 
@@ -85,30 +90,30 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(passwordText);
 
 		lblHostName = new JLabel("Host Name");
-		lblHostName.setBounds(147, 134, 71, 14);
+		lblHostName.setBounds(147, 118, 71, 14);
 		contentPane.add(lblHostName);
 
 		hostNameText = new JTextField();
-		hostNameText.setBounds(224, 131, 134, 20);
+		hostNameText.setBounds(224, 115, 134, 20);
 		contentPane.add(hostNameText);
 		hostNameText.setColumns(10);
 
 		portNameText = new JTextField();
 		portNameText.setColumns(10);
-		portNameText.setBounds(224, 159, 134, 20);
+		portNameText.setBounds(224, 143, 134, 20);
 		contentPane.add(portNameText);
 
 		lblPortName = new JLabel("Port Name");
-		lblPortName.setBounds(147, 162, 71, 14);
+		lblPortName.setBounds(147, 146, 71, 14);
 		contentPane.add(lblPortName);
 
 		databaseNameText = new JTextField();
 		databaseNameText.setColumns(10);
-		databaseNameText.setBounds(224, 188, 134, 20);
+		databaseNameText.setBounds(224, 172, 134, 20);
 		contentPane.add(databaseNameText);
 
 		lblDatabase = new JLabel("Database");
-		lblDatabase.setBounds(147, 191, 71, 14);
+		lblDatabase.setBounds(147, 175, 71, 14);
 		contentPane.add(lblDatabase);
 
 		JButton btnSave = new JButton("Save");
@@ -117,23 +122,20 @@ public class TeslaDBDetails extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				assignDBEntity();
 
-				try {
-					FileIO.saveDBDetails(dbDetails);
-					dispose();
-				} catch (DBAlreadyExists e) {
-					JOptionPane.showMessageDialog(null,
-							"Connection Save Failed! " + e.getMessage());
+				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
+					try {
+						FileIO.saveDBDetails(dbDetails);
+						dispose();
+					} catch (DBAlreadyExists e) {
+						JOptionPane.showMessageDialog(null,
+								"Connection Save Failed! " + e.getMessage());
+					}
+				} else {
+					JOptionPane
+							.showMessageDialog(null,
+									"Connection Test Failed! Please check the Connection Details");
 				}
 
-				/*
-				 * if (DBConnectionUtil.checkConnectivity(dbDetails)) { try {
-				 * FileIO.saveDBDetails(dbDetails); } catch (DBAlreadyExists e)
-				 * { JOptionPane.showMessageDialog(null,
-				 * "Connection Save Failed! " + e.getMessage()); } dispose(); }
-				 * else { JOptionPane .showMessageDialog(null,
-				 * "Connection Test Failed! Please check the Connection Details"
-				 * ); }
-				 */
 			}
 
 		});
@@ -184,12 +186,39 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnCancel);
 
 		lblDbType = new JLabel("DB Type");
-		lblDbType.setBounds(147, 109, 46, 14);
+		lblDbType.setBounds(147, 93, 46, 14);
 		contentPane.add(lblDbType);
 
+		lblSchema = new JLabel("Schema Name");
+		lblSchema.setBounds(147, 200, 71, 19);
+		contentPane.add(lblSchema);
+
+		schemaNameText = new JTextField();
+		schemaNameText.setColumns(10);
+		schemaNameText.setBounds(224, 203, 134, 19);
+		contentPane.add(schemaNameText);
+
+		lblSchema.setVisible(true);
+		schemaNameText.setVisible(true);
+
 		dbType = new JComboBox();
+		dbType.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				if (dbType.getSelectedItem().toString().equals("SQL")) {
+					lblSchema.setVisible(true);
+					schemaNameText.setVisible(true);
+				} else {
+					lblSchema.setVisible(false);
+					schemaNameText.setVisible(false);
+				}
+
+			}
+		});
+
 		dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
-		dbType.setBounds(224, 106, 134, 20);
+		dbType.setBounds(224, 90, 134, 20);
 		contentPane.add(dbType);
 	}
 
@@ -198,6 +227,7 @@ public class TeslaDBDetails extends JFrame {
 		dbDetails = new DBDetails(connectionNameText.getText(),
 				usernameText.getText(), passwordText.getText(),
 				hostNameText.getText(), portNameText.getText(),
-				databaseNameText.getText(), dbType.getSelectedItem().toString());
+				databaseNameText.getText(),
+				dbType.getSelectedItem().toString(), schemaNameText.getText());
 	}
 }

@@ -36,6 +36,8 @@ public class MasterCommon {
 	public static Query mainQuery = new Query();
 	public static String completeQuery = "";
 	public static String completeCaseQuery = "";
+	public static String masterPath = System.getProperty("user.home")
+			+ "//Desktop//Query//";
 	public static QueryIOUtil queryUtil;
 
 	public static void updateDBCredentials(String schemaName2, String url,
