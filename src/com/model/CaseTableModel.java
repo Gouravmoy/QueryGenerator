@@ -1,13 +1,13 @@
 package com.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
 import com.pojo.POJOColumn;
+import com.pojo.POJORow;
 import com.pojo.POJOTable;
 import com.ui.TeslaCase;
 
@@ -16,18 +16,16 @@ public class CaseTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "When", "TableOne", "ColumnOne",
 			"Condition", "Then", "TableTwo", "ColumnTwo", "Value" };
-	private List<CaseRow> listRow = new ArrayList<>();
-	private int caseCount;
+	private ArrayList<CaseRow> listRow = new ArrayList<CaseRow>();
 
-	public void updateUI() {
+	public void updateUI(POJORow pojoRow) {
 		POJOColumn column1 = new POJOColumn(null);
 		POJOColumn column2 = new POJOColumn(null);
 		POJOTable pojoTable1 = new POJOTable(null, column1);
 		POJOTable pojoTable2 = new POJOTable(null, column2);
-
-		CaseRow row = null;
-		row = new CaseRow(pojoTable1, pojoTable2, "", "", this.caseCount);
-		this.listRow.add(row);
+		pojoRow.setCaseRow(listRow);
+		CaseRow rowCase = new CaseRow(pojoTable1, pojoTable2, "", "");
+		this.listRow.add(rowCase);
 		this.fireTableDataChanged();
 
 	}
@@ -36,9 +34,8 @@ public class CaseTableModel extends AbstractTableModel {
 		listRow.removeAll(listRow);
 	}
 
-	public CaseTableModel(List<CaseRow> listRow, int caseCount) {
+	public CaseTableModel(ArrayList<CaseRow> listRow) {
 		this.listRow = listRow;
-		this.caseCount = caseCount;
 	}
 
 	@Override
@@ -91,7 +88,7 @@ public class CaseTableModel extends AbstractTableModel {
 			break;
 		}
 		if (rowIndex < MasterCommon.caseRows.size()) {
-			TeslaCase.caseRows.set(rowIndex, row);
+			TeslaCase.caseRows.set(rowIndex,row);
 		}
 
 	}
