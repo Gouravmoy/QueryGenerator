@@ -116,15 +116,15 @@ public class TeslaDBDetails extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				assignDBEntity();
-				
+
 				try {
 					FileIO.saveDBDetails(dbDetails);
+					dispose();
 				} catch (DBAlreadyExists e) {
 					JOptionPane.showMessageDialog(null,
 							"Connection Save Failed! " + e.getMessage());
 				}
-				dispose();
-				
+
 				/*
 				 * if (DBConnectionUtil.checkConnectivity(dbDetails)) { try {
 				 * FileIO.saveDBDetails(dbDetails); } catch (DBAlreadyExists e)
