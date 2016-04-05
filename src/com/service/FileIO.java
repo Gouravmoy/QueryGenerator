@@ -13,7 +13,6 @@ import java.util.Date;
 
 import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
-import com.pojo.POJORow;
 import com.pojo.POJOTable;
 import com.ui.Tesla2;
 import com.util.QueryIOUtil;
@@ -83,15 +82,8 @@ public class FileIO extends MasterCommon {
 			POJOTable table = (POJOTable) listPojoTable.get(i);
 			tableHolder.put(i, table.getTableName());
 			valueHolder.add(table.getTableName());
-
 		}
-		for (int i = 0; i < selectRows.size(); i++) {
-			POJORow row = (POJORow) selectRows.get(i);
-			String valueQuery = row.getTable().getTableName() + "."
-					+ row.getTable().getColumn().getColumnName() + " as '"
-					+ row.getElementname() + "' ,";
-			Tesla2.displyQuery(i, valueQuery);
-		}
-
+		Tesla2.displyQuery();
+		
 	}
 }

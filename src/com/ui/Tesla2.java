@@ -22,6 +22,7 @@ import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.Tables;
 import com.model.TableModel;
+import com.pojo.CaseRow;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
@@ -58,9 +59,6 @@ public class Tesla2 {
 		textArea.setEditorKit(new HTMLEditorKit());
 		textArea.setBounds(0, 0, 769, 81);
 		panel.add(textArea);
-		
-		
-		
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(0, 0, 769, 81);
 		panel.add(scrollPane_1);
@@ -97,8 +95,8 @@ public class Tesla2 {
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//frmQuerybuilder.setVisible(false);
-				new TeslaCase(caseCount++);
+				POJORow rowCase = tableModel.updateUI1();
+				new TeslaCase(rowCase);
 			}
 		});
 		btnAddTransformation.setBounds(469, 302, 166, 23);
@@ -115,7 +113,9 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
+				displyQuery();
 				tableModel.updateUI();
+
 			}
 
 		});
@@ -125,16 +125,39 @@ public class Tesla2 {
 		frmQuerybuilder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public static void displyQuery(int j, String valueQuery) {
-		MasterCommon.selectQueryHolder.put(j, valueQuery);
+	public static void displyQuery() {
+		textArea.setText("");
 		MasterCommon.completeQuery = "Select \n";
-		for (int i = 0; i < MasterCommon.selectQueryHolder.size(); i++) {
-			textArea.setText("Select \n");
-			MasterCommon.completeQuery = MasterCommon.completeQuery
-					+ MasterCommon.selectQueryHolder.get(i) + " \n";
-			textArea.setText(QueryColorUtil
-					.queryColorChange(MasterCommon.completeQuery) + " \n");
-
+		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
+			POJORow r = MasterCommon.selectRows.get(i);
+			if (r.getCaseRow().size() == 0) {
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						+ r.getTable().getTableName() + "."
+						+ r.getTable().getColumn().getColumnName() + " as '"
+						+ r.getElementname() + "', \n";
+			} else {
+				String value = "";
+				String caseQuery = "Case \n";
+				for (int j = 0; j < r.getCaseRow().size(); j++) {
+					CaseRow r1 = r.getCaseRow().get(j);
+					if (r1.getValueString().equals("")) {
+						value = r1.getTableTwo().getTableName() + "."
+								+ r1.getTableTwo().getTableName() + " \n";
+					} else {
+						value = r1.getValueString();
+					}
+					caseQuery = caseQuery + " When "
+							+ r1.getTableOne().getTableName() + "."
+							+ r1.getTableOne().getTableName()
+							+ r1.getConditionString() + " Then" + value;
+				}
+				caseQuery = caseQuery + " End Case \n";
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						+ caseQuery;
+			}
 		}
+		textArea.setText(QueryColorUtil
+				.queryColorChange(MasterCommon.completeQuery));
 	}
+
 }
