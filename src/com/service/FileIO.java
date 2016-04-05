@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.controller.MasterCommon;
+import com.entity.DBDetails;
+import com.exceptions.DBAlreadyExists;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJORow;
 import com.pojo.POJOTable;
@@ -53,6 +55,30 @@ public class FileIO extends MasterCommon {
 			e.printStackTrace();
 		}
 
+	}
+
+	public static void saveDBDetails(DBDetails dbDetails)
+			throws DBAlreadyExists {
+		FileOutputStream fout;
+		String path = System.getProperty("user.home")
+				+ "//Desktop//Query//DBCredentials//"
+				+ dbDetails.getConnectionName() + ".txt";
+
+		File file = new File(path);
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+				fout = new FileOutputStream(file);
+				ObjectOutputStream oos = new ObjectOutputStream(fout);
+				oos.writeObject(dbDetails);
+				fout.close();
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new DBAlreadyExists("Duplicate Connection Name");
+		}
 	}
 
 	public static void getFromTextFile(String input) {
