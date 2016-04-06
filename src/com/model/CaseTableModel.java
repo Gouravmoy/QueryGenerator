@@ -17,6 +17,7 @@ public class CaseTableModel extends AbstractTableModel {
 	private String[] columnNames = { "When", "TableOne", "ColumnOne",
 			"Condition", "Then", "TableTwo", "ColumnTwo", "Value" };
 	private ArrayList<CaseRow> listRow = new ArrayList<CaseRow>();
+	boolean elseFlag = true;
 
 	public void updateUI(POJORow pojoRow) {
 		POJOColumn column1 = new POJOColumn(null);
@@ -28,6 +29,18 @@ public class CaseTableModel extends AbstractTableModel {
 		this.listRow.add(rowCase);
 		this.fireTableDataChanged();
 
+	}
+
+	public void updateUI1(POJORow pojoRow) {
+		POJOColumn column1 = new POJOColumn("ELSE");
+		POJOColumn column2 = new POJOColumn(null);
+		POJOTable pojoTable1 = new POJOTable("ELSE", column1);
+		POJOTable pojoTable2 = new POJOTable(null, column2);
+		pojoRow.setCaseRow(listRow);
+		CaseRow rowCase = new CaseRow(pojoTable1, pojoTable2, "ELSE", "");
+		this.listRow.add(rowCase);
+		this.fireTableDataChanged();
+		elseFlag = false;
 	}
 
 	public void removeAll() {
@@ -86,9 +99,11 @@ public class CaseTableModel extends AbstractTableModel {
 		case 6:
 			row.getTableTwo().setColumn((POJOColumn) value);
 			break;
+		case 7:
+			row.setValueString((String) value);
 		}
 		if (rowIndex < MasterCommon.caseRows.size()) {
-			TeslaCase.caseRows.set(rowIndex,row);
+			TeslaCase.caseRows.set(rowIndex, row);
 		}
 
 	}
@@ -131,7 +146,10 @@ public class CaseTableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return true;
+		if (columnIndex > 4) {
+			return true;
+		} else
+			return elseFlag;
 	}
 
 }

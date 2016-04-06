@@ -53,26 +53,26 @@ public class Tesla2 {
 		frmQuerybuilder = new JFrame();
 		frmQuerybuilder.getContentPane().setLayout(null);
 		JPanel panel = new JPanel();
-		panel.setBounds(22, 338, 769, 81);
+		panel.setBounds(22, 264, 769, 207);
 		frmQuerybuilder.getContentPane().add(panel);
 		panel.setLayout(null);
 		textArea.setEditorKit(new HTMLEditorKit());
-		textArea.setBounds(0, 0, 769, 81);
+		textArea.setBounds(1, 1, 767, 195);
 		panel.add(textArea);
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
-		scrollPane_1.setBounds(0, 0, 769, 81);
+		scrollPane_1.setBounds(0, 0, 769, 207);
 		panel.add(scrollPane_1);
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(10, 11, 792, 280);
+		panel_1.setBounds(10, 11, 792, 195);
 		frmQuerybuilder.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 772, 258);
+		scrollPane.setBounds(10, 11, 772, 174);
 		panel_1.add(scrollPane);
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		JButton btnAdd = new JButton("ADD");
-		btnAdd.setBounds(298, 302, 108, 25);
+		btnAdd.setBounds(295, 217, 108, 25);
 		frmQuerybuilder.getContentPane().add(btnAdd);
 		tableModel = new TableModel(MasterCommon.selectRows);
 		table.setModel(tableModel);
@@ -89,17 +89,20 @@ public class Tesla2 {
 				new Tesla4().setVisible(true);
 			}
 		});
-		btnNext.setBounds(702, 302, 89, 23);
+		btnNext.setBounds(683, 217, 89, 23);
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
+
 				new TeslaCase(rowCase);
 			}
 		});
-		btnAddTransformation.setBounds(469, 302, 166, 23);
+		btnAddTransformation.setBounds(454, 217, 166, 23);
 		frmQuerybuilder.getContentPane().add(btnAddTransformation);
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
@@ -115,6 +118,8 @@ public class Tesla2 {
 				table.editCellAt(-1, -1);
 				displyQuery();
 				tableModel.updateUI();
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 
 			}
 
@@ -131,33 +136,59 @@ public class Tesla2 {
 		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
 			POJORow r = MasterCommon.selectRows.get(i);
 			if (r.getCaseRow().size() == 0) {
-				MasterCommon.completeQuery = MasterCommon.completeQuery
-						+ r.getTable().getTableName() + "."
-						+ r.getTable().getColumn().getColumnName() + " as '"
-						+ r.getElementname() + "', \n";
+				if (r.getElementname().length() > 0) {
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ r.getTable().getTableName() + "."
+							+ r.getTable().getColumn().getColumnName()
+							+ " as '" + r.getElementname() + "', \n";
+				} else {
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ r.getTable().getTableName() + "."
+							+ r.getTable().getColumn().getColumnName() + ", \n";
+				}
+
 			} else {
-				String value = "";
 				String caseQuery = "Case \n";
 				for (int j = 0; j < r.getCaseRow().size(); j++) {
+					String value = "";
 					CaseRow r1 = r.getCaseRow().get(j);
-					if (r1.getValueString().equals("")) {
-						value = r1.getTableTwo().getTableName() + "."
-								+ r1.getTableTwo().getTableName() + " \n";
+					if (r1.getConditionString().equals("ELSE")) {
+						if (r1.getValueString().length() == 0) {
+							value = r1.getTableTwo().getTableName()
+									+ "."
+									+ r1.getTableTwo().getColumn()
+											.getColumnName() + " \n";
+						} else {
+							value = "'" + r1.getValueString() + "' \n";
+						}
+						caseQuery = caseQuery + " ELSE " + value;
+
 					} else {
-						value = r1.getValueString();
+						if (r1.getValueString().length() == 0) {
+							value = r1.getTableTwo().getTableName()
+									+ "."
+									+ r1.getTableTwo().getColumn()
+											.getColumnName() + " \n";
+						} else {
+							value = "'" + r1.getValueString() + "' \n";
+						}
+						caseQuery = caseQuery + " When "
+								+ r1.getTableOne().getTableName() + "."
+								+ r1.getTableOne().getColumn().getColumnName()
+								+ " = '" + r1.getConditionString() + "' Then "
+								+ value;
 					}
-					caseQuery = caseQuery + " When "
-							+ r1.getTableOne().getTableName() + "."
-							+ r1.getTableOne().getTableName()
-							+ r1.getConditionString() + " Then" + value;
 				}
-				caseQuery = caseQuery + " End Case \n";
+
+				caseQuery = caseQuery + " End Case \n as '"
+						+ r.getElementname() + "' , \n";
 				MasterCommon.completeQuery = MasterCommon.completeQuery
 						+ caseQuery;
 			}
 		}
 		textArea.setText(QueryColorUtil
 				.queryColorChange(MasterCommon.completeQuery));
+		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
 }

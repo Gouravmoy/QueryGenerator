@@ -31,7 +31,7 @@ public class TeslaCase {
 	private JTable table;
 	public static ArrayList<CaseRow> caseRows;
 	private POJORow pojoRow;
-	static JTextPane textPane=new JTextPane();
+	static JTextPane textPane = new JTextPane();
 	static String query;
 
 	public TeslaCase(POJORow rowCase) {
@@ -60,18 +60,19 @@ public class TeslaCase {
 		initilizeColumns();
 		table.setRowHeight(25);
 		JScrollPane panel = new JScrollPane(table);
-		panel.setBounds(10, 11, 792, 284);
+		panel.setBounds(10, 11, 792, 217);
 		frame.getContentPane().add(panel, BorderLayout.CENTER);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(22, 362, 780, 109);
+		panel_1.setBounds(22, 294, 780, 177);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 
-		
+		JScrollPane scrollPane_1 = new JScrollPane(textPane);
+		scrollPane_1.setBounds(0, 0, 769, 177);
+		panel_1.add(scrollPane_1);
 		textPane.setEditorKit(new HTMLEditorKit());
 		textPane.setBounds(10, 11, 760, 87);
-		panel_1.add(textPane);
 
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.addActionListener(new ActionListener() {
@@ -79,10 +80,11 @@ public class TeslaCase {
 				table.editCellAt(-1, -1);
 				displayQuery();
 				tableModel.updateUI(pojoRow);
-
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 			}
 		});
-		btnAdd.setBounds(333, 317, 89, 23);
+		btnAdd.setBounds(330, 260, 89, 23);
 		frame.getContentPane().add(btnAdd);
 
 		JButton btnDone = new JButton("Done");
@@ -92,11 +94,23 @@ public class TeslaCase {
 						+ query;
 				table.editCellAt(-1, -1);
 				frame.setVisible(false);
-
 			}
 		});
-		btnDone.setBounds(490, 317, 89, 23);
+		btnDone.setBounds(478, 260, 89, 23);
 		frame.getContentPane().add(btnDone);
+
+		JButton btnElse = new JButton("ELSE");
+		btnElse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				table.editCellAt(-1, -1);
+				displayQuery();
+				tableModel.updateUI1(pojoRow);
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
+			}
+		});
+		btnElse.setBounds(622, 260, 89, 23);
+		frame.getContentPane().add(btnElse);
 		frame.setVisible(true);
 	}
 
@@ -121,26 +135,38 @@ public class TeslaCase {
 				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 	}
 
-	public  void displayQuery() {
+	public void displayQuery() {
 		textPane.setText("Case \n");
 		query = "Case \n";
 		String when = " When ";
 		String then = " Then ";
-		String value = "";
 		for (int i = 0; i < caseRows.size(); i++) {
+			String value = "";
 			CaseRow r = caseRows.get(i);
-			if (r.getValueString().equals("")) {
-				value = r.getTableTwo().getTableName() + "."
-						+ r.getTableTwo().getTableName() + " \n";
+			if (r.getConditionString().equals("ELSE")) {
+				if (r.getValueString().length() == 0) {
+					value = r.getTableTwo().getTableName() + "."
+							+ r.getTableTwo().getColumn().getColumnName()
+							+ " \n";
+				} else {
+					value = "'" + r.getValueString() + "' \n";
+				}
+				query = query + " ELSE " + value;
+				break;
 			} else {
-				value = r.getValueString();
+				if (r.getValueString().length() == 0) {
+					value = r.getTableTwo().getTableName() + "."
+							+ r.getTableTwo().getColumn().getColumnName()
+							+ " \n";
+				} else {
+					value = "'" + r.getValueString() + "' \n";
+				}
+				query = query + when + r.getTableOne().getTableName() + "."
+						+ r.getTableOne().getColumn().getColumnName() + " = '"
+						+ r.getConditionString() + "'" + then + value;
 			}
-			query = query + when + r.getTableOne().getTableName() + "."
-					+ r.getTableOne().getTableName() + r.getConditionString()
-					+ then + value;
 		}
 		query = query + "End Case";
 		textPane.setText(QueryColorUtil.queryColorChange(query));
 	}
-
 }
