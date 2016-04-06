@@ -14,7 +14,7 @@ public class DBUtil {
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
 		conn = DriverManager
-				.getConnection(DBConnector.getSQLConnectionString());
+				.getConnection(DBConnector.getSQLConnectionString());    
 		return conn;
 	}
 }
