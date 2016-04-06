@@ -16,6 +16,15 @@ public class QueryIOUtil implements Serializable {
 	List<POJOTable> selectTables;
 	ArrayList<InnerJoinRow> conditionRows;
 	ArrayList<WhereRow> whereRows;
+	String dbName;
+
+	public String getDbName() {
+		return dbName;
+	}
+
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
 
 	public ArrayList<WhereRow> getWhereRows() {
 		return whereRows;

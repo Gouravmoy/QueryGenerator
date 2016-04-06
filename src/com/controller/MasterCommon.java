@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import com.entity.DBDetails;
 import com.entity.Query;
 import com.entity.Tables;
 import com.pojo.InnerJoinRow;
@@ -39,6 +40,9 @@ public class MasterCommon {
 	public static String masterPath = System.getProperty("user.home")
 			+ "//Desktop//Query//";
 	public static QueryIOUtil queryUtil;
+	public static String selectedDBName;
+	
+	public static ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
 
 	public static void updateDBCredentials(String schemaName2, String url,
 			String dbName2, String userName2, String password2) {

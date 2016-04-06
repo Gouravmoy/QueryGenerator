@@ -10,6 +10,7 @@ import com.entity.Column;
 import com.entity.DBDetails;
 import com.entity.Tables;
 import com.extra.Keys;
+import com.util.DBConnectionUtil;
 import com.util.DBUtil;
 import com.util.PropsLoader;
 
@@ -62,6 +63,9 @@ public class Controller {
 		PreparedStatement preparedStatement;
 		ResultSet res;
 
+		DBDetails dbDetails = DBConnectionUtil.getDBDetails(
+				MasterCommon.selectedDBName, MasterCommon.dbConnection);
+
 		try {
 			String sql = MasterCommon.queriesProps
 					.getProperty(Keys.KEY_SQL_META_QUERY);
@@ -72,7 +76,7 @@ public class Controller {
 			for (String tableName : selectedTableNames) {
 				columns = new ArrayList<>();
 				preparedStatement.setString(1, tableName);
-				preparedStatement.setString(2, MasterCommon.schemaName);
+				preparedStatement.setString(2, dbDetails.getDbSchema());
 				res = preparedStatement.executeQuery();
 				table = new Tables();
 				table.setTableName(tableName);

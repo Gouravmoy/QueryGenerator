@@ -42,6 +42,7 @@ public class FileIO extends MasterCommon {
 			queryUtil.setConditionRows(joinRows);
 			queryUtil.setSelectTables(listPojoTable);
 			queryUtil.setWhereRows(whereRows);
+			queryUtil.setDbName(MasterCommon.selectedDBName);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
@@ -95,6 +96,7 @@ public class FileIO extends MasterCommon {
 		joinRows.addAll(reconMap.getConditionRows());
 		listPojoTable.addAll(reconMap.getSelectTables());
 		whereRows.addAll(reconMap.getWhereRows());
+		MasterCommon.selectedDBName = reconMap.getDbName();
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
@@ -106,7 +108,6 @@ public class FileIO extends MasterCommon {
 			valueHolder.add(table.getTableName());
 		}
 		Tesla2.displyQuery();
-
 	}
 
 	public static ArrayList<DBDetails> getDBConnectionsFromText() {

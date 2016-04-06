@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -27,6 +26,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import com.controller.Controller;
+import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.TablesSelect;
 import com.model.DBConnectionsModel;
@@ -42,8 +42,7 @@ public class Tesla0 extends JFrame {
 	public static ArrayList<String> tempTableNames = new ArrayList<String>();
 	public static ArrayList<String> tableNames = new ArrayList<String>();
 	private ArrayList<String> selectedTableNames = new ArrayList<String>();
-	private ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
-	private JCheckBox[] tablesCheckBoxList;
+	// private JCheckBox[] tablesCheckBoxList;
 	JScrollPane dbNamesPane;
 	JScrollPane tableNameScrollPane;
 	JTable connNamesTable;
@@ -125,9 +124,9 @@ public class Tesla0 extends JFrame {
 
 		mnDatabase.add(mntmAddDatabase);
 
-		dbConnection = DBConnectionUtil.getAllConnection();
+		MasterCommon.dbConnection = DBConnectionUtil.getAllConnection();
 
-		dbConnectionsModel = new DBConnectionsModel(dbConnection);
+		dbConnectionsModel = new DBConnectionsModel(MasterCommon.dbConnection);
 		connNamesTable = new JTable();
 		connNamesTable.setModel(dbConnectionsModel);
 		connNamesTable.setRowHeight(25);
@@ -150,7 +149,7 @@ public class Tesla0 extends JFrame {
 				btnBuildQuery.setEnabled(true);
 				tableNames.removeAll(tableNames);
 				tempTableNames = Controller.getTables(DBConnectionUtil
-						.getDBDetails(selectedDB, dbConnection));
+						.getDBDetails(MasterCommon.selectedDBName, MasterCommon.dbConnection));
 				tableNames.addAll(tempTableNames);
 				for (String tableName : tableNames) {
 					tablesSelects.add(new TablesSelect(tableName, false));
@@ -186,6 +185,7 @@ public class Tesla0 extends JFrame {
 							selectedDB.setLength(0);
 							selectedDB.append(connNamesTable.getValueAt(
 									rowAtPoint, 0));
+							MasterCommon.selectedDBName = selectedDB.toString();
 						}
 					}
 				});
