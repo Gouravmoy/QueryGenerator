@@ -27,7 +27,6 @@ import javax.swing.event.PopupMenuListener;
 
 import com.controller.Controller;
 import com.controller.MasterCommon;
-import com.entity.DBDetails;
 import com.entity.TablesSelect;
 import com.model.DBConnectionsModel;
 import com.model.TableNameModel;

@@ -12,9 +12,12 @@ public class TableCheckBox extends JFrame {
 	private JTable table;
 
 	public TableCheckBox() {
-		Object[] columnNames = { "Type", "Company", "Shares", "Price", "Boolean" };
-		Object[][] data = { { "Buy", "IBM", new Integer(1000), new Double(80.50), false },
-				{ "Sell", "MicroSoft", new Integer(2000), new Double(6.25), true },
+		Object[] columnNames = { "Type", "Company", "Shares", "Price",
+				"Boolean" };
+		Object[][] data = {
+				{ "Buy", "IBM", new Integer(1000), new Double(80.50), false },
+				{ "Sell", "MicroSoft", new Integer(2000), new Double(6.25),
+						true },
 				{ "Sell", "Apple", new Integer(3000), new Double(7.35), true },
 				{ "Buy", "Nortel", new Integer(4000), new Double(20.00), false } };
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
@@ -26,6 +29,7 @@ public class TableCheckBox extends JFrame {
 			 * @Override public Class getColumnClass(int column) { return
 			 * getValueAt(0, column).getClass(); }
 			 */
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public Class getColumnClass(int column) {
 				switch (column) {
