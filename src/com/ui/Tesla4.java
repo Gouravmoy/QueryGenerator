@@ -101,6 +101,8 @@ public class Tesla4 extends JFrame {
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
 				QueryUtil.updateQuery(textArea);
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 			}
 
 		});

@@ -2,19 +2,24 @@ package com.model;
 
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
 import javax.swing.table.AbstractTableModel;
+
+import com.entity.TablesSelect;
 
 public class TableNameModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private String[] columnNames = { "Table Names" };
-	private ArrayList<String> tablenames;
+	private String[] columnNames = { "Table Names", "Select" };
+	private ArrayList<TablesSelect> tablenames;
 
-	public TableNameModel(ArrayList<String> tablenames) {
+	public TableNameModel(ArrayList<TablesSelect> tablesSelects) {
 		super();
-		this.tablenames = tablenames;
+		this.tablenames = tablesSelects;
+	}
+
+	public void updateUI() {
+		this.fireTableDataChanged();
 	}
 
 	@Override
@@ -38,15 +43,30 @@ public class TableNameModel extends AbstractTableModel {
 		return obj;
 	}
 
+	public void setValueAt(Object value, int row, int column) {
+		tablenames.get(row).setSelected((boolean) value);
+	}
+
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		Object returnValue = null;
 		String tableName;
-		tableName = tablenames.get(rowIndex);
-		return tableName.toUpperCase();
-		/*
-		 * JCheckBox checkBox = new JCheckBox(tablenames.get(rowIndex)); return
-		 * checkBox;
-		 */
+		tableName = tablenames.get(rowIndex).getTableName();
+
+		switch (columnIndex) {
+		case 0:
+			returnValue = tableName;
+			break;
+		case 1:
+			returnValue = tablenames.get(rowIndex).isSelected();
+			break;
+		}
+		return returnValue;
+
+	}
+
+	public boolean isCellEditable(int row, int column) {
+		return (column != 0);
 	}
 
 }

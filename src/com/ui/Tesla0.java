@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,14 +25,12 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import javax.swing.table.TableColumn;
 
-import com.celleditor.CheckBoxCellEditor;
 import com.controller.Controller;
 import com.entity.DBDetails;
+import com.entity.TablesSelect;
 import com.model.DBConnectionsModel;
 import com.model.TableNameModel;
-import com.renderer.CheckBoxCellRender;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
 import com.util.PropsLoader;
@@ -40,10 +39,10 @@ public class Tesla0 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	public static ArrayList<String> tempTableNames = new ArrayList<String>();
 	public static ArrayList<String> tableNames = new ArrayList<String>();
 	private ArrayList<String> selectedTableNames = new ArrayList<String>();
 	private ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
-	// private ArrayList<String> dbConnectionNames = new ArrayList<String>();
 	private JCheckBox[] tablesCheckBoxList;
 	JScrollPane dbNamesPane;
 	JScrollPane tableNameScrollPane;
@@ -54,13 +53,16 @@ public class Tesla0 extends JFrame {
 	JMenuItem mntmConnect;
 	JPopupMenu popupMenu;
 	StringBuilder selectedDB = new StringBuilder();
+	ArrayList<TablesSelect> tablesSelects = new ArrayList<TablesSelect>();
+	JButton btnBuildQuery;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			UIManager
+					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,26 +102,21 @@ public class Tesla0 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse();
 				String filePath = fileBrowse.getFilePath();
-				tableNames = Controller.getTables(DBConnectionUtil.getDBDetails(selectedDB, dbConnection));
-				if (tablesCheckBoxList != null) {
-					for (JCheckBox checkBox : tablesCheckBoxList) {
-						if (checkBox.isSelected())
-							selectedTableNames.add(checkBox.getText());
-					}
-				}
 				FileIO.getFromTextFile(filePath);
 				dispose();
 				new Tesla2(selectedTableNames);
 			}
 		});
-		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/db.png")));
+		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class
+				.getResource("/png/db.png")));
 		mnFile.add(mntmLoadQuery);
 
 		JMenu mnDatabase = new JMenu("Database");
 		menuBar.add(mnDatabase);
 
 		JMenuItem mntmAddDatabase = new JMenuItem("New Database Conncetion");
-		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class.getResource("/png/plus.png")));
+		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class
+				.getResource("/png/plus.png")));
 		mntmAddDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new TeslaDBDetails().setVisible(true);
@@ -150,13 +147,20 @@ public class Tesla0 extends JFrame {
 		mntmConnect = new JMenuItem("Connect");
 		mntmConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tableNames = Controller.getTables(DBConnectionUtil.getDBDetails(selectedDB, dbConnection));
-				tableNameModel = new TableNameModel(tableNames);
-				tablenameTable.setModel(tableNameModel);
+				btnBuildQuery.setEnabled(true);
+				tableNames.removeAll(tableNames);
+				tempTableNames = Controller.getTables(DBConnectionUtil
+						.getDBDetails(selectedDB, dbConnection));
+				tableNames.addAll(tempTableNames);
+				for (String tableName : tableNames) {
+					tablesSelects.add(new TablesSelect(tableName, false));
+				}
+				tableNameModel.updateUI();
 			}
 		});
 
-		mntmConnect.setIcon(new ImageIcon(Tesla0.class.getResource("/png/connect-no.png")));
+		mntmConnect.setIcon(new ImageIcon(Tesla0.class
+				.getResource("/png/connect-no.png")));
 		popupMenu.add(mntmConnect);
 
 		JMenuItem mntmEditConnection = new JMenuItem("Edit Connection");
@@ -173,11 +177,15 @@ public class Tesla0 extends JFrame {
 					@Override
 					public void run() {
 						int rowAtPoint = connNamesTable
-								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), connNamesTable));
+								.rowAtPoint(SwingUtilities.convertPoint(
+										popupMenu, new Point(0, 0),
+										connNamesTable));
 						if (rowAtPoint > -1) {
-							connNamesTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+							connNamesTable.setRowSelectionInterval(rowAtPoint,
+									rowAtPoint);
 							selectedDB.setLength(0);
-							selectedDB.append(connNamesTable.getValueAt(rowAtPoint, 0));
+							selectedDB.append(connNamesTable.getValueAt(
+									rowAtPoint, 0));
 						}
 					}
 				});
@@ -198,23 +206,32 @@ public class Tesla0 extends JFrame {
 		dbNamesPane.setBounds(10, 67, 191, 389);
 		contentPane.add(dbNamesPane);
 
-		tableNameModel = new TableNameModel(tableNames);
+		tableNameModel = new TableNameModel(tablesSelects);
 
 		tablenameTable = new JTable();
 		tablenameTable.setModel(tableNameModel);
 		tablenameTable.setRowHeight(25);
 
-		initilizeRows();
-
 		tableNameScrollPane = new JScrollPane(tablenameTable);
 		tableNameScrollPane.setBounds(211, 67, 473, 388);
 		contentPane.add(tableNameScrollPane);
-	}
 
-	private void initilizeRows() {
-		TableColumn table1Column = tablenameTable.getColumn("Table Names");
-		table1Column.setCellRenderer(new CheckBoxCellRender());
-		table1Column.setCellEditor(new CheckBoxCellEditor());
+		btnBuildQuery = new JButton("Build Query");
+		btnBuildQuery.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				tempTableNames = new ArrayList<>();
+				for (TablesSelect tablesSelect : tablesSelects) {
+					if (tablesSelect.isSelected())
+						tempTableNames.add(tablesSelect.getTableName());
+				}
+				new Tesla2(tempTableNames);
+				dispose();
+			}
+		});
+		btnBuildQuery.setBounds(568, 32, 116, 23);
+		btnBuildQuery.setEnabled(false);
+		contentPane.add(btnBuildQuery);
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
