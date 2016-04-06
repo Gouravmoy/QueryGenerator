@@ -23,7 +23,7 @@ public class DBConnectionUtil extends MasterCommon {
 		Statement statement;
 
 		try {
-			connection = DBUtil.getSQLConnection();
+			connection = DBUtil.getSQLConnection(dbDetails);
 			statement = connection.createStatement();
 			statement.execute(testQuery);
 		} catch (SQLException | ClassNotFoundException e) {
