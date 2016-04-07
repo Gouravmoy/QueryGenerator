@@ -23,6 +23,7 @@ import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.util.QueryColorUtil;
+import javax.swing.ImageIcon;
 
 public class TeslaCase {
 
@@ -75,6 +76,7 @@ public class TeslaCase {
 		textPane.setBounds(10, 11, 760, 87);
 
 		JButton btnAdd = new JButton("ADD");
+		btnAdd.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/addd.png")));
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				table.editCellAt(-1, -1);
@@ -83,10 +85,11 @@ public class TeslaCase {
 				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 		});
-		btnAdd.setBounds(330, 260, 89, 23);
+		btnAdd.setBounds(155, 252, 89, 31);
 		frame.getContentPane().add(btnAdd);
 
 		JButton btnDone = new JButton("Done");
+		btnDone.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/Exit.png")));
 		btnDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				MasterCommon.completeCaseQuery = MasterCommon.completeCaseQuery + query;
@@ -94,10 +97,11 @@ public class TeslaCase {
 				frame.setVisible(false);
 			}
 		});
-		btnDone.setBounds(478, 260, 89, 23);
+		btnDone.setBounds(374, 252, 95, 31);
 		frame.getContentPane().add(btnDone);
 
 		JButton btnElse = new JButton("ELSE");
+		btnElse.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/Locking.png")));
 		btnElse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				table.editCellAt(-1, -1);
@@ -106,7 +110,7 @@ public class TeslaCase {
 				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 		});
-		btnElse.setBounds(622, 260, 89, 23);
+		btnElse.setBounds(572, 252, 95, 31);
 		frame.getContentPane().add(btnElse);
 		frame.setVisible(true);
 	}

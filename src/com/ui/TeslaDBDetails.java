@@ -22,6 +22,7 @@ import com.entity.DBTypes;
 import com.exceptions.DBAlreadyExists;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
+import javax.swing.ImageIcon;
 
 public class TeslaDBDetails extends JFrame {
 
@@ -134,6 +135,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(lblDatabase);
 
 		JButton btnSave = new JButton("Save");
+		btnSave.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/save.png")));
 		btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -163,6 +165,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnSave);
 
 		btnClear = new JButton("Clear");
+		btnClear.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/clear.png")));
 		btnClear.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -178,6 +181,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnClear);
 
 		btnTest = new JButton("Test");
+		btnTest.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/connect-icon.png")));
 		btnTest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -196,6 +200,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnTest);
 
 		btnCancel = new JButton("Cancel");
+		btnCancel.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/Exit.png")));
 		btnCancel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

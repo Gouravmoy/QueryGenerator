@@ -31,6 +31,7 @@ import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.util.QueryColorUtil;
 import com.util.QueryUtil;
+import javax.swing.ImageIcon;
 
 public class Tesla4 extends JFrame {
 
@@ -93,6 +94,7 @@ public class Tesla4 extends JFrame {
 		// textArea.setLineWrap(true);
 
 		JButton btnAddCoulmn = new JButton("ADD COULMN");
+		btnAddCoulmn.setIcon(new ImageIcon(Tesla4.class.getResource("/png/addd.png")));
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -118,6 +120,7 @@ public class Tesla4 extends JFrame {
 		contentPane.add(btnAddCoulmn);
 
 		JButton btnDelete = new JButton("DELETE LAST");
+		btnDelete.setIcon(new ImageIcon(Tesla4.class.getResource("/png/list_delete.png")));
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -130,6 +133,7 @@ public class Tesla4 extends JFrame {
 		contentPane.add(btnDelete);
 
 		JButton btnNewButton = new JButton("NEXT");
+		btnNewButton.setIcon(new ImageIcon(Tesla4.class.getResource("/png/next.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				table.editCellAt(-1, -1);
@@ -141,6 +145,7 @@ public class Tesla4 extends JFrame {
 		contentPane.add(btnNewButton);
 
 		JButton btnRefresh = new JButton("REFRESH");
+		btnRefresh.setIcon(new ImageIcon(Tesla4.class.getResource("/png/refresh.png")));
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

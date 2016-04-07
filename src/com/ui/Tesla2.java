@@ -29,6 +29,7 @@ import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.ColsUtil;
 import com.util.QueryColorUtil;
+import javax.swing.ImageIcon;
 
 public class Tesla2 {
 
@@ -72,6 +73,7 @@ public class Tesla2 {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		JButton btnAdd = new JButton("ADD");
+		btnAdd.setIcon(new ImageIcon(Tesla2.class.getResource("/png/addd.png")));
 		btnAdd.setBounds(295, 217, 108, 25);
 		frmQuerybuilder.getContentPane().add(btnAdd);
 		tableModel = new TableModel(MasterCommon.selectRows);
@@ -79,6 +81,7 @@ public class Tesla2 {
 		table.setRowHeight(25);
 
 		JButton btnNext = new JButton("NEXT");
+		btnNext.setIcon(new ImageIcon(Tesla2.class.getResource("/png/next.png")));
 		btnNext.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -94,6 +97,7 @@ public class Tesla2 {
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
+		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class.getResource("/png/transform_flip.png")));
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();

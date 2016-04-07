@@ -247,6 +247,7 @@ public class Tesla0 extends JFrame {
 		contentPane.add(tableNameScrollPane);
 
 		btnBuildQuery = new JButton("Build Query");
+		btnBuildQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/sql-query.png")));
 		btnBuildQuery.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
