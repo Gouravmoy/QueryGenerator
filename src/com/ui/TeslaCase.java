@@ -80,8 +80,7 @@ public class TeslaCase {
 				table.editCellAt(-1, -1);
 				displayQuery();
 				tableModel.updateUI(pojoRow);
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 		});
 		btnAdd.setBounds(330, 260, 89, 23);
@@ -90,8 +89,7 @@ public class TeslaCase {
 		JButton btnDone = new JButton("Done");
 		btnDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MasterCommon.completeCaseQuery = MasterCommon.completeCaseQuery
-						+ query;
+				MasterCommon.completeCaseQuery = MasterCommon.completeCaseQuery + query;
 				table.editCellAt(-1, -1);
 				frame.setVisible(false);
 			}
@@ -105,8 +103,7 @@ public class TeslaCase {
 				table.editCellAt(-1, -1);
 				displayQuery();
 				tableModel.updateUI1(pojoRow);
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 		});
 		btnElse.setBounds(622, 260, 89, 23);
@@ -121,18 +118,15 @@ public class TeslaCase {
 
 		TableColumn col1Column = table.getColumn("ColumnOne");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
-		col1Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col1Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
 		TableColumn joinTypeColumn = table.getColumn("TableTwo");
 		joinTypeColumn.setCellRenderer(new TableCellRenderer());
-		joinTypeColumn
-				.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
+		joinTypeColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 
 		TableColumn col2Column = table.getColumn("ColumnTwo");
 		col2Column.setCellRenderer(new ColumnCellRenderer());
-		col2Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col2Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 	}
 
 	public void displayQuery() {
@@ -143,27 +137,29 @@ public class TeslaCase {
 		for (int i = 0; i < caseRows.size(); i++) {
 			String value = "";
 			CaseRow r = caseRows.get(i);
-			if (r.getConditionString().equals("ELSE")) {
-				if (r.getValueString().length() == 0) {
-					value = r.getTableTwo().getTableName() + "."
-							+ r.getTableTwo().getColumn().getColumnName()
-							+ " \n";
-				} else {
-					value = "'" + r.getValueString() + "' \n";
-				}
-				query = query + " ELSE " + value;
-				break;
+			if (r.getTableOne().getTableName() == null) {
+				caseRows.remove(i);
 			} else {
-				if (r.getValueString().length() == 0) {
-					value = r.getTableTwo().getTableName() + "."
-							+ r.getTableTwo().getColumn().getColumnName()
-							+ " \n";
+				if (r.getConditionString().equals("ELSE")) {
+					if (r.getValueString().length() == 0) {
+						value = r.getTableTwo().getTableName() + "." + r.getTableTwo().getColumn().getColumnName()
+								+ " \n";
+					} else {
+						value = "'" + r.getValueString() + "' \n";
+					}
+					query = query + " ELSE " + value;
+					break;
 				} else {
-					value = "'" + r.getValueString() + "' \n";
+					if (r.getValueString().length() == 0) {
+						value = r.getTableTwo().getTableName() + "." + r.getTableTwo().getColumn().getColumnName()
+								+ " \n";
+					} else {
+						value = "'" + r.getValueString() + "' \n";
+					}
+					query = query + when + r.getTableOne().getTableName() + "."
+							+ r.getTableOne().getColumn().getColumnName() + " = '" + r.getConditionString() + "'" + then
+							+ value;
 				}
-				query = query + when + r.getTableOne().getTableName() + "."
-						+ r.getTableOne().getColumn().getColumnName() + " = '"
-						+ r.getConditionString() + "'" + then + value;
 			}
 		}
 		query = query + "End Case";

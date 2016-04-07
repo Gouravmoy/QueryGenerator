@@ -83,8 +83,9 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				MasterCommon.completeQuery = MasterCommon.completeQuery
-						.replaceAll(", $", "").toUpperCase() + " FROM \n";
+				Tesla2.displyQuery();
+				MasterCommon.completeQuery = MasterCommon.completeQuery.replaceAll(", $", "").toUpperCase()
+						+ " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
@@ -96,8 +97,7 @@ public class Tesla2 {
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 
 				new TeslaCase(rowCase);
 			}
@@ -107,19 +107,16 @@ public class Tesla2 {
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
-		countryColumn
-				.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
+		countryColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 		languageColumn.setCellRenderer(new ColumnCellRenderer());
-		languageColumn.setCellEditor(new ColumnCellEditor(
-				MasterCommon.listPojoCols));
+		languageColumn.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				displyQuery();
 				tableModel.updateUI();
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 
 			}
 
@@ -135,59 +132,55 @@ public class Tesla2 {
 		MasterCommon.completeQuery = "Select \n";
 		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
 			POJORow r = MasterCommon.selectRows.get(i);
-			if (r.getCaseRow().size() == 0) {
-				if (r.getElementname().length() > 0) {
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ r.getTable().getTableName() + "."
-							+ r.getTable().getColumn().getColumnName()
-							+ " as '" + r.getElementname() + "', \n";
-				} else {
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ r.getTable().getTableName() + "."
-							+ r.getTable().getColumn().getColumnName() + ", \n";
-				}
-
+			if (r.getTable().getTableName() == null) {
+				MasterCommon.selectRows.remove(i);
 			} else {
-				String caseQuery = "Case \n";
-				for (int j = 0; j < r.getCaseRow().size(); j++) {
-					String value = "";
-					CaseRow r1 = r.getCaseRow().get(j);
-					if (r1.getConditionString().equals("ELSE")) {
-						if (r1.getValueString().length() == 0) {
-							value = r1.getTableTwo().getTableName()
-									+ "."
-									+ r1.getTableTwo().getColumn()
-											.getColumnName() + " \n";
-						} else {
-							value = "'" + r1.getValueString() + "' \n";
-						}
-						caseQuery = caseQuery + " ELSE " + value;
-
+				if (r.getCaseRow().size() == 0) {
+					if (r.getElementname().length() > 0) {
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
 					} else {
-						if (r1.getValueString().length() == 0) {
-							value = r1.getTableTwo().getTableName()
-									+ "."
-									+ r1.getTableTwo().getColumn()
-											.getColumnName() + " \n";
-						} else {
-							value = "'" + r1.getValueString() + "' \n";
-						}
-						caseQuery = caseQuery + " When "
-								+ r1.getTableOne().getTableName() + "."
-								+ r1.getTableOne().getColumn().getColumnName()
-								+ " = '" + r1.getConditionString() + "' Then "
-								+ value;
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + ", \n";
 					}
-				}
 
-				caseQuery = caseQuery + " End Case \n as '"
-						+ r.getElementname() + "' , \n";
-				MasterCommon.completeQuery = MasterCommon.completeQuery
-						+ caseQuery;
+				} else {
+					String caseQuery = "Case \n";
+					for (int j = 0; j < r.getCaseRow().size(); j++) {
+						String value = "";
+						CaseRow r1 = r.getCaseRow().get(j);
+						if (r1.getTableOne().getTableName() == null) {
+							r.getCaseRow().remove(j);
+						} else {
+							if (r1.getConditionString().equals("ELSE")) {
+								if (r1.getValueString().length() == 0) {
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+								} else {
+									value = "'" + r1.getValueString() + "' \n";
+								}
+								caseQuery = caseQuery + " ELSE " + value;
+
+							} else {
+								if (r1.getValueString().length() == 0) {
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+								} else {
+									value = "'" + r1.getValueString() + "' \n";
+								}
+								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
+										+ r1.getTableOne().getColumn().getColumnName() + " = '"
+										+ r1.getConditionString() + "' Then " + value;
+							}
+						}
+					}
+
+					caseQuery = caseQuery + " End Case \n as '" + r.getElementname() + "' , \n";
+					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
+				}
 			}
 		}
-		textArea.setText(QueryColorUtil
-				.queryColorChange(MasterCommon.completeQuery));
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery));
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
