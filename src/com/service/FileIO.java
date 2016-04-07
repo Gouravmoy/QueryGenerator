@@ -54,16 +54,18 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails)
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
 			throws DBAlreadyExists {
 		FileOutputStream fout;
 		String path = masterPath + "DBCredentials//"
 				+ dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
-		if (!file.exists()) {
+		if (!file.exists() || isEdit == false) {
 			try {
-				file.createNewFile();
+				if (isEdit == true) {
+					file.createNewFile();
+				}
 				fout = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fout);
 				oos.writeObject(dbDetails);
@@ -136,5 +138,25 @@ public class FileIO extends MasterCommon {
 			}
 		}
 		return dbDetails;
+	}
+
+	public static void deleteDBConnection(String selectedDBName) {
+		try {
+
+			File file = new File(masterPath + "DBCredentials//"
+					+ selectedDBName + ".txt");
+
+			if (file.delete()) {
+				System.out.println(file.getName() + " is deleted!");
+			} else {
+				System.out.println("Delete operation is failed.");
+			}
+			
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
 	}
 }

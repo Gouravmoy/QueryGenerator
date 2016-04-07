@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import com.controller.Controller;
 import com.service.FileIO;
 
 public class TeslaS extends JFrame {

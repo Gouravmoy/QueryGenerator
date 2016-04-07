@@ -45,4 +45,8 @@ public class DBConnectionUtil extends MasterCommon {
 		}
 		return null;
 	}
+
+	public static void deleteDBConnection(String selectedDBName) {
+		FileIO.deleteDBConnection(selectedDBName);
+	}
 }

@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -46,7 +47,7 @@ public class Tesla0 extends JFrame {
 	JScrollPane tableNameScrollPane;
 	JTable connNamesTable;
 	JTable tablenameTable;
-	DBConnectionsModel dbConnectionsModel;
+	public static DBConnectionsModel dbConnectionsModel;
 	TableNameModel tableNameModel;
 	JMenuItem mntmConnect;
 	JPopupMenu popupMenu;
@@ -106,7 +107,7 @@ public class Tesla0 extends JFrame {
 			}
 		});
 		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/db.png")));
+				.getResource("/png/load.png")));
 		mnFile.add(mntmLoadQuery);
 
 		JMenu mnDatabase = new JMenu("Database");
@@ -114,10 +115,11 @@ public class Tesla0 extends JFrame {
 
 		JMenuItem mntmAddDatabase = new JMenuItem("New Database Conncetion");
 		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/plus.png")));
+				.getResource("/png/database_add.png")));
 		mntmAddDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new TeslaDBDetails().setVisible(true);
+				System.out.println("Here");
 			}
 		});
 
@@ -148,7 +150,8 @@ public class Tesla0 extends JFrame {
 				btnBuildQuery.setEnabled(true);
 				tableNames.removeAll(tableNames);
 				tempTableNames = Controller.getTables(DBConnectionUtil
-						.getDBDetails(MasterCommon.selectedDBName, MasterCommon.dbConnection));
+						.getDBDetails(MasterCommon.selectedDBName,
+								MasterCommon.dbConnection));
 				tableNames.addAll(tempTableNames);
 				for (String tableName : tableNames) {
 					tablesSelects.add(new TablesSelect(tableName, false));
@@ -158,13 +161,40 @@ public class Tesla0 extends JFrame {
 		});
 
 		mntmConnect.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/connect-no.png")));
+				.getResource("/png/database_connect.png")));
 		popupMenu.add(mntmConnect);
 
 		JMenuItem mntmEditConnection = new JMenuItem("Edit Connection");
+		mntmEditConnection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MasterCommon.dbConnection = DBConnectionUtil.getAllConnection();
+				new TeslaDBDetails(MasterCommon.selectedDBName)
+						.setVisible(true);
+			}
+		});
+		mntmEditConnection.setIcon(new ImageIcon(Tesla0.class
+				.getResource("/png/edit.png")));
 		popupMenu.add(mntmEditConnection);
 
 		JMenuItem mntmDeleteConnection = new JMenuItem("Delete Connection");
+		mntmDeleteConnection.setIcon(new ImageIcon(Tesla0.class
+				.getResource("/png/delete.png")));
+		mntmDeleteConnection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null,
+						"Are you Sure you want to delete this Connection?",
+						"Warning", dialogButton);
+
+				if (dialogResult == JOptionPane.YES_OPTION) {
+					DBConnectionUtil
+							.deleteDBConnection(MasterCommon.selectedDBName);
+					MasterCommon.dbConnection = DBConnectionUtil
+							.getAllConnection();
+					dbConnectionsModel.updateUI(MasterCommon.dbConnection);
+				}
+			}
+		});
 		popupMenu.add(mntmDeleteConnection);
 
 		popupMenu.addPopupMenuListener(new PopupMenuListener() {

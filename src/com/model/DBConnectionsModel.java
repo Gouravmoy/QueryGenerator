@@ -18,6 +18,17 @@ public class DBConnectionsModel extends AbstractTableModel {
 		this.dbDtlsList = dbDtlsList;
 	}
 
+	public void updateUI(DBDetails dbDetails) {
+		this.dbDtlsList.add(dbDetails);
+		this.fireTableDataChanged();
+	}
+
+	public void updateUI(ArrayList<DBDetails> details) {
+		dbDtlsList.clear();
+		dbDtlsList.addAll(details);
+		this.fireTableDataChanged();
+	}
+
 	@Override
 	public int getColumnCount() {
 		return columnNames.length;

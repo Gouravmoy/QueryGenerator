@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
 import com.exceptions.DBAlreadyExists;
@@ -49,6 +50,27 @@ public class TeslaDBDetails extends JFrame {
 	JComboBox dbType;
 
 	public TeslaDBDetails() {
+		connectionNameText = new JTextField();
+		usernameText = new JTextField();
+		passwordText = new JTextField();
+		hostNameText = new JTextField();
+		portNameText = new JTextField();
+		databaseNameText = new JTextField();
+		schemaNameText = new JTextField();
+		initialize();
+	}
+
+	public TeslaDBDetails(String selectedDBName) {
+		DBDetails dbDetail = DBConnectionUtil.getDBDetails(selectedDBName,
+				MasterCommon.dbConnection);
+		connectionNameText = new JTextField(dbDetail.getConnectionName());
+		connectionNameText.setEditable(false);
+		usernameText = new JTextField(dbDetail.getUserName());
+		passwordText = new JTextField(dbDetail.getPassword());
+		hostNameText = new JTextField(dbDetail.getHostName());
+		portNameText = new JTextField(dbDetail.getPort());
+		databaseNameText = new JTextField(dbDetail.getDatabase());
+		schemaNameText = new JTextField(dbDetail.getDbSchema());
 		initialize();
 	}
 
@@ -66,7 +88,6 @@ public class TeslaDBDetails extends JFrame {
 		lblConnectionName.setBounds(10, 14, 96, 14);
 		contentPane.add(lblConnectionName);
 
-		connectionNameText = new JTextField();
 		connectionNameText.setBounds(115, 11, 384, 20);
 		contentPane.add(connectionNameText);
 		connectionNameText.setColumns(10);
@@ -75,7 +96,6 @@ public class TeslaDBDetails extends JFrame {
 		lblUserName.setBounds(10, 36, 85, 14);
 		contentPane.add(lblUserName);
 
-		usernameText = new JTextField();
 		usernameText.setColumns(10);
 		usernameText.setBounds(115, 33, 384, 20);
 		contentPane.add(usernameText);
@@ -84,7 +104,6 @@ public class TeslaDBDetails extends JFrame {
 		lblPassword.setBounds(10, 58, 85, 14);
 		contentPane.add(lblPassword);
 
-		passwordText = new JTextField();
 		passwordText.setColumns(10);
 		passwordText.setBounds(115, 55, 384, 20);
 		contentPane.add(passwordText);
@@ -93,12 +112,10 @@ public class TeslaDBDetails extends JFrame {
 		lblHostName.setBounds(147, 118, 71, 14);
 		contentPane.add(lblHostName);
 
-		hostNameText = new JTextField();
 		hostNameText.setBounds(224, 115, 134, 20);
 		contentPane.add(hostNameText);
 		hostNameText.setColumns(10);
 
-		portNameText = new JTextField();
 		portNameText.setColumns(10);
 		portNameText.setBounds(224, 143, 134, 20);
 		contentPane.add(portNameText);
@@ -107,7 +124,6 @@ public class TeslaDBDetails extends JFrame {
 		lblPortName.setBounds(147, 146, 71, 14);
 		contentPane.add(lblPortName);
 
-		databaseNameText = new JTextField();
 		databaseNameText.setColumns(10);
 		databaseNameText.setBounds(224, 172, 134, 20);
 		contentPane.add(databaseNameText);
@@ -124,7 +140,10 @@ public class TeslaDBDetails extends JFrame {
 
 				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
 					try {
-						FileIO.saveDBDetails(dbDetails);
+						FileIO.saveDBDetails(dbDetails,
+								connectionNameText.isEditable());
+						if (connectionNameText.isEditable())
+							Tesla0.dbConnectionsModel.updateUI(dbDetails);
 						dispose();
 					} catch (DBAlreadyExists e) {
 						JOptionPane.showMessageDialog(null,
@@ -193,7 +212,6 @@ public class TeslaDBDetails extends JFrame {
 		lblSchema.setBounds(147, 200, 71, 19);
 		contentPane.add(lblSchema);
 
-		schemaNameText = new JTextField();
 		schemaNameText.setColumns(10);
 		schemaNameText.setBounds(224, 203, 134, 19);
 		contentPane.add(schemaNameText);
