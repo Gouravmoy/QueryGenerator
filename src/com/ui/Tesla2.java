@@ -74,11 +74,13 @@ public class Tesla2 {
 		scrollPane.setViewportView(table);
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.setIcon(new ImageIcon(Tesla2.class.getResource("/png/addd.png")));
-		btnAdd.setBounds(295, 217, 108, 25);
+		btnAdd.setBounds(174, 216, 121, 37);
 		frmQuerybuilder.getContentPane().add(btnAdd);
 		tableModel = new TableModel(MasterCommon.selectRows);
 		table.setModel(tableModel);
 		table.setRowHeight(25);
+
+		Tesla2.displyQuery();
 
 		JButton btnNext = new JButton("NEXT");
 		btnNext.setIcon(new ImageIcon(Tesla2.class.getResource("/png/next.png")));
@@ -93,7 +95,7 @@ public class Tesla2 {
 				new Tesla4().setVisible(true);
 			}
 		});
-		btnNext.setBounds(683, 217, 89, 23);
+		btnNext.setBounds(680, 216, 111, 37);
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
@@ -106,8 +108,24 @@ public class Tesla2 {
 				new TeslaCase(rowCase);
 			}
 		});
-		btnAddTransformation.setBounds(454, 217, 166, 23);
+		btnAddTransformation.setBounds(475, 216, 184, 37);
 		frmQuerybuilder.getContentPane().add(btnAddTransformation);
+
+		JButton btnNewButton = new JButton("REFRESH");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Tesla2.displyQuery();
+			}
+		});
+		btnNewButton.setIcon(new ImageIcon(Tesla2.class.getResource("/png/refresh.png")));
+		btnNewButton.setBounds(319, 217, 133, 36);
+		frmQuerybuilder.getContentPane().add(btnNewButton);
+
+		JButton btnNewButton_1 = new JButton("DELETE LAST");
+		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class.getResource("/png/list_delete.png")));
+		btnNewButton_1.setBounds(22, 217, 129, 36);
+		frmQuerybuilder.getContentPane().add(btnNewButton_1);
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
@@ -184,7 +202,7 @@ public class Tesla2 {
 				}
 			}
 		}
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery));
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 

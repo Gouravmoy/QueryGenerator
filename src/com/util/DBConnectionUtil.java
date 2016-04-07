@@ -13,11 +13,9 @@ import com.service.FileIO;
 public class DBConnectionUtil extends MasterCommon {
 
 	public static boolean checkConnectivity(DBDetails dbDetails) {
-		String testQuery = queriesProps
-				.getProperty(Keys.QUERY_TEST_CONNECTION_SQL);
+		String testQuery = queriesProps.getProperty(Keys.QUERY_TEST_CONNECTION_SQL);
 
-		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(), "",
-				dbDetails.getDatabase(), dbDetails.getUserName(),
+		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(), "", dbDetails.getDatabase(), dbDetails.getUserName(),
 				dbDetails.getPassword());
 		Connection connection;
 		Statement statement;
@@ -37,9 +35,8 @@ public class DBConnectionUtil extends MasterCommon {
 		return FileIO.getDBConnectionsFromText();
 	}
 
-	public static DBDetails getDBDetails(String selectedDBName,
-			ArrayList<DBDetails> dbConnection) {
-		for (DBDetails dbDetail : dbConnection) {
+	public static DBDetails getDBDetails(String selectedDBName) {
+		for (DBDetails dbDetail : MasterCommon.dbConnection) {
 			if (dbDetail.getConnectionName().equals(selectedDBName))
 				return dbDetail;
 		}

@@ -64,7 +64,7 @@ public class Controller {
 		ResultSet res;
 
 		DBDetails dbDetails = DBConnectionUtil.getDBDetails(
-				MasterCommon.selectedDBName, MasterCommon.dbConnection);
+				MasterCommon.selectedDBName);
 
 		try {
 			String sql = MasterCommon.queriesProps

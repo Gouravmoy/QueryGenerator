@@ -63,8 +63,7 @@ public class TeslaDBDetails extends JFrame {
 	}
 
 	public TeslaDBDetails(String selectedDBName) {
-		DBDetails dbDetail = DBConnectionUtil.getDBDetails(selectedDBName,
-				MasterCommon.dbConnection);
+		DBDetails dbDetail = DBConnectionUtil.getDBDetails(selectedDBName);
 		connectionNameText = new JTextField(dbDetail.getConnectionName());
 		connectionNameText.setEditable(false);
 		usernameText = new JTextField(dbDetail.getUserName());

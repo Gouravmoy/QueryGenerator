@@ -1,12 +1,15 @@
 package com.ui;
 
 import java.awt.BorderLayout;
+import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -19,13 +22,14 @@ import com.celleditor.ColumnCellEditor;
 import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
+import com.exceptions.QueryExecutionException;
 import com.model.WhereModel;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
+import com.util.DBUtil;
 import com.util.QueryUtil;
-import javax.swing.ImageIcon;
 
 public class Tesla5 extends JFrame {
 
@@ -106,10 +110,14 @@ public class Tesla5 extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				FileIO.writeToText();
+				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("txt", "SAVE");
+				String filePath = fileBrowse.getFilePath();
+				FileIO.writeTempData();
+				FileIO.writeToText(filePath);
+				JOptionPane.showMessageDialog(null, "Query Model Successfully Saved!");
 			}
 		});
-		btnNewButton.setBounds(249, 474, 122, 38);
+		btnNewButton.setBounds(131, 474, 122, 38);
 		contentPane.add(btnNewButton);
 
 		JButton btnRefresh = new JButton("REFRESH");
@@ -123,11 +131,37 @@ public class Tesla5 extends JFrame {
 		});
 		btnRefresh.setBounds(585, 221, 137, 33);
 		contentPane.add(btnRefresh);
-		
+
 		JButton btnExportquery = new JButton("EXPORT QUERY");
+		btnExportquery.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("sql", "SAVE");
+				String filePath = fileBrowse.getFilePath();
+				FileIO.writeFullQueryToFile(filePath);
+				JOptionPane.showMessageDialog(null, "Query Successfully Exported!");
+			}
+		});
 		btnExportquery.setIcon(new ImageIcon(Tesla5.class.getResource("/png/export.png")));
-		btnExportquery.setBounds(395, 474, 131, 38);
+		btnExportquery.setBounds(585, 474, 131, 38);
 		contentPane.add(btnExportquery);
+
+		JButton btnNewButton_1 = new JButton("TEST QUERY");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					if (DBUtil.testFinalQuery(MasterCommon.mainQuery.toString())) {
+						JOptionPane.showMessageDialog(null, "Query Successfully Executed!");
+					}
+				} catch (HeadlessException | QueryExecutionException e) {
+					JOptionPane.showMessageDialog(null, "Query Failed! Reason - " + e.getMessage());
+				}
+			}
+		});
+		btnNewButton_1.setIcon(new ImageIcon(Tesla5.class.getResource("/png/test.png")));
+		btnNewButton_1.setBounds(363, 474, 143, 38);
+		contentPane.add(btnNewButton_1);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -138,13 +172,11 @@ public class Tesla5 extends JFrame {
 
 		TableColumn col1Column = table.getColumn("ColumnName");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
-		col1Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col1Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
 		TableColumn joinTypeColumn = table.getColumn("Condition");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
-		joinTypeColumn.setCellEditor(new DropDownCellEditor(
-				MasterCommon.relationalOps));
+		joinTypeColumn.setCellEditor(new DropDownCellEditor(MasterCommon.relationalOps));
 
 		TableColumn col2Column = table.getColumn("And/Or");
 		col2Column.setCellRenderer(new DropDownRenderer());
