@@ -153,6 +153,7 @@ public class Tesla0 extends JFrame {
 						.getDBDetails(MasterCommon.selectedDBName,
 								MasterCommon.dbConnection));
 				tableNames.addAll(tempTableNames);
+				tablesSelects.clear();
 				for (String tableName : tableNames) {
 					tablesSelects.add(new TablesSelect(tableName, false));
 				}

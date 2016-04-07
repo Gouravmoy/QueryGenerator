@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -28,7 +29,7 @@ public class TeslaDBDetails extends JFrame {
 	private JPanel contentPane;
 	private JTextField connectionNameText;
 	private JTextField usernameText;
-	private JTextField passwordText;
+	private JPasswordField passwordText;
 	private JTextField hostNameText;
 	private JTextField portNameText;
 	private JTextField databaseNameText;
@@ -52,7 +53,7 @@ public class TeslaDBDetails extends JFrame {
 	public TeslaDBDetails() {
 		connectionNameText = new JTextField();
 		usernameText = new JTextField();
-		passwordText = new JTextField();
+		passwordText = new JPasswordField();
 		hostNameText = new JTextField();
 		portNameText = new JTextField();
 		databaseNameText = new JTextField();
@@ -66,7 +67,7 @@ public class TeslaDBDetails extends JFrame {
 		connectionNameText = new JTextField(dbDetail.getConnectionName());
 		connectionNameText.setEditable(false);
 		usernameText = new JTextField(dbDetail.getUserName());
-		passwordText = new JTextField(dbDetail.getPassword());
+		passwordText = new JPasswordField(dbDetail.getPassword());
 		hostNameText = new JTextField(dbDetail.getHostName());
 		portNameText = new JTextField(dbDetail.getPort());
 		databaseNameText = new JTextField(dbDetail.getDatabase());
@@ -243,9 +244,9 @@ public class TeslaDBDetails extends JFrame {
 	public void assignDBEntity() {
 
 		dbDetails = new DBDetails(connectionNameText.getText(),
-				usernameText.getText(), passwordText.getText(),
-				hostNameText.getText(), portNameText.getText(),
-				databaseNameText.getText(),
-				dbType.getSelectedItem().toString(), schemaNameText.getText());
+				usernameText.getText(), String.valueOf(passwordText
+						.getPassword()), hostNameText.getText(),
+				portNameText.getText(), databaseNameText.getText(), dbType
+						.getSelectedItem().toString(), schemaNameText.getText());
 	}
 }
