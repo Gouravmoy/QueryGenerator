@@ -147,7 +147,7 @@ public class Tesla5 extends JFrame {
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				new Tesla6().setVisible(true);
+				new Tesla6("INDIRRECT").setVisible(true);
 				dispose();
 			}
 		});

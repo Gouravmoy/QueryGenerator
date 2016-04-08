@@ -33,13 +33,15 @@ public class Tesla6 extends JFrame {
 	public static JTextPane textArea;
 	public JTable queryResultTable;
 	public QueryTableModel queryTableModel;
+	public JButton exportButton;
+	public JButton executeQueryBtn;
 
-	public Tesla6() {
-		initialize();
+	public Tesla6(String status) {
+		initialize(status);
 	}
 
 	@SuppressWarnings("serial")
-	private void initialize() {
+	private void initialize(String status) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 828, 561);
 		contentPane = new JPanel();
@@ -49,12 +51,12 @@ public class Tesla6 extends JFrame {
 
 		textArea = new JTextPane();
 		textArea.setBounds(10, 11, 772, 176);
+
 		textArea.setEditorKit(new HTMLEditorKit());
 
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(10, 11, 791, 197);
 		contentPane.add(scrollPane_1);
-
 		QueryUtil.updateQuery(textArea);
 
 		queryTableModel = new QueryTableModel();
@@ -74,25 +76,26 @@ public class Tesla6 extends JFrame {
 		queryResult.setBounds(10, 264, 791, 248);
 		contentPane.add(queryResult);
 
-		JButton btnNewButton = new JButton("BACK");
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		JButton backButton = new JButton("BACK");
+		backButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				new Tesla5().setVisible(true);
 				dispose();
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/back.png")));
-		btnNewButton.setBounds(158, 219, 135, 34);
-		contentPane.add(btnNewButton);
+		backButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/back.png")));
+		backButton.setBounds(73, 219, 135, 34);
+		contentPane.add(backButton);
 
-		JButton btnNewButton_1 = new JButton("EXECUTE QUERY");
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
+		executeQueryBtn = new JButton("EXECUTE QUERY");
+		executeQueryBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				try {
 					if (DBUtil.testFinalQuery(MasterCommon.mainQuery.toString())) {
 						queryTableModel.executeQueryAndUI();
+						exportButton.setEnabled(true);
 					}
 				} catch (HeadlessException | QueryExecutionException | ClassNotFoundException | SQLException e) {
 					e.printStackTrace();
@@ -101,11 +104,12 @@ public class Tesla6 extends JFrame {
 
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon(Tesla6.class.getResource("/png/lightning.png")));
-		btnNewButton_1.setBounds(314, 219, 135, 34);
-		contentPane.add(btnNewButton_1);
+		executeQueryBtn.setIcon(new ImageIcon(Tesla6.class.getResource("/png/lightning.png")));
+		executeQueryBtn.setBounds(322, 219, 135, 34);
+		contentPane.add(executeQueryBtn);
 
-		JButton exportButton = new JButton("EXPORT RESULT");
+		exportButton = new JButton("EXPORT RESULT");
+		exportButton.setEnabled(false);
 		exportButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("xlsx", "SAVE");
@@ -123,7 +127,8 @@ public class Tesla6 extends JFrame {
 			}
 		});
 		exportButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/excel-icon.png")));
-		exportButton.setBounds(478, 219, 135, 34);
+		exportButton.setBounds(595, 219, 135, 34);
 		contentPane.add(exportButton);
+
 	}
 }

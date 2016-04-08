@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -16,13 +17,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
 import com.exceptions.DBAlreadyExists;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
-import javax.swing.ImageIcon;
 
 public class TeslaDBDetails extends JFrame {
 

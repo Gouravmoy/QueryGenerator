@@ -35,6 +35,7 @@ public class ExcelExporter {
 	        //Set the row to the next one in the sequence 
 	        row = sheet.createRow((rows + 3)); 
 	    }
-	    wb.write(new FileOutputStream(filePath));//Save the file     
+	    wb.write(new FileOutputStream(filePath));//Save the file  
+	    wb.close();
 	}
 }
