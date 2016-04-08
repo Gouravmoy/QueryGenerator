@@ -1,5 +1,15 @@
 package com.ui;
 
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,14 +23,8 @@ import com.controller.MasterCommon;
 import com.exceptions.QueryExecutionException;
 import com.model.QueryTableModel;
 import com.util.DBUtil;
+import com.util.ExcelExporter;
 import com.util.QueryUtil;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-
-import java.awt.HeadlessException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 
 public class Tesla6 extends JFrame {
 
@@ -34,6 +38,7 @@ public class Tesla6 extends JFrame {
 		initialize();
 	}
 
+	@SuppressWarnings("serial")
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 828, 561);
@@ -54,16 +59,29 @@ public class Tesla6 extends JFrame {
 
 		queryTableModel = new QueryTableModel();
 
-		queryResultTable = new JTable();
+		queryResultTable = new JTable() {
+			public boolean getScrollableTracksViewportWidth() {
+				return getPreferredSize().width < getParent().getWidth();
+			}
+		};
+		queryResultTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		queryResultTable.setModel(queryTableModel);
 		queryResultTable.setBounds(10, 264, 791, 248);
 		queryResultTable.setRowHeight(25);
 
-		JScrollPane queryResult = new JScrollPane(queryResultTable);
+		JScrollPane queryResult = new JScrollPane(queryResultTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		queryResult.setBounds(10, 264, 791, 248);
 		contentPane.add(queryResult);
 
 		JButton btnNewButton = new JButton("BACK");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				new Tesla5().setVisible(true);
+				dispose();
+			}
+		});
 		btnNewButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/back.png")));
 		btnNewButton.setBounds(158, 219, 135, 34);
 		contentPane.add(btnNewButton);
@@ -87,9 +105,25 @@ public class Tesla6 extends JFrame {
 		btnNewButton_1.setBounds(314, 219, 135, 34);
 		contentPane.add(btnNewButton_1);
 
-		JButton btnNewButton_2 = new JButton("EXPORT RESULT");
-		btnNewButton_2.setIcon(new ImageIcon(Tesla6.class.getResource("/png/excel-icon.png")));
-		btnNewButton_2.setBounds(478, 219, 135, 34);
-		contentPane.add(btnNewButton_2);
+		JButton exportButton = new JButton("EXPORT RESULT");
+		exportButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("xlsx", "SAVE");
+				String filePath = fileBrowse.getFilePath();
+				if (!filePath.endsWith(".xlsx"))
+					filePath = filePath + ".xlsx";
+				ExcelExporter exp = new ExcelExporter();
+				try {
+					exp.exportTable(queryResultTable, filePath);
+					JOptionPane.showMessageDialog(null, "Result Successfully Exported!");
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(null, "Export Failed! Reason - " + e1.getMessage());
+				}
+
+			}
+		});
+		exportButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/excel-icon.png")));
+		exportButton.setBounds(478, 219, 135, 34);
+		contentPane.add(exportButton);
 	}
 }

@@ -67,7 +67,13 @@ public class QueryTableModel extends AbstractTableModel {
 			cache.addElement(record);
 		}
 		System.out.println("All Records Fetched");
+		conn.close();
 		fireTableChanged(null);
+	}
+
+	@Override
+	public boolean isCellEditable(int arg0, int arg1) {
+		return true;
 	}
 
 }

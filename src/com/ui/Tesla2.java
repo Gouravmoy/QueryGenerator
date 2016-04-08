@@ -197,7 +197,11 @@ public class Tesla2 {
 						}
 					}
 
-					caseQuery = caseQuery + " End Case \n as '" + r.getElementname() + "' , \n";
+					// caseQuery = caseQuery + " End Case \n as '" +
+					// r.getElementname() + "' , \n";
+					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
+																							// SQL
+																							// Syntax
 					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
 				}
 			}
