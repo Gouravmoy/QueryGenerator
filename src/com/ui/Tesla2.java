@@ -124,6 +124,12 @@ public class Tesla2 {
 		frmQuerybuilder.getContentPane().add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("DELETE LAST");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class.getResource("/png/list_delete.png")));
 		btnNewButton_1.setBounds(22, 217, 129, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton_1);

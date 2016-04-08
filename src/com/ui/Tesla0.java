@@ -26,6 +26,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.table.TableColumn;
 
 import com.controller.Controller;
 import com.controller.MasterCommon;
@@ -33,6 +34,7 @@ import com.entity.TablesSelect;
 import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
 import com.model.DBConnectionsModel;
 import com.model.TableNameModel;
+import com.renderer.IconTextCellRemderer;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
 import com.util.PropsLoader;
@@ -141,6 +143,7 @@ public class Tesla0 extends JFrame {
 		connNamesTable = new JTable();
 		connNamesTable.setModel(dbConnectionsModel);
 		connNamesTable.setRowHeight(25);
+		initilizeColumn();
 
 		/*
 		 * TableColumn connNamesTableName = connNamesTable .getColumn(
@@ -259,6 +262,12 @@ public class Tesla0 extends JFrame {
 		btnBuildQuery.setBounds(568, 32, 116, 23);
 		btnBuildQuery.setEnabled(false);
 		contentPane.add(btnBuildQuery);
+	}
+
+	private void initilizeColumn() {
+		TableColumn table1Column = connNamesTable.getColumn("Connection Names");
+		table1Column.setCellRenderer(new IconTextCellRemderer());
+
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
