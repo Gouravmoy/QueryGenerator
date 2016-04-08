@@ -115,6 +115,7 @@ public class Tesla2 {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				table.editCellAt(-1, -1);
 				Tesla2.displyQuery();
 			}
 		});

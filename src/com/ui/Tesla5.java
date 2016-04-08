@@ -73,10 +73,6 @@ public class Tesla5 extends JFrame {
 		panel.setBounds(10, 11, 792, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
-		JLabel lblQuery = new JLabel("QUERY");
-		lblQuery.setBounds(10, 240, 46, 14);
-		contentPane.add(lblQuery);
-
 		JButton btnAddCoulmn = new JButton("ADD CONDITION");
 		btnAddCoulmn.setIcon(new ImageIcon(Tesla5.class.getResource("/png/addd.png")));
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
@@ -87,7 +83,7 @@ public class Tesla5 extends JFrame {
 				QueryUtil.updateQuery(textArea);
 			}
 		});
-		btnAddCoulmn.setBounds(363, 221, 143, 33);
+		btnAddCoulmn.setBounds(428, 221, 143, 33);
 		contentPane.add(btnAddCoulmn);
 
 		JButton btnDelete = new JButton("DELETE LAST");
@@ -99,7 +95,7 @@ public class Tesla5 extends JFrame {
 				QueryUtil.updateQuery(textArea);
 			}
 		});
-		btnDelete.setBounds(131, 221, 143, 33);
+		btnDelete.setBounds(223, 221, 143, 33);
 		contentPane.add(btnDelete);
 
 		JButton btnNewButton = new JButton("SAVE MODEL\r\n");
@@ -126,7 +122,7 @@ public class Tesla5 extends JFrame {
 				QueryUtil.updateQuery(textArea);
 			}
 		});
-		btnRefresh.setBounds(585, 221, 137, 33);
+		btnRefresh.setBounds(630, 221, 137, 33);
 		contentPane.add(btnRefresh);
 
 		JButton btnExportquery = new JButton("EXPORT QUERY");
@@ -154,6 +150,18 @@ public class Tesla5 extends JFrame {
 		btnNewButton_1.setIcon(new ImageIcon(Tesla5.class.getResource("/png/test.png")));
 		btnNewButton_1.setBounds(363, 474, 143, 38);
 		contentPane.add(btnNewButton_1);
+
+		JButton btnNewButton_2 = new JButton("BACK");
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new Tesla4().setVisible(true);
+				dispose();
+			}
+		});
+		btnNewButton_2.setIcon(new ImageIcon(Tesla5.class.getResource("/png/back.png")));
+		btnNewButton_2.setBounds(38, 221, 122, 33);
+		contentPane.add(btnNewButton_2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 

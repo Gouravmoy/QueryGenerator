@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,7 +31,6 @@ import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.util.QueryColorUtil;
 import com.util.QueryUtil;
-import javax.swing.ImageIcon;
 
 public class Tesla4 extends JFrame {
 
@@ -87,10 +86,6 @@ public class Tesla4 extends JFrame {
 		panel.setBounds(10, 11, 792, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
-		JLabel lblQuery = new JLabel("QUERY");
-		lblQuery.setBounds(10, 240, 46, 14);
-		contentPane.add(lblQuery);
-
 		// textArea.setLineWrap(true);
 
 		JButton btnAddCoulmn = new JButton("ADD COULMN");
@@ -116,7 +111,7 @@ public class Tesla4 extends JFrame {
 		 * System.out.println(htmlText); textArea.setText(htmlText);
 		 */
 
-		btnAddCoulmn.setBounds(277, 221, 132, 33);
+		btnAddCoulmn.setBounds(344, 221, 132, 33);
 		contentPane.add(btnAddCoulmn);
 
 		JButton btnDelete = new JButton("DELETE LAST");
@@ -129,7 +124,7 @@ public class Tesla4 extends JFrame {
 
 			}
 		});
-		btnDelete.setBounds(82, 221, 132, 33);
+		btnDelete.setBounds(183, 221, 132, 33);
 		contentPane.add(btnDelete);
 
 		JButton btnNewButton = new JButton("NEXT");
@@ -141,7 +136,7 @@ public class Tesla4 extends JFrame {
 				new Tesla5().setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(637, 221, 132, 33);
+		btnNewButton.setBounds(670, 221, 132, 33);
 		contentPane.add(btnNewButton);
 
 		JButton btnRefresh = new JButton("REFRESH");
@@ -156,8 +151,20 @@ public class Tesla4 extends JFrame {
 				QueryUtil.updateQuery(textArea);
 			}
 		});
-		btnRefresh.setBounds(469, 221, 132, 33);
+		btnRefresh.setBounds(505, 221, 132, 33);
 		contentPane.add(btnRefresh);
+		
+		JButton btnNewButton_1 = new JButton("BACK");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new Tesla2(Tesla0.tempTableNames);
+				dispose();
+			}
+		});
+		btnNewButton_1.setIcon(new ImageIcon(Tesla4.class.getResource("/png/back.png")));
+		btnNewButton_1.setBounds(20, 221, 132, 33);
+		contentPane.add(btnNewButton_1);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
