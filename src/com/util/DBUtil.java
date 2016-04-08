@@ -29,13 +29,15 @@ public class DBUtil {
 	}
 
 	public static boolean testFinalQuery(String string) throws QueryExecutionException {
+		boolean returnValue = false;
 		try {
 			Connection conn = DBUtil.getSQLConnection(DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName));
 			Statement stmt = conn.createStatement();
-			stmt.executeQuery(MasterCommon.completeQuery);
+			stmt.executeQuery(MasterCommon.mainQuery.toString());
+			returnValue = true;
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new QueryExecutionException(e.getMessage());
 		}
-		return false;
+		return returnValue;
 	}
 }

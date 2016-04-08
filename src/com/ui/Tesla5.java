@@ -1,7 +1,6 @@
 package com.ui;
 
 import java.awt.BorderLayout;
-import java.awt.HeadlessException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,13 +21,11 @@ import com.celleditor.ColumnCellEditor;
 import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
-import com.exceptions.QueryExecutionException;
 import com.model.WhereModel;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
-import com.util.DBUtil;
 import com.util.QueryUtil;
 
 public class Tesla5 extends JFrame {
@@ -150,13 +147,8 @@ public class Tesla5 extends JFrame {
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				try {
-					if (DBUtil.testFinalQuery(MasterCommon.mainQuery.toString())) {
-						JOptionPane.showMessageDialog(null, "Query Successfully Executed!");
-					}
-				} catch (HeadlessException | QueryExecutionException e) {
-					JOptionPane.showMessageDialog(null, "Query Failed! Reason - " + e.getMessage());
-				}
+				new Tesla6().setVisible(true);
+				dispose();
 			}
 		});
 		btnNewButton_1.setIcon(new ImageIcon(Tesla5.class.getResource("/png/test.png")));
