@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -80,7 +78,9 @@ public class Tesla0 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PropsLoader.loadProps();
+					//PropsLoader.loadProps();
+					PropsLoader loader = new PropsLoader();
+					loader.loadProps();
 					Tesla0 frame = new Tesla0();
 					frame.setVisible(true);
 				} catch (Exception e) {
