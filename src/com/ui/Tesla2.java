@@ -53,6 +53,7 @@ public class Tesla2 {
 	private void initialize() {
 		frmQuerybuilder = new JFrame();
 		frmQuerybuilder.getContentPane().setLayout(null);
+		frmQuerybuilder.setTitle("Select Window");
 		JPanel panel = new JPanel();
 		panel.setBounds(22, 264, 769, 207);
 		frmQuerybuilder.getContentPane().add(panel);
@@ -127,7 +128,7 @@ public class Tesla2 {
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 			}
 		});
 		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class.getResource("/png/list_delete.png")));

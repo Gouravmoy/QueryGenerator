@@ -49,6 +49,8 @@ public class TeslaCase {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+		frame.setTitle("Transformation Window");
+
 		// JPanel panel = new JPanel();
 		// panel.setBounds(22, 22, 780, 261);
 		// frame.getContentPane().add(panel);

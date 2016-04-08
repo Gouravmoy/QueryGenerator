@@ -46,6 +46,8 @@ public class Tesla5 extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		setTitle("Condition Window");
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 265, 792, 198);
@@ -102,7 +104,7 @@ public class Tesla5 extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("txt", "SAVE");
+				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("ser", "SAVE");
 				String filePath = fileBrowse.getFilePath();
 				FileIO.writeTempData();
 				FileIO.writeToText(filePath);

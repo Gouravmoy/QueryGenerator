@@ -32,8 +32,8 @@ public class FileIO extends MasterCommon {
 		try {
 
 			path = filePath;
-			if (!filePath.endsWith(".txt"))
-				path = filePath + ".txt";
+			if (!filePath.endsWith(".ser"))
+				path = filePath + ".ser";
 
 			File file = new File(path);
 			if (!file.exists()) {

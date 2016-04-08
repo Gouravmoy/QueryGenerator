@@ -57,6 +57,8 @@ public class Tesla4 extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		setTitle("Joins Window");
 
 		JScrollPane panel_1 = new JScrollPane();
 		panel_1.setBounds(10, 265, 792, 198);

@@ -5,11 +5,14 @@ import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -96,6 +100,7 @@ public class Tesla0 extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setTitle("Multiverse Query Generator");
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 694, 21);
@@ -105,9 +110,13 @@ public class Tesla0 extends JFrame {
 		menuBar.add(mnFile);
 
 		JMenuItem mntmLoadQuery = new JMenuItem("Load Query");
+
+		KeyStroke keyStrokeToLoadQuery = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
+		mntmLoadQuery.setAccelerator(keyStrokeToLoadQuery);
+
 		mntmLoadQuery.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("txt", "OPEN");
+				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("ser", "OPEN");
 				String filePath = fileBrowse.getFilePath();
 				if (filePath.length() != 0) {
 					FileIO.getFromTextFile(filePath);
@@ -127,6 +136,10 @@ public class Tesla0 extends JFrame {
 		menuBar.add(mnDatabase);
 
 		JMenuItem mntmAddDatabase = new JMenuItem("New Database Conncetion");
+
+		KeyStroke keyStrokeToNewConnection = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
+		mntmAddDatabase.setAccelerator(keyStrokeToNewConnection);
+
 		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class.getResource("/png/database_add.png")));
 		mntmAddDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

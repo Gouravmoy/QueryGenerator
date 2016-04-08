@@ -49,6 +49,8 @@ public class Tesla6 extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		setTitle("Test Your Query");
+
 		textArea = new JTextPane();
 		textArea.setBounds(10, 11, 772, 176);
 
