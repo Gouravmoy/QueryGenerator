@@ -45,7 +45,10 @@ public class TeslaCase {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 828, 520);
+		frame.setSize(828, 520);
+
+		frame.setLocationRelativeTo(null);
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 

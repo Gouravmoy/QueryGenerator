@@ -17,9 +17,8 @@ public class IconTextCellRemderer extends DefaultTableCellRenderer {
 			String column2 = (String) value;
 			setText(column2);
 		}
-		setIcon(new ImageIcon("./resource/png/database_connect.png"));
+		setIcon(new ImageIcon(getClass().getResource("/png/database_connect.png")));
 		setToolTipText("Right Click to Connect");
 		return this;
 	}
-
 }

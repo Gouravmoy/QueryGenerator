@@ -152,7 +152,10 @@ public class Tesla2 {
 
 		});
 		frmQuerybuilder.setVisible(false);
-		frmQuerybuilder.setBounds(100, 100, 828, 520);
+		frmQuerybuilder.setSize(828, 520);
+
+		frmQuerybuilder.setLocationRelativeTo(null);
+
 		frmQuerybuilder.setVisible(true);
 		frmQuerybuilder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}

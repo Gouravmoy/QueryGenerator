@@ -1,7 +1,6 @@
 package com.ui;
 
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,7 +22,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -33,13 +30,11 @@ import javax.swing.table.TableColumn;
 import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.TablesSelect;
-import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
 import com.model.DBConnectionsModel;
 import com.model.TableNameModel;
 import com.renderer.IconTextCellRemderer;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
-import com.util.PropsLoader;
 
 public class Tesla0 extends JFrame {
 
@@ -64,38 +59,14 @@ public class Tesla0 extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		try {
-			Properties props = new Properties();
-			props.put("logoString", "VIGO");
-			AcrylLookAndFeel.setCurrentTheme(props);
-			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//PropsLoader.loadProps();
-					PropsLoader loader = new PropsLoader();
-					loader.loadProps();
-					Tesla0 frame = new Tesla0();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public Tesla0() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 710, 504);
+		setSize(710, 504);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

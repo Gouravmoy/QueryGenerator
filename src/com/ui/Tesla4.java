@@ -52,12 +52,13 @@ public class Tesla4 extends JFrame {
 
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 828, 520);
+		setSize(828, 520);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		setTitle("Joins Window");
 
 		JScrollPane panel_1 = new JScrollPane();
@@ -100,8 +101,7 @@ public class Tesla4 extends JFrame {
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
 				QueryUtil.updateQuery(textArea);
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 
 		});
@@ -155,7 +155,7 @@ public class Tesla4 extends JFrame {
 		});
 		btnRefresh.setBounds(505, 221, 132, 33);
 		contentPane.add(btnRefresh);
-		
+
 		JButton btnNewButton_1 = new JButton("BACK");
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -177,13 +177,11 @@ public class Tesla4 extends JFrame {
 
 		TableColumn col1Column = table.getColumn("ColumnName1");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
-		col1Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col1Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
 		TableColumn joinTypeColumn = table.getColumn("Join Type");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
-		joinTypeColumn.setCellEditor(new DropDownCellEditor(
-				MasterCommon.joinTypes));
+		joinTypeColumn.setCellEditor(new DropDownCellEditor(MasterCommon.joinTypes));
 
 		TableColumn table2Column = table.getColumn("TableName2");
 		table2Column.setCellRenderer(new TableCellRenderer());
@@ -191,7 +189,6 @@ public class Tesla4 extends JFrame {
 
 		TableColumn col2Column = table.getColumn("ColumnName2");
 		col2Column.setCellRenderer(new ColumnCellRenderer());
-		col2Column
-				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		col2Column.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 	}
 }

@@ -43,7 +43,10 @@ public class Tesla6 extends JFrame {
 	@SuppressWarnings("serial")
 	private void initialize(String status) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 828, 561);
+		setSize(828, 561);
+
+		setLocationRelativeTo(null);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
