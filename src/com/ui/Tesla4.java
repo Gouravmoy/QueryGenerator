@@ -96,6 +96,16 @@ public class Tesla4 extends JFrame {
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				if (MasterCommon.joinRows.size() == 0) {
+					updateUIQuery();
+				} else {
+					if (!MasterCommon.joinRows.get(0).getInnerJoinType().equals("NO JOIN")) {
+						updateUIQuery();
+					}
+				}
+			}
+
+			private void updateUIQuery() {
 				colorUtil = new QueryColorUtil();
 				innerJoinTableModel.updateUI();
 				table.editCellAt(-1, -1);

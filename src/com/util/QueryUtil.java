@@ -20,8 +20,7 @@ public class QueryUtil extends MasterCommon {
 
 	public static void updateQuery(JTextPane textArea) {
 		QueryUtil.buildQuery();
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.mainQuery
-				.toString()));
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.mainQuery.toString()));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -63,13 +62,14 @@ public class QueryUtil extends MasterCommon {
 
 			if (!whereRow.getRelationalOp().equals("SELECT RELATION")) {
 				stringBuilder = new StringBuilder();
-				stringBuilder.append(whereRow.getWhereTableCol().getTableName()
-						+ "."
-						+ whereRow.getWhereTableCol().getColumn()
-								.getColumnName() + space
-						+ resolveCondition(whereRow.getRelationalOp()) + space
-						+ singleQuote + whereRow.getConditionalValue()
-						+ singleQuote + space + whereRow.getAndOrCondition());
+				stringBuilder.append(whereRow.getWhereTableCol().getTableName() + "."
+						+ whereRow.getWhereTableCol().getColumn().getColumnName() + space
+						+ resolveCondition(whereRow.getRelationalOp()) + space + singleQuote
+						+ whereRow.getConditionalValue() + singleQuote + space);
+				if (whereRow.getAndOrCondition().equals("SELECT") || whereRow.getAndOrCondition().equals("END"))
+					stringBuilder.append("");
+				else
+					stringBuilder.append(whereRow.getAndOrCondition());
 				whereStmts.add(stringBuilder.toString());
 			}
 		}
@@ -100,37 +100,45 @@ public class QueryUtil extends MasterCommon {
 		boolean isReverse = false;
 		boolean match = false;
 		InnerJoinRow joinRow;
-		if (innerJoinRows.size() == 0 || innerJoinRows.size() == 1) {
+		if (innerJoinRows.size() == 0 /* || innerJoinRows.size() == 1 */) {
 			return;
 		}
 		for (int i = 0; i < innerJoinRows.size(); i++) {
 			isReverse = false;
 			match = false;
 			joinRow = innerJoinRows.get(i);
+
+			if (joinRow.getInnerJoinType().equals("NO JOIN")) {
+				String table1Name = joinRow.getJoinTable1().getTableName();
+				innerJoinMap.put(table1Name + "|" + "" + "|" + i, getInnerJoinValue(joinRow, 5));
+				joinRow.setStatus(true);
+				System.out.println("Condition No Join");
+				continue;
+			}
+
+			if (innerJoinRows.get(0).getInnerJoinType().equals("NO JOIN")) {
+				return;
+			}
+
 			if (joinRow.getInnerJoinType().equals("SELECT JOIN"))
 				break;
 			String table1Name = joinRow.getJoinTable1().getTableName();
 			String table2Name = joinRow.getJoinTable2().getTableName();
 
-			if (innerJoinMap.containsKey(table1Name + "|" + table2Name + "|"
-					+ i)
-					|| innerJoinMap.containsKey(table2Name + "|" + table1Name
-							+ "|" + i) || joinRow.isStatus()) {
+			if (innerJoinMap.containsKey(table1Name + "|" + table2Name + "|" + i)
+					|| innerJoinMap.containsKey(table2Name + "|" + table1Name + "|" + i) || joinRow.isStatus()) {
 				continue;
 			} else if (table1Name.equals(table2Name)) {
 				Iterator it = innerJoinMap.entrySet().iterator();
 				if (innerJoinMap.size() == 0) {
-					innerJoinMap.put(table1Name + "|" + table1Name + "|0",
-							getInnerJoinValue(joinRow, 4));
+					innerJoinMap.put(table1Name + "|" + table1Name + "|0", getInnerJoinValue(joinRow, 4));
 					continue;
 				}
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					String key = (String) pair.getKey();
-					String mapTable = key.split("\\|")[0] + "|"
-							+ key.split("\\|")[1];
-					if (mapTable.split("\\|")[0].equals(table1Name)
-							|| mapTable.split("\\|")[1].equals(table1Name)) {
+					String mapTable = key.split("\\|")[0] + "|" + key.split("\\|")[1];
+					if (mapTable.split("\\|")[0].equals(table1Name) || mapTable.split("\\|")[1].equals(table1Name)) {
 						String prevVal = innerJoinMap.get(key);
 						String newJoinCond = getInnerJoinValue(joinRow, 1);
 						if (!prevVal.contains(newJoinCond))
@@ -140,8 +148,7 @@ public class QueryUtil extends MasterCommon {
 				}
 			} else {
 				if (innerJoinMap.size() == 0) {
-					innerJoinMap.put(table1Name + "|" + table2Name + "|" + i,
-							getInnerJoinValue(joinRow, 2));
+					innerJoinMap.put(table1Name + "|" + table2Name + "|" + i, getInnerJoinValue(joinRow, 2));
 					joinRow.setStatus(true);
 					System.out.println("Condition Map Size is zero - 2");
 					continue;
@@ -150,35 +157,27 @@ public class QueryUtil extends MasterCommon {
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					String key = (String) pair.getKey();
-					String mapTable = key.split("\\|")[0] + "|"
-							+ key.split("\\|")[1];
+					String mapTable = key.split("\\|")[0] + "|" + key.split("\\|")[1];
 					String keyRow = key.split("\\|")[2];
-					if (mapTable
-							.equalsIgnoreCase(table2Name + "|" + table1Name)
-							|| mapTable.equalsIgnoreCase(table1Name + "|"
-									+ table2Name)) {
+					if (mapTable.equalsIgnoreCase(table2Name + "|" + table1Name)
+							|| mapTable.equalsIgnoreCase(table1Name + "|" + table2Name)) {
 
-						String prevVal = innerJoinMap.get(table1Name + "|"
-								+ table2Name + "|" + keyRow);
+						String prevVal = innerJoinMap.get(table1Name + "|" + table2Name + "|" + keyRow);
 						if (prevVal == null) {
-							prevVal = innerJoinMap.get(table2Name + "|"
-									+ table1Name + "|" + keyRow);
+							prevVal = innerJoinMap.get(table2Name + "|" + table1Name + "|" + keyRow);
 							isReverse = true;
 						}
 						String newJoinCond = getInnerJoinValue(joinRow, 1);
 						if (!prevVal.contains(newJoinCond)) {
 							if (isReverse == true) {
-								innerJoinMap.put(table2Name + "|" + table1Name
-										+ "|" + keyRow, prevVal + "\n"
-										+ newJoinCond);
+								innerJoinMap.put(table2Name + "|" + table1Name + "|" + keyRow,
+										prevVal + "\n" + newJoinCond);
 								joinRow.setStatus(true);
 								match = true;
-								System.out
-										.println("Condition Existing in Reverse");
+								System.out.println("Condition Existing in Reverse");
 							} else {
-								innerJoinMap.put(table1Name + "|" + table2Name
-										+ "|" + keyRow, prevVal + "\n"
-										+ newJoinCond);
+								innerJoinMap.put(table1Name + "|" + table2Name + "|" + keyRow,
+										prevVal + "\n" + newJoinCond);
 								joinRow.setStatus(true);
 								match = true;
 								System.out.println("Condition Existing");
@@ -198,26 +197,18 @@ public class QueryUtil extends MasterCommon {
 						String mapTable1 = key.split("\\|")[0];
 						String mapTable2 = key.split("\\|")[1];
 						// String keyRow = key.split("\\|")[2];
-						if ((table1Name.equals(mapTable1) || table1Name
-								.equals(mapTable2))) {
-							tempMap.put(
-									table1Name + "|" + table2Name + "|" + i,
-									getInnerJoinValue(joinRow, 3));
+						if ((table1Name.equals(mapTable1) || table1Name.equals(mapTable2))) {
+							tempMap.put(table1Name + "|" + table2Name + "|" + i, getInnerJoinValue(joinRow, 3));
 							joinRow.setStatus(true);
 							match = true;
-							System.out
-									.println("Condition One Table - Table 1 is Existing");
+							System.out.println("Condition One Table - Table 1 is Existing");
 							break;
 						}
-						if ((table2Name.equals(mapTable1) || table2Name
-								.equals(mapTable2))) {
-							tempMap.put(
-									table1Name + "|" + table2Name + "|" + i,
-									getInnerJoinValue(joinRow, 4));
+						if ((table2Name.equals(mapTable1) || table2Name.equals(mapTable2))) {
+							tempMap.put(table1Name + "|" + table2Name + "|" + i, getInnerJoinValue(joinRow, 4));
 							joinRow.setStatus(true);
 							match = true;
-							System.out
-									.println("Condition One Table - Table 2 is Existing");
+							System.out.println("Condition One Table - Table 2 is Existing");
 							break;
 						}
 					}
@@ -255,14 +246,11 @@ public class QueryUtil extends MasterCommon {
 		String joinType = joinRow.getInnerJoinType();
 
 		if (condition == 1) {
-			return value = "AND" + space + table1Name + "." + col1Name + " = "
-					+ table2Name + "." + col2Name;
+			return value = "AND" + space + table1Name + "." + col1Name + " = " + table2Name + "." + col2Name;
 		}
 		if (condition == 2) {
-			return value = table1Name + space + table1Name + space + joinType
-					+ space + table2Name + space + table2Name + space + "ON"
-					+ space + table1Name + "." + col1Name + " = " + table2Name
-					+ "." + col2Name;
+			return value = table1Name + space + table1Name + space + joinType + space + table2Name + space + table2Name
+					+ space + "ON" + space + table1Name + "." + col1Name + " = " + table2Name + "." + col2Name;
 		}
 		if (condition == 3) {
 			joinTbale1 = table2Name;
@@ -276,9 +264,11 @@ public class QueryUtil extends MasterCommon {
 			joinCol1 = col1Name;
 			joinCol2 = col2Name;
 		}
-		value = joinType + space + joinTbale1 + space + joinTbale1 + space
-				+ "ON" + space + joinTbale1 + "." + joinCol1 + " = "
-				+ joinTbale2 + "." + joinCol2;
+		if (condition == 5) {
+			return value = table1Name + space + table1Name;
+		}
+		value = joinType + space + joinTbale1 + space + joinTbale1 + space + "ON" + space + joinTbale1 + "." + joinCol1
+				+ " = " + joinTbale2 + "." + joinCol2;
 		return value;
 	}
 

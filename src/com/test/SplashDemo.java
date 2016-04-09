@@ -112,6 +112,7 @@ public class SplashDemo extends Frame implements ActionListener {
 	};
 
 	public static void main(String args[]) {
+		@SuppressWarnings("unused")
 		SplashDemo test = new SplashDemo();
 	}
 }
