@@ -17,8 +17,15 @@ public class IconTextCellRemderer extends DefaultTableCellRenderer {
 			String column2 = (String) value;
 			setText(column2);
 		}
-		setIcon(new ImageIcon(getClass().getResource("/png/database_connect.png")));
+		System.out.println("Love - "+value);
+
+		if (isSelected) {
+			setIcon(new ImageIcon(getClass().getResource("/png/connect.png")));
+		} else {
+			setIcon(new ImageIcon(getClass().getResource("/png/database_connect.png")));
+		}
 		setToolTipText("Right Click to Connect");
 		return this;
 	}
+
 }

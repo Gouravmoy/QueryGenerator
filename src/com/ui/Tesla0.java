@@ -51,6 +51,7 @@ public class Tesla0 extends JFrame {
 	public static DBConnectionsModel dbConnectionsModel;
 	TableNameModel tableNameModel;
 	JMenuItem mntmConnect;
+	JMenuItem mntmExecuteQuery;
 	JPopupMenu popupMenu;
 	StringBuilder selectedDB = new StringBuilder();
 	ArrayList<TablesSelect> tablesSelects = new ArrayList<TablesSelect>();
@@ -99,6 +100,21 @@ public class Tesla0 extends JFrame {
 		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/load.png")));
 		mnFile.add(mntmLoadQuery);
 
+		mntmExecuteQuery = new JMenuItem("Execute Query");
+
+		KeyStroke keyStrokeToExecuteQuery = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+		mntmExecuteQuery.setAccelerator(keyStrokeToExecuteQuery);
+
+		mntmExecuteQuery.setEnabled(false);
+		mntmExecuteQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new Tesla6("DIRRECT").setVisible(true);
+				dispose();
+			}
+		});
+		mntmExecuteQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/lightning.png")));
+		mnFile.add(mntmExecuteQuery);
+
 		JMenu space = new JMenu("");
 		space.setEnabled(false);
 		menuBar.add(space);
@@ -145,6 +161,7 @@ public class Tesla0 extends JFrame {
 		mntmConnect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnBuildQuery.setEnabled(true);
+				mntmExecuteQuery.setEnabled(true);
 				tableNames.removeAll(tableNames);
 				tempTableNames = Controller.getTables(DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName));
 				tableNames.addAll(tempTableNames);
@@ -153,6 +170,7 @@ public class Tesla0 extends JFrame {
 					tablesSelects.add(new TablesSelect(tableName, false));
 				}
 				tableNameModel.updateUI();
+
 			}
 		});
 
@@ -243,7 +261,7 @@ public class Tesla0 extends JFrame {
 			}
 		});
 		btnBuildQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/sql-query.png")));
-		btnBuildQuery.setBounds(568, 32, 116, 23);
+		btnBuildQuery.setBounds(566, 25, 118, 31);
 		btnBuildQuery.setEnabled(false);
 		contentPane.add(btnBuildQuery);
 	}

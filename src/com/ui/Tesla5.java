@@ -63,7 +63,7 @@ public class Tesla5 extends JFrame {
 		scrollPane_1.setBounds(1, 1, 791, 197);
 		panel_1.add(scrollPane_1);
 
-		QueryUtil.updateQuery(textArea);
+		QueryUtil.updateQuery(textArea, "INDIRECT");
 
 		table = new JTable();
 		whereModel = new WhereModel(MasterCommon.whereRows);
@@ -82,7 +82,7 @@ public class Tesla5 extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				whereModel.updateUI();
 				table.editCellAt(-1, -1);
-				QueryUtil.updateQuery(textArea);
+				QueryUtil.updateQuery(textArea, "INDIRECT");
 			}
 		});
 		btnAddCoulmn.setBounds(428, 221, 143, 33);
@@ -94,7 +94,7 @@ public class Tesla5 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				whereModel.removeFromUI();
-				QueryUtil.updateQuery(textArea);
+				QueryUtil.updateQuery(textArea, "INDIRECT");
 			}
 		});
 		btnDelete.setBounds(223, 221, 143, 33);
@@ -121,7 +121,7 @@ public class Tesla5 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				table.editCellAt(-1, -1);
-				QueryUtil.updateQuery(textArea);
+				QueryUtil.updateQuery(textArea, "INDIRECT");
 			}
 		});
 		btnRefresh.setBounds(630, 221, 137, 33);

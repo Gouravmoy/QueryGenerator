@@ -9,7 +9,6 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.controller.MasterCommon;
 import com.util.DBUtil;
 
 public class QueryTableModel extends AbstractTableModel {
@@ -48,11 +47,11 @@ public class QueryTableModel extends AbstractTableModel {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void executeQueryAndUI() throws ClassNotFoundException, SQLException {
+	public void executeQueryAndUI(String queryToExecute) throws ClassNotFoundException, SQLException {
 		cache = new Vector();
 		conn = DBUtil.getSQLConnection();
 		stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(MasterCommon.mainQuery.toString());
+		ResultSet rs = stmt.executeQuery(queryToExecute);
 		ResultSetMetaData meta = rs.getMetaData();
 		colCount = meta.getColumnCount();
 		headers = new String[colCount];

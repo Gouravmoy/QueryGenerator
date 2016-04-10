@@ -78,7 +78,7 @@ public class Tesla4 extends JFrame {
 		innerJoinRows = new ArrayList<InnerJoinRow>();
 		innerJoinTableModel = new InnerJoinTableModel(MasterCommon.joinRows);
 		QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
-		QueryUtil.updateQuery(textArea);
+		QueryUtil.updateQuery(textArea, "INDIRECT");
 		table.setModel(innerJoinTableModel);
 
 		initilizeColumns();
@@ -110,7 +110,7 @@ public class Tesla4 extends JFrame {
 				innerJoinTableModel.updateUI();
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
-				QueryUtil.updateQuery(textArea);
+				QueryUtil.updateQuery(textArea, "INDIRECT");
 				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 			}
 
@@ -160,7 +160,7 @@ public class Tesla4 extends JFrame {
 				QueryUtil.reinitilizeJoinRows(MasterCommon.joinRows);
 				table.editCellAt(-1, -1);
 				QueryUtil.updateInnerJoinMap(MasterCommon.joinRows);
-				QueryUtil.updateQuery(textArea);
+				QueryUtil.updateQuery(textArea,"");
 			}
 		});
 		btnRefresh.setBounds(505, 221, 132, 33);

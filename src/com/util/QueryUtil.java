@@ -12,15 +12,20 @@ import javax.swing.JTextPane;
 import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
 import com.pojo.WhereRow;
+import com.ui.Tesla6;
 
 public class QueryUtil extends MasterCommon {
 	final static String space = " ";
 	final static String newLine = "\n";
 	final static String singleQuote = "'";
 
-	public static void updateQuery(JTextPane textArea) {
-		QueryUtil.buildQuery();
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.mainQuery.toString()));
+	public static void updateQuery(JTextPane textArea, String status) {
+		if (status.equals("DIRRECT")) {
+			textArea.setText(QueryColorUtil.queryColorChange(Tesla6.queryToExecute));
+		} else {
+			QueryUtil.buildQuery();
+			textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.mainQuery.toString()));
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

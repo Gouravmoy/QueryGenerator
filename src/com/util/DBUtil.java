@@ -28,12 +28,12 @@ public class DBUtil {
 		return conn;
 	}
 
-	public static boolean testFinalQuery(String string) throws QueryExecutionException {
+	public static boolean testFinalQuery(String queryToExecute) throws QueryExecutionException {
 		boolean returnValue = false;
 		try {
 			Connection conn = DBUtil.getSQLConnection(DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName));
 			Statement stmt = conn.createStatement();
-			stmt.executeQuery(MasterCommon.mainQuery.toString());
+			stmt.executeQuery(queryToExecute);
 			returnValue = true;
 		} catch (ClassNotFoundException | SQLException e) {
 			throw new QueryExecutionException(e.getMessage());

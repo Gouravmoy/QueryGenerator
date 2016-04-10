@@ -19,6 +19,8 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.jsoup.Jsoup;
+
 import com.controller.MasterCommon;
 import com.exceptions.QueryExecutionException;
 import com.model.QueryTableModel;
@@ -35,6 +37,7 @@ public class Tesla6 extends JFrame {
 	public QueryTableModel queryTableModel;
 	public JButton exportButton;
 	public JButton executeQueryBtn;
+	public static String queryToExecute;
 
 	public Tesla6(String status) {
 		initialize(status);
@@ -53,16 +56,18 @@ public class Tesla6 extends JFrame {
 		contentPane.setLayout(null);
 
 		setTitle("Test Your Query");
-
+		queryToExecute = "";
 		textArea = new JTextPane();
 		textArea.setBounds(10, 11, 772, 176);
 
 		textArea.setEditorKit(new HTMLEditorKit());
+		if (!status.equals("DIRRECT")) {
+			QueryUtil.updateQuery(textArea, "INDIRECT");
+		}
 
 		JScrollPane scrollPane_1 = new JScrollPane(textArea);
 		scrollPane_1.setBounds(10, 11, 791, 197);
 		contentPane.add(scrollPane_1);
-		QueryUtil.updateQuery(textArea);
 
 		queryTableModel = new QueryTableModel();
 
@@ -90,7 +95,7 @@ public class Tesla6 extends JFrame {
 			}
 		});
 		backButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/back.png")));
-		backButton.setBounds(73, 219, 135, 34);
+		backButton.setBounds(39, 219, 135, 34);
 		contentPane.add(backButton);
 
 		executeQueryBtn = new JButton("EXECUTE QUERY");
@@ -98,8 +103,13 @@ public class Tesla6 extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				try {
-					if (DBUtil.testFinalQuery(MasterCommon.mainQuery.toString())) {
-						queryTableModel.executeQueryAndUI();
+					if (status.equals("INDIRRECT")) {
+						queryToExecute = MasterCommon.mainQuery.toString();
+					} else {
+						queryToExecute = Jsoup.parse(textArea.getText().replace(";", "")).text();
+					}
+					if (DBUtil.testFinalQuery(queryToExecute)) {
+						queryTableModel.executeQueryAndUI(queryToExecute);
 						exportButton.setEnabled(true);
 					}
 				} catch (HeadlessException | QueryExecutionException | ClassNotFoundException | SQLException e) {
@@ -110,7 +120,7 @@ public class Tesla6 extends JFrame {
 			}
 		});
 		executeQueryBtn.setIcon(new ImageIcon(Tesla6.class.getResource("/png/lightning.png")));
-		executeQueryBtn.setBounds(322, 219, 135, 34);
+		executeQueryBtn.setBounds(245, 219, 135, 34);
 		contentPane.add(executeQueryBtn);
 
 		exportButton = new JButton("EXPORT RESULT");
@@ -132,8 +142,20 @@ public class Tesla6 extends JFrame {
 			}
 		});
 		exportButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/excel-icon.png")));
-		exportButton.setBounds(595, 219, 135, 34);
+		exportButton.setBounds(641, 219, 135, 34);
 		contentPane.add(exportButton);
+
+		JButton btnRefresh = new JButton("REFRESH");
+		btnRefresh.setIcon(new ImageIcon(Tesla6.class.getResource("/png/refresh.png")));
+		btnRefresh.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				queryToExecute = textArea.getText().replace("\\;", "");
+				QueryUtil.updateQuery(textArea, status);
+			}
+		});
+		btnRefresh.setBounds(446, 219, 135, 34);
+		contentPane.add(btnRefresh);
 
 	}
 }
