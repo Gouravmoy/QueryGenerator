@@ -106,6 +106,7 @@ public class Tesla5 extends JFrame {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				
 				FileIO.writeToText();
 			}
 		});
