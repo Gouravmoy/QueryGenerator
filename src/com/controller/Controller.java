@@ -20,7 +20,9 @@ public class Controller {
 		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(),
 				dbDetails.getHostName(), dbDetails.getDatabase(),
 				dbDetails.getUserName(), dbDetails.getPassword());
-		PropsLoader.loadProps();
+		//PropsLoader.loadProps();
+		PropsLoader loader = new PropsLoader();
+		loader.loadProps();
 		ArrayList<String> tableNames = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement preparedStatement;
@@ -64,7 +66,7 @@ public class Controller {
 		ResultSet res;
 
 		DBDetails dbDetails = DBConnectionUtil.getDBDetails(
-				MasterCommon.selectedDBName, MasterCommon.dbConnection);
+				MasterCommon.selectedDBName);
 
 		try {
 			String sql = MasterCommon.queriesProps

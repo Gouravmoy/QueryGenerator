@@ -1,9 +1,11 @@
 package com.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -23,7 +25,59 @@ import com.util.QueryUtil;
 public class FileIO extends MasterCommon {
 	public static ArrayList<String> valueHolder = new ArrayList<String>();
 
-	public static void writeToText() {
+	public static void writeToText(String filePath) {
+		queryUtil = new QueryIOUtil();
+		FileOutputStream fout;
+		String path = "";
+		try {
+
+			path = filePath;
+			if (!filePath.endsWith(".ser"))
+				path = filePath + ".ser";
+
+			File file = new File(path);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			fout = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			queryUtil.setSelectRows(selectRows);
+			queryUtil.setConditionRows(joinRows);
+			queryUtil.setSelectTables(listPojoTable);
+			queryUtil.setWhereRows(whereRows);
+			queryUtil.setDbName(MasterCommon.selectedDBName);
+			oos.writeObject(queryUtil);
+			fout.close();
+			oos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void writeFullQueryToFile(String filePath) {
+		BufferedWriter writer;
+		String path = "";
+		try {
+			if (!filePath.endsWith(".sql"))
+				path = filePath + ".sql";
+			File file = new File(path);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			writer = new BufferedWriter(new FileWriter(file));
+			writer.write(MasterCommon.mainQuery.toString());
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void writeTempData() {
 		Date d = new Date();
 		SimpleDateFormat form = new SimpleDateFormat("dd_mm_yyyy_hh_mm_ss");
 		queryUtil = new QueryIOUtil();
@@ -54,11 +108,9 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
-			throws DBAlreadyExists {
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit) throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = masterPath + "DBCredentials//"
-				+ dbDetails.getConnectionName() + ".txt";
+		String path = masterPath + "DBCredentials//" + dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
 		if (!file.exists() || isEdit == false) {
@@ -143,15 +195,13 @@ public class FileIO extends MasterCommon {
 	public static void deleteDBConnection(String selectedDBName) {
 		try {
 
-			File file = new File(masterPath + "DBCredentials//"
-					+ selectedDBName + ".txt");
+			File file = new File(masterPath + "DBCredentials//" + selectedDBName + ".txt");
 
 			if (file.delete()) {
 				System.out.println(file.getName() + " is deleted!");
 			} else {
 				System.out.println("Delete operation is failed.");
 			}
-			
 
 		} catch (Exception e) {
 
@@ -159,4 +209,5 @@ public class FileIO extends MasterCommon {
 
 		}
 	}
+
 }

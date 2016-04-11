@@ -29,25 +29,23 @@ public class QueryColorUtil extends MasterCommon {
 					 * System.out.println("BBKBK"); }
 					 */
 					if (queryPartsSplit[k].trim().equals("<")) {
-						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
-								+ "&lt;" + "</font>";
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">" + "&lt;" + "</font>";
 					}
 					if (queryPartsSplit[k].trim().equals("<=")) {
-						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
-								+ "&lt;"+"=" + "</font>";
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">" + "&lt;" + "="
+								+ "</font>";
 					}
 					if (queryPartsSplit[k].trim().equals(">")) {
-						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
-								+ "&gt;" + "</font>";
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">" + "&gt;" + "</font>";
 					}
 					if (queryPartsSplit[k].trim().equals("<>")) {
-						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
-								+ "&lt;" + "&gt;" + "</font>";
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">" + "&lt;" + "&gt;"
+								+ "</font>";
 					}
 					if ((queryPartsSplit[k].trim()).equalsIgnoreCase(parts[i])) {
 
-						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">"
-								+ queryPartsSplit[k] + "</font>";
+						queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"blue\">" + queryPartsSplit[k]
+								+ "</font>";
 						Query = Query + queryPartsSplit[k] + " ";
 
 						count++;
@@ -66,8 +64,8 @@ public class QueryColorUtil extends MasterCommon {
 						flag = 0;
 
 					}
-					queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"green\">"
-							+ queryPartsSplit[k] + "</font>";
+					queryPartsSplit[k] = "<font size=\"3\" face=\"verdana\" color=\"green\">" + queryPartsSplit[k]
+							+ "</font>";
 					Query = Query + queryPartsSplit[k] + " ";
 
 					count++;
@@ -81,6 +79,8 @@ public class QueryColorUtil extends MasterCommon {
 
 		}
 		System.out.println(finalQuery);
+		finalQuery = finalQuery.replaceAll("(?m)(^ *| +(?= |$))", "").replaceAll("(?m)^$([\r\n]+?)(^$[\r\n]+?^)+",
+				"$1");
 		finalQuery = "<html>" + finalQuery + "</html>";
 		// System.out.println(finalQuery);
 		return finalQuery;
