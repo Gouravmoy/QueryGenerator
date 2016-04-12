@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.entity.Column;
 import com.entity.DBDetails;
+import com.entity.DBTypes;
 import com.entity.Tables;
 import com.extra.Keys;
 import com.util.DBConnectionUtil;
@@ -20,19 +21,25 @@ public class Controller {
 		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(),
 				dbDetails.getHostName(), dbDetails.getDatabase(),
 				dbDetails.getUserName(), dbDetails.getPassword());
-		//PropsLoader.loadProps();
 		PropsLoader loader = new PropsLoader();
 		loader.loadProps();
 		ArrayList<String> tableNames = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement preparedStatement;
 		ResultSet res;
+		String key = "";
 		try {
-			String sql = MasterCommon.queriesProps
-					.getProperty(Keys.KEY_SQL_TABLE_LIST);
 			System.out.println("Connecting to Database");
-			conn = DBUtil.getSQLConnection();
+			if (dbDetails.getDbType().equals(DBTypes.SQL.toString())) {
+				key = Keys.KEY_SQL_TABLE_LIST;
+				conn = DBUtil.getSQLConnection();
+			} else if (dbDetails.getDbType().equals(DBTypes.DB2.toString())) {
+				key = Keys.KEY_DB2_TABLE_LIST;
+				conn = DBUtil.getDB2Connection(dbDetails);
+			}
 			System.out.println("Connected to Database");
+			String sql = MasterCommon.queriesProps.getProperty(key);
+
 			preparedStatement = conn.prepareStatement(sql);
 			preparedStatement.setString(1, dbDetails.getDbSchema());
 			res = preparedStatement.executeQuery();
@@ -64,16 +71,22 @@ public class Controller {
 		Connection conn = null;
 		PreparedStatement preparedStatement;
 		ResultSet res;
+		String key = "";
 
-		DBDetails dbDetails = DBConnectionUtil.getDBDetails(
-				MasterCommon.selectedDBName);
+		DBDetails dbDetails = DBConnectionUtil
+				.getDBDetails(MasterCommon.selectedDBName);
 
 		try {
-			String sql = MasterCommon.queriesProps
-					.getProperty(Keys.KEY_SQL_META_QUERY);
 			System.out.println("Connecting to Database");
-			conn = DBUtil.getSQLConnection();
+			if (dbDetails.getDbType().equals(DBTypes.SQL.toString())) {
+				key = Keys.KEY_SQL_META_QUERY;
+				conn = DBUtil.getSQLConnection();
+			} else if (dbDetails.getDbType().equals(DBTypes.DB2.toString())) {
+				key = Keys.KEY_DB2_META_QUERY;
+				conn = DBUtil.getDB2Connection(dbDetails);
+			}
 			System.out.println("Connected to Database");
+			String sql = MasterCommon.queriesProps.getProperty(key);
 			preparedStatement = conn.prepareStatement(sql);
 			for (String tableName : selectedTableNames) {
 				columns = new ArrayList<>();

@@ -10,19 +10,20 @@ public class IconTextCellRemderer extends DefaultTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
-		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column) {
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+				row, column);
 		if (value instanceof String) {
 			String column2 = (String) value;
 			setText(column2);
 		}
-		System.out.println("Love - "+value);
 
 		if (isSelected) {
 			setIcon(new ImageIcon(getClass().getResource("/png/connect.png")));
 		} else {
-			setIcon(new ImageIcon(getClass().getResource("/png/database_connect.png")));
+			setIcon(new ImageIcon(getClass().getResource(
+					"/png/database_connect.png")));
 		}
 		setToolTipText("Right Click to Connect");
 		return this;

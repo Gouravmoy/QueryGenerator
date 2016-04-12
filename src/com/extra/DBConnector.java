@@ -7,8 +7,8 @@ import com.util.DBConnectionUtil;
 public class DBConnector extends MasterCommon {
 
 	public static String getSQLConnectionString() {
-		DBDetails dbDetails = DBConnectionUtil.getDBDetails(
-				MasterCommon.selectedDBName);
+		DBDetails dbDetails = DBConnectionUtil
+				.getDBDetails(MasterCommon.selectedDBName);
 		String connectionStr = "jdbc:mysql://localhost/"
 				+ dbDetails.getDbSchema() + "?" + "user="
 				+ dbDetails.getUserName() + "&password="
@@ -23,5 +23,11 @@ public class DBConnector extends MasterCommon {
 				+ dbDetails.getUserName() + "&password="
 				+ dbDetails.getPassword();
 		return connectionStr;
+	}
+
+	public static String getDB2ConnectionString(DBDetails dbDetails) {
+		String connStr = "jdbc:db2://" + dbDetails.getHostName() + ":"
+				+ dbDetails.getPort() + "/" + dbDetails.getDatabase();
+		return connStr;
 	}
 }

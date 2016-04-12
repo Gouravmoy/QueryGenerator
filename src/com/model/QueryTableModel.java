@@ -9,6 +9,10 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.controller.MasterCommon;
+import com.entity.DBDetails;
+import com.entity.DBTypes;
+import com.util.DBConnectionUtil;
 import com.util.DBUtil;
 
 public class QueryTableModel extends AbstractTableModel {
@@ -21,6 +25,7 @@ public class QueryTableModel extends AbstractTableModel {
 
 	Connection conn;
 	Statement stmt;
+	DBDetails dbDetails;
 
 	@SuppressWarnings("rawtypes")
 	public QueryTableModel() {
@@ -47,9 +52,14 @@ public class QueryTableModel extends AbstractTableModel {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void executeQueryAndUI(String queryToExecute) throws ClassNotFoundException, SQLException {
+	public void executeQueryAndUI(String queryToExecute)
+			throws ClassNotFoundException, SQLException {
 		cache = new Vector();
-		conn = DBUtil.getSQLConnection();
+		dbDetails = DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName);
+		if (dbDetails.getDbType().equals(DBTypes.SQL.toString()))
+			conn = DBUtil.getSQLConnection();
+		if (dbDetails.getDbType().equals(DBTypes.DB2.toString()))
+			conn = DBUtil.getDB2Connection(dbDetails);
 		stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(queryToExecute);
 		ResultSetMetaData meta = rs.getMetaData();
