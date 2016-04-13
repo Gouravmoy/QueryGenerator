@@ -58,7 +58,8 @@ public class Tesla00 extends JFrame {
 
 		window.setVisible(true);
 		try {
-			Thread.sleep(6500);
+			/*Thread.sleep(6500);*/
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
