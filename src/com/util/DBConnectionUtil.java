@@ -7,25 +7,33 @@ import java.util.ArrayList;
 
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
+import com.entity.DBTypes;
 import com.extra.Keys;
 import com.service.FileIO;
 
 public class DBConnectionUtil extends MasterCommon {
 
 	public static boolean checkConnectivity(DBDetails dbDetails) {
-		String testQuery = queriesProps.getProperty(Keys.QUERY_TEST_CONNECTION_SQL);
-
-		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(), "", dbDetails.getDatabase(), dbDetails.getUserName(),
+		String testQuery = "";
+		MasterCommon.updateDBCredentials(dbDetails.getDbSchema(), "",
+				dbDetails.getDatabase(), dbDetails.getUserName(),
 				dbDetails.getPassword());
-		Connection connection;
+		Connection connection = null;
 		Statement statement;
-
 		try {
-			connection = DBUtil.getSQLConnection(dbDetails);
+			if (dbDetails.getDbType().equals(DBTypes.DB2.toString())) {
+				testQuery = queriesProps
+						.getProperty(Keys.QUERY_TEST_CONNECTION_DB2);
+				connection = DBUtil.getDB2Connection(dbDetails);
+			} else if (dbDetails.getDbType().equals(DBTypes.SQL.toString())) {
+				testQuery = queriesProps
+						.getProperty(Keys.QUERY_TEST_CONNECTION_SQL);
+				connection = DBUtil.getSQLConnection(dbDetails);
+			}
 			statement = connection.createStatement();
 			statement.execute(testQuery);
 		} catch (SQLException | ClassNotFoundException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
 		return true;

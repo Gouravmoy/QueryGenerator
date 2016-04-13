@@ -7,31 +7,43 @@ import java.sql.Statement;
 
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
+import com.entity.DBTypes;
 import com.exceptions.QueryExecutionException;
 import com.extra.DBConnector;
 
 public class DBUtil {
 
-	public static Connection getSQLConnection() throws SQLException, ClassNotFoundException {
+	public static Connection getSQLConnection() throws SQLException,
+			ClassNotFoundException {
 		Connection conn = null;
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
-		conn = DriverManager.getConnection(DBConnector.getSQLConnectionString());
+		conn = DriverManager
+				.getConnection(DBConnector.getSQLConnectionString());
 		return conn;
 	}
 
-	public static Connection getSQLConnection(DBDetails dbDetails) throws SQLException, ClassNotFoundException {
+	public static Connection getSQLConnection(DBDetails dbDetails)
+			throws SQLException, ClassNotFoundException {
 		Connection conn = null;
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
-		conn = DriverManager.getConnection(DBConnector.getSQLConnectionString(dbDetails));
+		conn = DriverManager.getConnection(DBConnector
+				.getSQLConnectionString(dbDetails));
 		return conn;
 	}
 
-	public static boolean testFinalQuery(String queryToExecute) throws QueryExecutionException {
+	public static boolean testFinalQuery(String queryToExecute)
+			throws QueryExecutionException {
 		boolean returnValue = false;
+		DBDetails dbDetails;
+		Connection conn = null;
+		dbDetails = DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName);
 		try {
-			Connection conn = DBUtil.getSQLConnection(DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName));
+			if (dbDetails.getDbType().equals(DBTypes.SQL.toString()))
+				conn = DBUtil.getSQLConnection();
+			if (dbDetails.getDbType().equals(DBTypes.DB2.toString()))
+				conn = DBUtil.getDB2Connection(dbDetails);
 			Statement stmt = conn.createStatement();
 			stmt.executeQuery(queryToExecute);
 			returnValue = true;
@@ -39,5 +51,16 @@ public class DBUtil {
 			throw new QueryExecutionException(e.getMessage());
 		}
 		return returnValue;
+	}
+
+	public static Connection getDB2Connection(DBDetails dbDetails)
+			throws ClassNotFoundException, SQLException {
+		Connection conn = null;
+		String driver = "com.ibm.db2.jcc.DB2Driver";
+		Class.forName(driver);
+		conn = DriverManager.getConnection(
+				DBConnector.getDB2ConnectionString(dbDetails),
+				dbDetails.getUserName(), dbDetails.getPassword());
+		return conn;
 	}
 }

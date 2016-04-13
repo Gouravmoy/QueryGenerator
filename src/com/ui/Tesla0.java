@@ -92,8 +92,12 @@ public class Tesla0 extends JFrame {
 				String filePath = fileBrowse.getFilePath();
 				if (filePath.length() != 0) {
 					FileIO.getFromTextFile(filePath);
-					dispose();
-					new Tesla2(selectedTableNames);
+					if (MasterCommon.selectedDBName != null || MasterCommon.selectedDBName.length() != 0) {
+						dispose();
+						new Tesla2(selectedTableNames);
+					} else {
+						JOptionPane.showMessageDialog(null, "Please Select a database!");
+					}
 				}
 			}
 		});
@@ -256,8 +260,12 @@ public class Tesla0 extends JFrame {
 					if (tablesSelect.isSelected())
 						tempTableNames.add(tablesSelect.getTableName());
 				}
-				new Tesla2(tempTableNames);
-				dispose();
+				if (MasterCommon.selectedDBName != null || MasterCommon.selectedDBName.length() != 0) {
+					new Tesla2(tempTableNames);
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Please Select a database!");
+				}
 			}
 		});
 		btnBuildQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/sql-query.png")));

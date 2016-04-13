@@ -79,17 +79,17 @@ public class TeslaDBDetails extends JFrame {
 		setTitle("New DatabaseConnection");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(525, 308);
-		setLocationRelativeTo ( null );
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		lblConnectionName = new JLabel("Connection Name");
-		lblConnectionName.setBounds(10, 14, 96, 14);
+		lblConnectionName.setBounds(10, 14, 106, 14);
 		contentPane.add(lblConnectionName);
 
-		connectionNameText.setBounds(115, 11, 384, 20);
+		connectionNameText.setBounds(126, 11, 373, 20);
 		contentPane.add(connectionNameText);
 		connectionNameText.setColumns(10);
 
@@ -98,7 +98,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(lblUserName);
 
 		usernameText.setColumns(10);
-		usernameText.setBounds(115, 33, 384, 20);
+		usernameText.setBounds(126, 33, 373, 20);
 		contentPane.add(usernameText);
 
 		lblPassword = new JLabel("Password");
@@ -106,7 +106,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(lblPassword);
 
 		passwordText.setColumns(10);
-		passwordText.setBounds(115, 55, 384, 20);
+		passwordText.setBounds(126, 55, 373, 20);
 		contentPane.add(passwordText);
 
 		lblHostName = new JLabel("Host Name");
@@ -134,7 +134,8 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(lblDatabase);
 
 		JButton btnSave = new JButton("Save");
-		btnSave.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/save.png")));
+		btnSave.setIcon(new ImageIcon(TeslaDBDetails.class
+				.getResource("/png/save.png")));
 		btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -164,7 +165,8 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnSave);
 
 		btnClear = new JButton("Clear");
-		btnClear.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/clear.png")));
+		btnClear.setIcon(new ImageIcon(TeslaDBDetails.class
+				.getResource("/png/clear.png")));
 		btnClear.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -180,7 +182,8 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnClear);
 
 		btnTest = new JButton("Test");
-		btnTest.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/connect-icon.png")));
+		btnTest.setIcon(new ImageIcon(TeslaDBDetails.class
+				.getResource("/png/connect-icon.png")));
 		btnTest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -199,7 +202,8 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(btnTest);
 
 		btnCancel = new JButton("Cancel");
-		btnCancel.setIcon(new ImageIcon(TeslaDBDetails.class.getResource("/png/Exit.png")));
+		btnCancel.setIcon(new ImageIcon(TeslaDBDetails.class
+				.getResource("/png/Exit.png")));
 		btnCancel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -214,7 +218,7 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(lblDbType);
 
 		lblSchema = new JLabel("Schema Name");
-		lblSchema.setBounds(147, 200, 71, 19);
+		lblSchema.setBounds(147, 203, 85, 14);
 		contentPane.add(lblSchema);
 
 		schemaNameText.setColumns(10);
@@ -229,7 +233,8 @@ public class TeslaDBDetails extends JFrame {
 
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				if (dbType.getSelectedItem().toString().equals("SQL")) {
+				if (dbType.getSelectedItem().toString().equals("SQL")
+						|| dbType.getSelectedItem().toString().equals("DB2")) {
 					lblSchema.setVisible(true);
 					schemaNameText.setVisible(true);
 				} else {
