@@ -101,7 +101,7 @@ public class Tesla0 extends JFrame {
 		mnFile.add(mntmLoadQuery);
 
 		mntmExecuteQuery = new JMenuItem("Execute Query");
-
+		mntmExecuteQuery.setToolTipText("Connect Database to Execute Query");
 		KeyStroke keyStrokeToExecuteQuery = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		mntmExecuteQuery.setAccelerator(keyStrokeToExecuteQuery);
 
