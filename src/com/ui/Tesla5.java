@@ -174,8 +174,8 @@ public class Tesla5 extends JFrame {
 		btnNewButton_2.setBounds(38, 221, 122, 33);
 		contentPane.add(btnNewButton_2);
 
-		JButton btnNewButton_3 = new JButton("HOME");
-		btnNewButton_3.addMouseListener(new MouseAdapter() {
+		JButton homeButton = new JButton("HOME");
+		homeButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				new Tesla0().setVisible(true);
@@ -183,10 +183,10 @@ public class Tesla5 extends JFrame {
 				dispose();
 			}
 		});
-		btnNewButton_3.setIcon(new ImageIcon(Tesla5.class
+		homeButton.setIcon(new ImageIcon(Tesla5.class
 				.getResource("/png/Home.png")));
-		btnNewButton_3.setBounds(630, 474, 137, 38);
-		contentPane.add(btnNewButton_3);
+		homeButton.setBounds(630, 474, 137, 38);
+		contentPane.add(homeButton);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
