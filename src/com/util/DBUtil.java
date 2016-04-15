@@ -43,12 +43,16 @@ public class DBUtil {
 		ArrayList<String> listSchemas = new ArrayList<>();
 		String connectionURL = "";
 		Connection con;
-		String driver = "com.mysql.jdbc.Driver";
+		String sqlDriver = "com.mysql.jdbc.Driver";
+		String db2Driver = "com.ibm.db2.jcc.DB2Driver";
 		try {
-			Class.forName(driver);
-			if (dbType.equals(DBTypes.SQL.toString()))
+
+			if (dbType.equals(DBTypes.SQL.toString())) {
+				Class.forName(sqlDriver);
 				connectionURL = "jdbc:mysql://localhost/";
+			}
 			if (dbType.equals(DBTypes.DB2.toString())) {
+				Class.forName(db2Driver);
 				connectionURL = "jdbc:db2://" + conUrl + ":" + portNo + "/"
 						+ dbName;
 				con = DriverManager.getConnection(connectionURL, userName,
@@ -77,7 +81,7 @@ public class DBUtil {
 		ResultSet res = stmt.executeQuery(MasterCommon.queriesProps
 				.getProperty(Keys.KEY_DB2_SCHEMA_LIST));
 		while (res.next()) {
-			returnSchemaList.add(res.getString(0));
+			returnSchemaList.add(res.getString(1));
 		}
 		con.close();
 		return returnSchemaList;

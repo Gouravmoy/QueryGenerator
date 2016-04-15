@@ -36,7 +36,6 @@ public class TeslaDBDetails extends JFrame {
 	private JTextField hostNameText;
 	private JTextField portNameText;
 	private JTextField databaseNameText;
-	private JTextField schemaNameText;
 	private JLabel lblConnectionName;
 	private JLabel lblHostName;
 	private JLabel lblUserName;
@@ -65,11 +64,13 @@ public class TeslaDBDetails extends JFrame {
 		hostNameText = new JTextField();
 		portNameText = new JTextField();
 		databaseNameText = new JTextField();
-		// schemaNameText = new JTextField();
+		dbType = new JComboBox();
+		dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
 		schemaCombo = new JComboBox(schemaNameList.toArray());
 		initialize();
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TeslaDBDetails(String selectedDBName) {
 		DBDetails dbDetail = DBConnectionUtil.getDBDetails(selectedDBName);
 		connectionNameText = new JTextField(dbDetail.getConnectionName());
@@ -79,7 +80,12 @@ public class TeslaDBDetails extends JFrame {
 		hostNameText = new JTextField(dbDetail.getHostName());
 		portNameText = new JTextField(dbDetail.getPort());
 		databaseNameText = new JTextField(dbDetail.getDatabase());
-		// schemaNameText = new JTextField(dbDetail.getDbSchema());
+		dbType = new JComboBox();
+		DBTypes selectedDbTypes = DBTypes.convert(dbDetail.getDbType());
+		dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
+		dbType.setSelectedItem(selectedDbTypes);
+		schemaCombo = new JComboBox(schemaNameList.toArray());
+		schemaNameList.add(dbDetail.getDbSchema());
 		schemaCombo.setSelectedItem(dbDetail.getDbSchema());
 		initialize();
 	}
@@ -238,7 +244,7 @@ public class TeslaDBDetails extends JFrame {
 		 * lblSchema.setVisible(true); schemaNameText.setVisible(true);
 		 */
 
-		dbType = new JComboBox();
+		// dbType = new JComboBox();
 		dbType.addItemListener(new ItemListener() {
 
 			@Override
@@ -255,7 +261,7 @@ public class TeslaDBDetails extends JFrame {
 			}
 		});
 
-		dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
+		// dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
 		dbType.setBounds(247, 84, 134, 20);
 		contentPane.add(dbType);
 
@@ -264,29 +270,25 @@ public class TeslaDBDetails extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.out.println("inside Mouse Action Listner");
-				if (dbType.getSelectedItem().toString().equals("SQL")) {
-					try {
-
-						schemaNameList = DBUtil.getSchemaName(
-								hostNameText.getText(), usernameText.getText(),
-								portNameText.getText(),
-								databaseNameText.getText(),
-								String.valueOf(passwordText.getPassword()),
-								dbType.getSelectedItem().toString());
-						schemaCombo.removeAllItems();
-						for (String schemaName : schemaNameList) {
-							// System.out.println(schemaName);
-							schemaCombo.addItem(schemaName);
-						}
-						schemaCombo.revalidate();
-						contentPane.revalidate();
-						contentPane.repaint();
-					} catch (DBConnectionError e) {
-						JOptionPane.showMessageDialog(
-								null,
-								"Connection Test Failed! Reason -"
-										+ e.getMessage());
+				try {
+					schemaNameList = DBUtil.getSchemaName(hostNameText
+							.getText(), usernameText.getText(), portNameText
+							.getText(), databaseNameText.getText(), String
+							.valueOf(passwordText.getPassword()), dbType
+							.getSelectedItem().toString());
+					schemaCombo.removeAllItems();
+					for (String schemaName : schemaNameList) {
+						schemaCombo.addItem(schemaName);
 					}
+					schemaCombo.revalidate();
+					contentPane.revalidate();
+					contentPane.repaint();
+				} catch (DBConnectionError e) {
+					JOptionPane
+							.showMessageDialog(
+									null,
+									"Connection Test Failed! Reason -"
+											+ e.getMessage());
 				}
 			}
 		});
