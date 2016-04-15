@@ -2,14 +2,18 @@ package com.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
+import com.exceptions.DBConnectionError;
 import com.exceptions.QueryExecutionException;
 import com.extra.DBConnector;
+import com.extra.Keys;
 
 public class DBUtil {
 
@@ -31,6 +35,51 @@ public class DBUtil {
 		conn = DriverManager.getConnection(DBConnector
 				.getSQLConnectionString(dbDetails));
 		return conn;
+	}
+
+	public static ArrayList<String> getSchemaName(String conUrl,
+			String userName, String password, String dbType)
+			throws DBConnectionError {
+		ArrayList<String> listSchemas = new ArrayList<>();
+		String connectionURL = "";
+		Connection con;
+		String driver = "com.mysql.jdbc.Driver";
+		try {
+			Class.forName(driver);
+			if (dbType.equals(DBTypes.SQL))
+				connectionURL = "jdbc:mysql://localhost/";
+			if (dbType.equals(DBTypes.DB2)) {
+				connectionURL = conUrl;
+				con = DriverManager.getConnection(connectionURL, userName,
+						password);
+				return getDB2Schemas(con);
+			}
+			con = DriverManager
+					.getConnection(connectionURL, userName, password);
+			ResultSet rs = con.getMetaData().getCatalogs();
+			while (rs.next()) {
+				listSchemas.add(rs.getString("TABLE_CAT"));
+			}
+			con.close();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			throw new DBConnectionError(
+					"DB Connection Error. Please Select all Necessary Feilds");
+		}
+		return listSchemas;
+	}
+
+	private static ArrayList<String> getDB2Schemas(Connection con)
+			throws SQLException {
+		ArrayList<String> returnSchemaList = new ArrayList<>();
+		Statement stmt = con.createStatement();
+		ResultSet res = stmt.executeQuery(MasterCommon.queriesProps
+				.getProperty(Keys.KEY_DB2_SCHEMA_LIST));
+		while (res.next()) {
+			returnSchemaList.add(res.getString(0));
+		}
+		con.close();
+		return returnSchemaList;
 	}
 
 	public static boolean testFinalQuery(String queryToExecute)
