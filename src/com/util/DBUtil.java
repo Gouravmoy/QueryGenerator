@@ -38,18 +38,19 @@ public class DBUtil {
 	}
 
 	public static ArrayList<String> getSchemaName(String conUrl,
-			String userName, String password, String dbType)
-			throws DBConnectionError {
+			String userName, String portNo, String dbName, String password,
+			String dbType) throws DBConnectionError {
 		ArrayList<String> listSchemas = new ArrayList<>();
 		String connectionURL = "";
 		Connection con;
 		String driver = "com.mysql.jdbc.Driver";
 		try {
 			Class.forName(driver);
-			if (dbType.equals(DBTypes.SQL))
+			if (dbType.equals(DBTypes.SQL.toString()))
 				connectionURL = "jdbc:mysql://localhost/";
-			if (dbType.equals(DBTypes.DB2)) {
-				connectionURL = conUrl;
+			if (dbType.equals(DBTypes.DB2.toString())) {
+				connectionURL = "jdbc:db2://" + conUrl + ":" + portNo + "/"
+						+ dbName;
 				con = DriverManager.getConnection(connectionURL, userName,
 						password);
 				return getDB2Schemas(con);
