@@ -49,7 +49,7 @@ public class TeslaCase {
 
 		frame.setLocationRelativeTo(null);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		frame.setTitle("Transformation Window");
