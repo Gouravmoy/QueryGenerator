@@ -15,7 +15,7 @@ public class TeslaFileBrowse extends JFrame {
 	JFileChooser fileChooser;
 	int option = 0;
 
-	public TeslaFileBrowse(String extension, String opereation) {
+	public TeslaFileBrowse(final String extension, String opereation) {
 		try {
 			// UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
