@@ -93,7 +93,7 @@ public class TeslaDBDetails extends JFrame {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		setTitle("New DatabaseConnection");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(565, 386);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
