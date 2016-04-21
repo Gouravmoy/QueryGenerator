@@ -14,7 +14,6 @@ public class TestHugeVol {
 		long startt = System.currentTimeMillis();
 
 		Connection conn = null;
-		int count = 0;
 		String driver = "com.mysql.jdbc.Driver";
 		Class.forName(driver);
 		conn = DriverManager.getConnection("jdbc:mysql://localhost/world",
@@ -33,9 +32,9 @@ public class TestHugeVol {
 		rs.close();
 
 		long endt = System.currentTimeMillis();
-		System.out.println("Data Fetched in with cursor on : " + (endt - startt) + " msec.");
+		System.out.println("Data Fetched in with cursor on : "
+				+ (endt - startt) + " msec.");
 		startt = System.currentTimeMillis();
-		count = 0;
 		// Turn the cursor off.
 		st.setFetchSize(0);
 		rs = st.executeQuery("SELECT * FROM large_table");
@@ -44,7 +43,8 @@ public class TestHugeVol {
 		}
 		rs.close();
 		endt = System.currentTimeMillis();
-		System.out.println("Data Fetched in with : " + (endt - startt) + " msec.");
+		System.out.println("Data Fetched in with : " + (endt - startt)
+				+ " msec.");
 		// Close the statement.
 		st.close();
 	}
