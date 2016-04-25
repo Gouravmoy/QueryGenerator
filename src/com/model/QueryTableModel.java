@@ -33,7 +33,7 @@ public class QueryTableModel extends AbstractTableModel {
 	public QueryTableModel() {
 		cache = new Vector();
 	}
-
+	@Override
 	public String getColumnName(int i) {
 		return headers[i];
 	}
@@ -84,7 +84,7 @@ public class QueryTableModel extends AbstractTableModel {
 			rs.close();
 			stmt.close();
 			conn.close();
-		} catch (SQLException | ClassNotFoundException | DBConnectionError err) {
+		} catch (SQLException | DBConnectionError err) {
 			throw new TestQueryExecutionError("Error in Query Execution - "
 					+ err.getMessage());
 		}

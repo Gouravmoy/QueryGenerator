@@ -19,6 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.Logger;
+
 import com.entity.DBDetails;
 import com.entity.DBTypes;
 import com.exceptions.DBAlreadyExists;
@@ -28,6 +30,8 @@ import com.util.DBConnectionUtil;
 import com.util.DBUtil;
 
 public class TeslaDBDetails extends JFrame {
+
+	static final Logger logger = Logger.getLogger(TeslaDBDetails.class);
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -156,27 +160,25 @@ public class TeslaDBDetails extends JFrame {
 		btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				assignDBEntity();
-
-				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
-					try {
+				try {
+					assignDBEntity();
+					if (DBConnectionUtil.checkConnectivity(dbDetails)) {
 						FileIO.saveDBDetails(dbDetails,
 								connectionNameText.isEditable());
 						if (connectionNameText.isEditable())
 							Tesla0.dbConnectionsModel.updateUI(dbDetails);
 						dispose();
-					} catch (DBAlreadyExists e) {
-						JOptionPane.showMessageDialog(null,
-								"Connection Save Failed! " + e.getMessage());
+					} else {
+						JOptionPane
+								.showMessageDialog(null,
+										"Connection Test Failed! Please check the Connection Details");
 					}
-				} else {
-					JOptionPane
-							.showMessageDialog(null,
-									"Connection Test Failed! Please check the Connection Details");
+				} catch (DBConnectionError | DBAlreadyExists e1) {
+					logger.error(e1.getMessage());
+					JOptionPane.showMessageDialog(null,
+							"Connection Save Failed! " + e1.getMessage());
 				}
-
 			}
-
 		});
 		btnSave.setBounds(64, 281, 90, 23);
 		contentPane.add(btnSave);
@@ -204,15 +206,23 @@ public class TeslaDBDetails extends JFrame {
 		btnTest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				assignDBEntity();
-				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
-					JOptionPane.showMessageDialog(null,
-							"Connection Test Success!");
-				} else {
+				try {
+					assignDBEntity();
+					if (DBConnectionUtil.checkConnectivity(dbDetails)) {
+						JOptionPane.showMessageDialog(null,
+								"Connection Test Success!");
+					} else {
+						JOptionPane
+								.showMessageDialog(null,
+										"Connection Test Failed! Please check the Connection Details");
+					}
+				} catch (DBConnectionError e1) {
+					logger.error(e1.getMessage());
 					JOptionPane
 							.showMessageDialog(null,
 									"Connection Test Failed! Please check the Connection Details");
 				}
+
 			}
 		});
 		btnTest.setBounds(292, 281, 89, 23);
@@ -288,13 +298,17 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(schemaCombo);
 	}
 
-	public void assignDBEntity() {
-
-		dbDetails = new DBDetails(connectionNameText.getText(),
-				usernameText.getText(), String.valueOf(passwordText
-						.getPassword()), hostNameText.getText(),
-				portNameText.getText(), databaseNameText.getText(), dbType
-						.getSelectedItem().toString(), schemaCombo
-						.getSelectedItem().toString());
+	public void assignDBEntity() throws DBConnectionError {
+		try {
+			dbDetails = new DBDetails(connectionNameText.getText(),
+					usernameText.getText(), String.valueOf(passwordText
+							.getPassword()), hostNameText.getText(),
+					portNameText.getText(), databaseNameText.getText(), dbType
+							.getSelectedItem().toString(), schemaCombo
+							.getSelectedItem().toString());
+		} catch (NullPointerException e) {
+			logger.error("DBDetails Object Setting Error" + e.getMessage());
+			throw new DBConnectionError("Please Enter all the Feilds");
+		}
 	}
 }

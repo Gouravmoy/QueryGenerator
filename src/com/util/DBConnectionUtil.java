@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
+import com.exceptions.DBConnectionError;
 import com.extra.Keys;
 import com.service.FileIO;
 
@@ -32,7 +33,7 @@ public class DBConnectionUtil extends MasterCommon {
 			}
 			statement = connection.createStatement();
 			statement.execute(testQuery);
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException | DBConnectionError e) {
 			e.printStackTrace();
 			return false;
 		}

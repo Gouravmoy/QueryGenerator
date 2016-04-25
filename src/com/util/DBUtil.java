@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
@@ -18,6 +20,8 @@ import com.extra.Keys;
 
 public class DBUtil {
 
+	static final Logger logger = Logger.getLogger(DBUtil.class);
+
 	public static Connection getSQLConnection() throws DBConnectionError {
 		Connection conn;
 		String driver = Keys.SQL_DRIVER_NAME;
@@ -26,6 +30,8 @@ public class DBUtil {
 			conn = DriverManager.getConnection(DBConnector
 					.getSQLConnectionString());
 		} catch (ClassNotFoundException | SQLException e) {
+			logger.error("Error in connecting to SQLConnection - "
+					+ e.getMessage());
 			throw new DBConnectionError(
 					"Error in connecting to SQLConnection - " + e.getMessage());
 		}
@@ -72,7 +78,8 @@ public class DBUtil {
 			}
 			con.close();
 		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
+			logger.error("DB Connection Error. Please Select all Necessary Feilds "
+					+ e.getMessage());
 			throw new DBConnectionError(
 					"DB Connection Error. Please Select all Necessary Feilds");
 		}
@@ -119,20 +126,26 @@ public class DBUtil {
 			if (conn != null)
 				conn.close();
 
-		} catch (ClassNotFoundException | SQLException | DBConnectionError e) {
+		} catch (SQLException | DBConnectionError e) {
+			logger.error(e.getMessage());
 			throw new QueryExecutionException(e.getMessage());
 		}
 		return returnValue;
 	}
 
 	public static Connection getDB2Connection(DBDetails dbDetails)
-			throws ClassNotFoundException, SQLException {
-		Connection conn;
+			throws DBConnectionError {
+		Connection conn = null;
 		String driver = Keys.SQL_DRIVER_NAME;
-		Class.forName(driver);
-		conn = DriverManager.getConnection(
-				DBConnector.getDB2ConnectionString(dbDetails),
-				dbDetails.getUserName(), dbDetails.getPassword());
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(
+					DBConnector.getDB2ConnectionString(dbDetails),
+					dbDetails.getUserName(), dbDetails.getPassword());
+		} catch (ClassNotFoundException | SQLException e) {
+			logger.error("DB2 Connection Error" + e.getMessage());
+			throw new DBConnectionError("DB2 Connection Error" + e.getMessage());
+		}
 		return conn;
 	}
 }

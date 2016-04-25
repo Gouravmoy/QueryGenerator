@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,8 +28,6 @@ import com.model.QueryTableModel;
 import com.util.DBUtil;
 import com.util.ExcelExporter;
 import com.util.QueryUtil;
-
-import javax.swing.JLabel;
 
 public class Tesla6 extends JFrame {
 
@@ -77,6 +75,7 @@ public class Tesla6 extends JFrame {
 		queryTableModel = new QueryTableModel();
 
 		queryResultTable = new JTable() {
+			@Override
 			public boolean getScrollableTracksViewportWidth() {
 				return getPreferredSize().width < getParent().getWidth();
 			}
@@ -139,6 +138,7 @@ public class Tesla6 extends JFrame {
 		exportButton = new JButton("EXPORT RESULT");
 		exportButton.setEnabled(false);
 		exportButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("xlsx", "SAVE");
 				String filePath = fileBrowse.getFilePath();
