@@ -12,6 +12,8 @@ import javax.swing.table.AbstractTableModel;
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
+import com.exceptions.DBConnectionError;
+import com.exceptions.TestQueryExecutionError;
 import com.util.DBConnectionUtil;
 import com.util.DBUtil;
 
@@ -52,32 +54,42 @@ public class QueryTableModel extends AbstractTableModel {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void executeQueryAndUI(String queryToExecute)
-			throws ClassNotFoundException, SQLException {
+	public int executeQueryAndUI(String queryToExecute)
+			throws TestQueryExecutionError {
+		int recordCount = 0;
+		ResultSet rs;
 		cache = new Vector();
 		dbDetails = DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName);
-		if (dbDetails.getDbType().equals(DBTypes.SQL.toString()))
-			conn = DBUtil.getSQLConnection();
-		if (dbDetails.getDbType().equals(DBTypes.DB2.toString()))
-			conn = DBUtil.getDB2Connection(dbDetails);
-		stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(queryToExecute);
-		ResultSetMetaData meta = rs.getMetaData();
-		colCount = meta.getColumnCount();
-		headers = new String[colCount];
-		for (int h = 1; h <= colCount; h++) {
-			headers[h - 1] = meta.getColumnName(h);
-		}
-		while (rs.next()) {
-			String[] record = new String[colCount];
-			for (int i = 0; i < colCount; i++) {
-				record[i] = rs.getString(i + 1);
+		try {
+			if (dbDetails.getDbType().equals(DBTypes.SQL.toString()))
+				conn = DBUtil.getSQLConnection();
+			if (dbDetails.getDbType().equals(DBTypes.DB2.toString()))
+				conn = DBUtil.getDB2Connection(dbDetails);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(queryToExecute);
+			ResultSetMetaData meta = rs.getMetaData();
+			colCount = meta.getColumnCount();
+			headers = new String[colCount];
+			for (int h = 1; h <= colCount; h++) {
+				headers[h - 1] = meta.getColumnName(h);
 			}
-			cache.addElement(record);
+			while (rs.next()) {
+				recordCount++;
+				String[] record = new String[colCount];
+				for (int i = 0; i < colCount; i++) {
+					record[i] = rs.getString(i + 1);
+				}
+				cache.addElement(record);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException | ClassNotFoundException | DBConnectionError err) {
+			throw new TestQueryExecutionError("Error in Query Execution - "
+					+ err.getMessage());
 		}
-		System.out.println("All Records Fetched");
-		conn.close();
 		fireTableChanged(null);
+		return recordCount;
 	}
 
 	@Override

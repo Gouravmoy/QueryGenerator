@@ -40,6 +40,6 @@
 		</plugins>
 	</build>
 	<properties>
-		<sonar.host.url>http:localhost:9000</sonar.host.url>
+		<sonar.host.url>http:localhost:9000/</sonar.host.url>
 	</properties>
 </project>

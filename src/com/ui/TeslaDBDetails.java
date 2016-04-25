@@ -5,6 +5,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -49,7 +50,7 @@ public class TeslaDBDetails extends JFrame {
 	private JButton btnCancel;
 	private DBDetails dbDetails;
 
-	private ArrayList<String> schemaNameList = new ArrayList<>();
+	private List<String> schemaNameList = new ArrayList<>();
 
 	@SuppressWarnings("rawtypes")
 	JComboBox dbType;
@@ -237,14 +238,6 @@ public class TeslaDBDetails extends JFrame {
 		lblSchema.setBounds(147, 203, 85, 14);
 		contentPane.add(lblSchema);
 
-		/*
-		 * schemaNameText.setColumns(10); schemaNameText.setBounds(224, 203,
-		 * 134, 19); contentPane.add(schemaNameText);
-		 * 
-		 * lblSchema.setVisible(true); schemaNameText.setVisible(true);
-		 */
-
-		// dbType = new JComboBox();
 		dbType.addItemListener(new ItemListener() {
 
 			@Override
@@ -261,7 +254,6 @@ public class TeslaDBDetails extends JFrame {
 			}
 		});
 
-		// dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
 		dbType.setBounds(247, 84, 134, 20);
 		contentPane.add(dbType);
 
@@ -295,14 +287,6 @@ public class TeslaDBDetails extends JFrame {
 		schemaCombo.setBounds(247, 200, 134, 20);
 		contentPane.add(schemaCombo);
 	}
-
-	/*
-	 * class ItemChangeListener implements ItemListener {
-	 * 
-	 * @Override public void itemStateChanged(ItemEvent event) { if
-	 * (event.getStateChange() == ItemEvent.SELECTED) { Object item =
-	 * event.getItem(); System.out.println(item.toString()); } } }
-	 */
 
 	public void assignDBEntity() {
 

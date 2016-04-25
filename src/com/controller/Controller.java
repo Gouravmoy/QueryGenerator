@@ -10,6 +10,7 @@ import com.entity.Column;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
 import com.entity.Tables;
+import com.exceptions.DBConnectionError;
 import com.extra.Keys;
 import com.util.DBConnectionUtil;
 import com.util.DBUtil;
@@ -48,7 +49,7 @@ public class Controller {
 			}
 			preparedStatement.close();
 			conn.close();
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException | DBConnectionError e) {
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
@@ -106,7 +107,7 @@ public class Controller {
 			}
 			preparedStatement.close();
 			conn.close();
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException | DBConnectionError e) {
 			e.printStackTrace();
 		} finally {
 			if (conn != null) {
