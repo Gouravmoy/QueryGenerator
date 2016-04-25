@@ -6,11 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -23,6 +23,7 @@ import org.jsoup.Jsoup;
 
 import com.controller.MasterCommon;
 import com.exceptions.QueryExecutionException;
+import com.exceptions.TestQueryExecutionError;
 import com.model.QueryTableModel;
 import com.util.DBUtil;
 import com.util.ExcelExporter;
@@ -38,6 +39,8 @@ public class Tesla6 extends JFrame {
 	public JButton exportButton;
 	public JButton executeQueryBtn;
 	public static String queryToExecute;
+	public JLabel lblRecordCount;
+	int recordCount = 0;
 
 	public Tesla6(String status) {
 		initialize(status);
@@ -46,7 +49,7 @@ public class Tesla6 extends JFrame {
 	@SuppressWarnings("serial")
 	private void initialize(String status) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(828, 561);
+		setSize(831, 593);
 
 		setLocationRelativeTo(null);
 
@@ -72,6 +75,7 @@ public class Tesla6 extends JFrame {
 		queryTableModel = new QueryTableModel();
 
 		queryResultTable = new JTable() {
+			@Override
 			public boolean getScrollableTracksViewportWidth() {
 				return getPreferredSize().width < getParent().getWidth();
 			}
@@ -84,7 +88,7 @@ public class Tesla6 extends JFrame {
 		JScrollPane queryResult = new JScrollPane(queryResultTable,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		queryResult.setBounds(10, 264, 791, 248);
+		queryResult.setBounds(10, 295, 791, 248);
 		contentPane.add(queryResult);
 
 		JButton backButton = new JButton("BACK");
@@ -112,11 +116,13 @@ public class Tesla6 extends JFrame {
 								textArea.getText().replace(";", "")).text();
 					}
 					if (DBUtil.testFinalQuery(queryToExecute)) {
-						queryTableModel.executeQueryAndUI(queryToExecute);
+						recordCount = queryTableModel
+								.executeQueryAndUI(queryToExecute);
+						lblRecordCount.setText(Integer.toString(recordCount));
 						exportButton.setEnabled(true);
 					}
 				} catch (HeadlessException | QueryExecutionException
-						| ClassNotFoundException | SQLException e) {
+						| TestQueryExecutionError e) {
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(null,
 							"Query Failed! Reason - " + e.getMessage());
@@ -132,6 +138,7 @@ public class Tesla6 extends JFrame {
 		exportButton = new JButton("EXPORT RESULT");
 		exportButton.setEnabled(false);
 		exportButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				TeslaFileBrowse fileBrowse = new TeslaFileBrowse("xlsx", "SAVE");
 				String filePath = fileBrowse.getFilePath();
@@ -166,6 +173,14 @@ public class Tesla6 extends JFrame {
 		});
 		btnRefresh.setBounds(446, 219, 135, 34);
 		contentPane.add(btnRefresh);
+
+		JLabel lblRowsReturned = new JLabel("Rows Returned");
+		lblRowsReturned.setBounds(10, 278, 89, 14);
+		contentPane.add(lblRowsReturned);
+
+		lblRecordCount = new JLabel("0");
+		lblRecordCount.setBounds(109, 278, 80, 14);
+		contentPane.add(lblRecordCount);
 
 	}
 }

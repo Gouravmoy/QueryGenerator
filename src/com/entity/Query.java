@@ -10,9 +10,9 @@ public class Query {
 
 	public Query() {
 		super();
-		selectStmts = new ArrayList<String>();
-		joinStmts = new ArrayList<String>();
-		whereStmts = new ArrayList<String>();
+		selectStmts = new ArrayList<>();
+		joinStmts = new ArrayList<>();
+		whereStmts = new ArrayList<>();
 	}
 
 	public ArrayList<String> getSelectStmts() {
@@ -51,7 +51,7 @@ public class Query {
 		for (String joinStmt : joinStmts) {
 			query.append(joinStmt + newLine);
 		}
-		if (whereStmts.size() != 0)
+		if (whereStmts.isEmpty())
 			query.append(" WHERE " + newLine);
 		for (String whereStmt : whereStmts) {
 			query.append(whereStmt + newLine);

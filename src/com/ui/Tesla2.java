@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -18,7 +19,6 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
-import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.Tables;
 import com.model.TableModel;
@@ -28,22 +28,22 @@ import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.util.ColsUtil;
+import com.util.DBUtil;
 import com.util.QueryColorUtil;
-import javax.swing.ImageIcon;
 
 public class Tesla2 {
 
 	private JFrame frmQuerybuilder;
 	private TableModel tableModel;
-	private ArrayList<Tables> tables;
+	private List<Tables> tables;
 	private JTable table;
 	private static JTextPane textArea = new JTextPane();;
 	List<POJORow> listRow = new ArrayList<>();
 	int caseCount = 0;
 
-	public Tesla2(ArrayList<String> tables) {
+	public Tesla2(List<String> tables) {
 		tables.addAll(FileIO.valueHolder);
-		this.tables = Controller.getTablesMetaInfo(tables);
+		this.tables = DBUtil.getTablesMetaInfo(tables);
 		MasterCommon.listTable.clear();
 		MasterCommon.listTable.addAll(this.tables);
 		ColsUtil.setPOJOClass();
@@ -90,8 +90,8 @@ public class Tesla2 {
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2.displyQuery();
-				MasterCommon.completeQuery = MasterCommon.completeQuery.replaceAll(", $", "").toUpperCase()
-						+ " FROM \n";
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						.replaceAll(", $", "").toUpperCase() + " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
@@ -100,11 +100,13 @@ public class Tesla2 {
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
-		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class.getResource("/png/transform_flip.png")));
+		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/transform_flip.png")));
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 
 				new TeslaCase(rowCase);
 			}
@@ -120,7 +122,8 @@ public class Tesla2 {
 				Tesla2.displyQuery();
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Tesla2.class.getResource("/png/refresh.png")));
+		btnNewButton.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/refresh.png")));
 		btnNewButton.setBounds(319, 217, 133, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton);
 
@@ -131,22 +134,26 @@ public class Tesla2 {
 
 			}
 		});
-		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class.getResource("/png/list_delete.png")));
+		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/list_delete.png")));
 		btnNewButton_1.setBounds(22, 217, 129, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton_1);
 		TableColumn countryColumn = table.getColumn("TableName");
 		TableColumn languageColumn = table.getColumn("ColumnName");
 		countryColumn.setCellRenderer(new TableCellRenderer());
-		countryColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
+		countryColumn
+				.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 		languageColumn.setCellRenderer(new ColumnCellRenderer());
-		languageColumn.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		languageColumn.setCellEditor(new ColumnCellEditor(
+				MasterCommon.listPojoCols));
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				displyQuery();
 				tableModel.updateUI();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 
 			}
 
@@ -170,11 +177,15 @@ public class Tesla2 {
 			} else {
 				if (r.getCaseRow().size() == 0) {
 					if (r.getElementname().length() > 0) {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery
+								+ r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName()
+								+ " as '" + r.getElementname() + "', \n";
 					} else {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + ", \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery
+								+ r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName()
+								+ ", \n";
 					}
 
 				} else {
@@ -187,8 +198,10 @@ public class Tesla2 {
 						} else {
 							if (r1.getConditionString().equals("ELSE")) {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName()
+											+ "."
+											+ r1.getTableTwo().getColumn()
+													.getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
@@ -196,28 +209,38 @@ public class Tesla2 {
 
 							} else {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName()
+											+ "."
+											+ r1.getTableTwo().getColumn()
+													.getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
-								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
-										+ r1.getTableOne().getColumn().getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then " + value;
+								caseQuery = caseQuery
+										+ " When "
+										+ r1.getTableOne().getTableName()
+										+ "."
+										+ r1.getTableOne().getColumn()
+												.getColumnName() + " = '"
+										+ r1.getConditionString() + "' Then "
+										+ value;
 							}
 						}
 					}
 
 					// caseQuery = caseQuery + " End Case \n as '" +
 					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
-																							// SQL
-																							// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
+					caseQuery = caseQuery + " End \n as '" + r.getElementname()
+							+ "' , \n";// My
+										// SQL
+										// Syntax
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ caseQuery;
 				}
 			}
 		}
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
+		textArea.setText(QueryColorUtil.queryColorChange(
+				MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
