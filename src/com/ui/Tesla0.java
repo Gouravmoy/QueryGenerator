@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,7 +28,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableColumn;
 
-import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.TablesSelect;
 import com.model.DBConnectionsModel;
@@ -35,15 +35,15 @@ import com.model.TableNameModel;
 import com.renderer.IconTextCellRemderer;
 import com.service.FileIO;
 import com.util.DBConnectionUtil;
+import com.util.DBUtil;
 
 public class Tesla0 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	public static ArrayList<String> tempTableNames = new ArrayList<String>();
+	public static List<String> tempTableNames = new ArrayList<String>();
 	public static ArrayList<String> tableNames = new ArrayList<String>();
 	private ArrayList<String> selectedTableNames = new ArrayList<String>();
-	// private JCheckBox[] tablesCheckBoxList;
 	JScrollPane dbNamesPane;
 	JScrollPane tableNameScrollPane;
 	JTable connNamesTable;
@@ -157,12 +157,6 @@ public class Tesla0 extends JFrame {
 		connNamesTable.setRowHeight(25);
 		initilizeColumn();
 
-		/*
-		 * TableColumn connNamesTableName = connNamesTable .getColumn(
-		 * "Connection Names"); connNamesTableName.setCellRenderer(new
-		 * TableCellRenderer()); connNamesTableName.setCellEditor(new
-		 * TableEditor( MasterCommon.listPojoTable));
-		 */
 
 		dbNamesPane = new JScrollPane(connNamesTable);
 
@@ -175,7 +169,7 @@ public class Tesla0 extends JFrame {
 				btnBuildQuery.setEnabled(true);
 				mntmExecuteQuery.setEnabled(true);
 				tableNames.removeAll(tableNames);
-				tempTableNames = Controller.getTables(DBConnectionUtil
+				tempTableNames = DBUtil.getTables(DBConnectionUtil
 						.getDBDetails(MasterCommon.selectedDBName));
 				tableNames.addAll(tempTableNames);
 				tablesSelects.clear();

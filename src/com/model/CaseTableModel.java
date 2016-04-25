@@ -16,7 +16,7 @@ public class CaseTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "When", "TableOne", "ColumnOne",
 			"Condition", "Then", "TableTwo", "ColumnTwo", "Value" };
-	private ArrayList<CaseRow> listRow = new ArrayList<CaseRow>();
+	private ArrayList<CaseRow> listRow = new ArrayList<>();
 	boolean elseFlag = true;
 
 	public void updateUI(POJORow pojoRow) {

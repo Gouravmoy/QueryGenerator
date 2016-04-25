@@ -3,7 +3,9 @@ package com.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
@@ -13,6 +15,8 @@ import com.extra.Keys;
 import com.service.FileIO;
 
 public class DBConnectionUtil extends MasterCommon {
+
+	static final Logger logger = Logger.getLogger(DBUtil.class);
 
 	public static boolean checkConnectivity(DBDetails dbDetails) {
 		String testQuery = "";
@@ -31,16 +35,21 @@ public class DBConnectionUtil extends MasterCommon {
 						.getProperty(Keys.QUERY_TEST_CONNECTION_SQL);
 				connection = DBUtil.getSQLConnection(dbDetails);
 			}
-			statement = connection.createStatement();
-			statement.execute(testQuery);
+			if (connection != null) {
+				statement = connection.createStatement();
+				statement.execute(testQuery);
+				statement.close();
+				connection.close();
+			}
+
 		} catch (SQLException | ClassNotFoundException | DBConnectionError e) {
-			e.printStackTrace();
+			logger.error(e);
 			return false;
 		}
 		return true;
 	}
 
-	public static ArrayList<DBDetails> getAllConnection() {
+	public static List<DBDetails> getAllConnection() {
 		return FileIO.getDBConnectionsFromText();
 	}
 

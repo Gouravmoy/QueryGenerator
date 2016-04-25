@@ -19,7 +19,7 @@ public class DropDownCellEditor extends AbstractCellEditor implements
 
 	private static final long serialVersionUID = 1L;
 	private String dropDownString = "";
-	private List<String> dropDownStringList = new ArrayList<String>();
+	private List<String> dropDownStringList = new ArrayList<>();
 
 	public DropDownCellEditor(String[] joinTypes) {
 		this.dropDownStringList = Arrays.asList(joinTypes);
@@ -38,7 +38,7 @@ public class DropDownCellEditor extends AbstractCellEditor implements
 			this.dropDownString = (String) value;
 		}
 
-		JComboBox<String> comboCol = new JComboBox<String>();
+		JComboBox<String> comboCol = new JComboBox<>();
 
 		for (String cols : dropDownStringList) {
 			comboCol.addItem(cols);
@@ -61,7 +61,6 @@ public class DropDownCellEditor extends AbstractCellEditor implements
 				.getSource();
 		this.dropDownString = (String) dropDown.getSelectedItem();
 		System.out.println(dropDown.getSelectedItem().toString());
-
 	}
 
 }

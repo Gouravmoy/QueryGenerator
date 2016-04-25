@@ -51,6 +51,8 @@ public class PagingTester extends JFrame {
 
 class PagingModel extends AbstractTableModel {
 
+	private static final long serialVersionUID = 1L;
+
 	protected int pageSize;
 
 	protected int pageOffset;

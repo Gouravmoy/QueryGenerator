@@ -9,25 +9,20 @@ public class DBConnector extends MasterCommon {
 	public static String getSQLConnectionString() {
 		DBDetails dbDetails = DBConnectionUtil
 				.getDBDetails(MasterCommon.selectedDBName);
-		String connectionStr = "jdbc:mysql://localhost/"
-				+ dbDetails.getDbSchema() + "?" + "user="
-				+ dbDetails.getUserName() + "&password="
+		return "jdbc:mysql://localhost/" + dbDetails.getDbSchema() + "?"
+				+ "user=" + dbDetails.getUserName() + "&password="
 				+ dbDetails.getPassword();
-		return connectionStr;
 	}
 
 	public static String getSQLConnectionString(DBDetails dbDetails) {
 
-		String connectionStr = "jdbc:mysql://localhost/"
-				+ dbDetails.getDbSchema() + "?" + "user="
-				+ dbDetails.getUserName() + "&password="
+		return "jdbc:mysql://localhost/" + dbDetails.getDbSchema() + "?"
+				+ "user=" + dbDetails.getUserName() + "&password="
 				+ dbDetails.getPassword();
-		return connectionStr;
 	}
 
 	public static String getDB2ConnectionString(DBDetails dbDetails) {
-		String connStr = "jdbc:db2://" + dbDetails.getHostName() + ":"
+		return "jdbc:db2://" + dbDetails.getHostName() + ":"
 				+ dbDetails.getPort() + "/" + dbDetails.getDatabase();
-		return connStr;
 	}
 }

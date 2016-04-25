@@ -9,6 +9,8 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.log4j.Logger;
+
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.entity.DBTypes;
@@ -19,6 +21,7 @@ import com.util.DBUtil;
 
 public class QueryTableModel extends AbstractTableModel {
 
+	static final Logger logger = Logger.getLogger(QueryTableModel.class);
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("rawtypes")
 	Vector cache;
@@ -33,6 +36,7 @@ public class QueryTableModel extends AbstractTableModel {
 	public QueryTableModel() {
 		cache = new Vector();
 	}
+
 	@Override
 	public String getColumnName(int i) {
 		return headers[i];
@@ -85,6 +89,7 @@ public class QueryTableModel extends AbstractTableModel {
 			stmt.close();
 			conn.close();
 		} catch (SQLException | DBConnectionError err) {
+			logger.error(err);
 			throw new TestQueryExecutionError("Error in Query Execution - "
 					+ err.getMessage());
 		}
