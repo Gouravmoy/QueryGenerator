@@ -57,13 +57,6 @@ public class Tesla0 extends JFrame {
 	ArrayList<TablesSelect> tablesSelects = new ArrayList<TablesSelect>();
 	JButton btnBuildQuery;
 
-	/**
-	 * Launch the application.
-	 */
-
-	/**
-	 * Create the frame.
-	 */
 	public Tesla0() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(710, 504);

@@ -23,7 +23,7 @@ public class Tesla00 extends JFrame {
 	public static void main(String[] args) {
 		try {
 
-			splashScreen();
+			//splashScreen();
 			Properties props = new Properties();
 			props.put("logoString", "VIGO");
 			AcrylLookAndFeel.setCurrentTheme(props);
