@@ -8,11 +8,20 @@ public class POJORow implements Serializable {
 	POJOTable table;
 	String elementname;
 	ArrayList<CaseRow> caseRow = new ArrayList<CaseRow>();
+	ArrayList<CoalesceRow> coalesceRow = new ArrayList<CoalesceRow>();
 	String rowType;
 
 	public POJORow(POJOTable table, String elementname) {
 		this.table = table;
 		this.elementname = elementname;
+	}
+
+	public ArrayList<CoalesceRow> getCoalesceRow() {
+		return coalesceRow;
+	}
+
+	public void setCoalesceRow(ArrayList<CoalesceRow> coalesceRow) {
+		this.coalesceRow = coalesceRow;
 	}
 
 	public String getRowType() {

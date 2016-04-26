@@ -4,6 +4,7 @@ import javax.swing.JTextPane;
 
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
+import com.pojo.CoalesceRow;
 import com.pojo.POJORow;
 import com.util.QueryColorUtil;
 
@@ -17,20 +18,16 @@ public class Tesla2Functions {
 			if (r.getTable().getTableName() == null) {
 				MasterCommon.selectRows.remove(i);
 			} else {
-				if (r.getCaseRow().size() == 0) {
+				if (r.getRowType() == null) {
 					if (r.getElementname().length() > 0) {
-						MasterCommon.completeQuery = MasterCommon.completeQuery
-								+ r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName()
-								+ " as '" + r.getElementname() + "', \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
 					} else {
-						MasterCommon.completeQuery = MasterCommon.completeQuery
-								+ r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName()
-								+ ", \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + ", \n";
 					}
 
-				} else {
+				} else if (r.getRowType().equals("Case")) {
 					String caseQuery = "Case \n";
 					for (int j = 0; j < r.getCaseRow().size(); j++) {
 						String value = "";
@@ -40,10 +37,8 @@ public class Tesla2Functions {
 						} else {
 							if (r1.getConditionString().equals("ELSE")) {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName()
-											+ "."
-											+ r1.getTableTwo().getColumn()
-													.getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
@@ -51,38 +46,36 @@ public class Tesla2Functions {
 
 							} else {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName()
-											+ "."
-											+ r1.getTableTwo().getColumn()
-													.getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
-								caseQuery = caseQuery
-										+ " When "
-										+ r1.getTableOne().getTableName()
-										+ "."
-										+ r1.getTableOne().getColumn()
-												.getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then "
-										+ value;
+								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
+										+ r1.getTableOne().getColumn().getColumnName() + " = '"
+										+ r1.getConditionString() + "' Then " + value;
 							}
 						}
 					}
 
 					// caseQuery = caseQuery + " End Case \n as '" +
 					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname()
-							+ "' , \n";// My
-										// SQL
-										// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ caseQuery;
+					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
+																							// SQL
+																							// Syntax
+					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
+				} else if (r.getRowType().equals("Coalesce")) {
+					String coalesceQuery = "COALESCE (";
+					for (int k = 0; k < r.getCoalesceRow().size(); k++) {
+						CoalesceRow r2 = r.getCoalesceRow().get(i);
+						coalesceQuery += r2.getTableOne().getTableName() + "." + r2.getColumnOne().getColumnName()
+								+ " ,";
+					}
+					MasterCommon.completeQuery = MasterCommon.completeQuery + coalesceQuery;
 				}
 			}
 		}
-		textArea.setText(QueryColorUtil.queryColorChange(
-				MasterCommon.completeQuery).toUpperCase());
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 

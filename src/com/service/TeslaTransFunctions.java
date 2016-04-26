@@ -42,6 +42,19 @@ public class TeslaTransFunctions extends TeslaTransforms {
 
 	}
 
+	public static void initializeCoalesceTables(JTable tableCase) {
+
+		TableColumn table1Column = tableCase.getColumn("TableOne");
+		table1Column.setCellRenderer(new TableCellRenderer());
+		table1Column.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
+
+		TableColumn col1Column = tableCase.getColumn("ColumnOne");
+		col1Column.setCellRenderer(new ColumnCellRenderer());
+		col1Column
+				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+
+	}
+
 	public static void displayQuery() {
 		textPane.setText("Case \n");
 		query = "Case \n";
