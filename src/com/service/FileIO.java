@@ -161,7 +161,7 @@ public class FileIO extends MasterCommon {
 			tableHolder.put(i, table.getTableName());
 			valueHolder.add(table.getTableName());
 		}
-		Tesla2.displyQuery();
+		Tesla2Functions.displyQuery(Tesla2.textArea);
 	}
 
 	public static ArrayList<DBDetails> getDBConnectionsFromText() {

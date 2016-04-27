@@ -47,7 +47,7 @@ public class Tesla6 extends JFrame {
 	}
 
 	@SuppressWarnings("serial")
-	private void initialize(String status) {
+	private void initialize(final String status) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(831, 593);
 
@@ -85,8 +85,7 @@ public class Tesla6 extends JFrame {
 		queryResultTable.setBounds(10, 264, 791, 248);
 		queryResultTable.setRowHeight(25);
 
-		JScrollPane queryResult = new JScrollPane(queryResultTable,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		JScrollPane queryResult = new JScrollPane(queryResultTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		queryResult.setBounds(10, 295, 791, 248);
 		contentPane.add(queryResult);
@@ -99,8 +98,7 @@ public class Tesla6 extends JFrame {
 				dispose();
 			}
 		});
-		backButton.setIcon(new ImageIcon(Tesla6.class
-				.getResource("/png/back.png")));
+		backButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/back.png")));
 		backButton.setBounds(39, 219, 135, 34);
 		contentPane.add(backButton);
 
@@ -112,26 +110,21 @@ public class Tesla6 extends JFrame {
 					if (status.equals("INDIRRECT")) {
 						queryToExecute = MasterCommon.mainQuery.toString();
 					} else {
-						queryToExecute = Jsoup.parse(
-								textArea.getText().replace(";", "")).text();
+						queryToExecute = Jsoup.parse(textArea.getText().replace(";", "")).text();
 					}
 					if (DBUtil.testFinalQuery(queryToExecute)) {
-						recordCount = queryTableModel
-								.executeQueryAndUI(queryToExecute);
+						recordCount = queryTableModel.executeQueryAndUI(queryToExecute);
 						lblRecordCount.setText(Integer.toString(recordCount));
 						exportButton.setEnabled(true);
 					}
-				} catch (HeadlessException | QueryExecutionException
-						| TestQueryExecutionError e) {
+				} catch (HeadlessException | QueryExecutionException | TestQueryExecutionError e) {
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(null,
-							"Query Failed! Reason - " + e.getMessage());
+					JOptionPane.showMessageDialog(null, "Query Failed! Reason - " + e.getMessage());
 				}
 
 			}
 		});
-		executeQueryBtn.setIcon(new ImageIcon(Tesla6.class
-				.getResource("/png/lightning.png")));
+		executeQueryBtn.setIcon(new ImageIcon(Tesla6.class.getResource("/png/lightning.png")));
 		executeQueryBtn.setBounds(245, 219, 135, 34);
 		contentPane.add(executeQueryBtn);
 
@@ -147,23 +140,19 @@ public class Tesla6 extends JFrame {
 				ExcelExporter exp = new ExcelExporter();
 				try {
 					exp.exportTable(queryResultTable, filePath);
-					JOptionPane.showMessageDialog(null,
-							"Result Successfully Exported!");
+					JOptionPane.showMessageDialog(null, "Result Successfully Exported!");
 				} catch (IOException e1) {
-					JOptionPane.showMessageDialog(null,
-							"Export Failed! Reason - " + e1.getMessage());
+					JOptionPane.showMessageDialog(null, "Export Failed! Reason - " + e1.getMessage());
 				}
 
 			}
 		});
-		exportButton.setIcon(new ImageIcon(Tesla6.class
-				.getResource("/png/excel-icon.png")));
+		exportButton.setIcon(new ImageIcon(Tesla6.class.getResource("/png/excel-icon.png")));
 		exportButton.setBounds(641, 219, 135, 34);
 		contentPane.add(exportButton);
 
 		JButton btnRefresh = new JButton("REFRESH");
-		btnRefresh.setIcon(new ImageIcon(Tesla6.class
-				.getResource("/png/refresh.png")));
+		btnRefresh.setIcon(new ImageIcon(Tesla6.class.getResource("/png/refresh.png")));
 		btnRefresh.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
