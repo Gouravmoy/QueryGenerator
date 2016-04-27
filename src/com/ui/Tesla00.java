@@ -23,7 +23,7 @@ public class Tesla00 extends JFrame {
 	public static void main(String[] args) {
 		try {
 
-			//splashScreen();
+			splashScreen();
 			Properties props = new Properties();
 			props.put("logoString", "VIGO");
 			AcrylLookAndFeel.setCurrentTheme(props);
@@ -35,7 +35,6 @@ public class Tesla00 extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					// PropsLoader.loadProps();
 					PropsLoader loader = new PropsLoader();
 					loader.loadProps();
 					Tesla0 frame = new Tesla0();

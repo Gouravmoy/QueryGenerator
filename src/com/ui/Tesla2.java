@@ -21,7 +21,6 @@ import javax.swing.text.html.HTMLEditorKit;
 
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
-import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.Tables;
 import com.model.TableModel;
@@ -31,21 +30,22 @@ import com.renderer.TableCellRenderer;
 import com.service.FileIO;
 import com.service.Tesla2Functions;
 import com.util.ColsUtil;
+import com.util.DBUtil;
 
 public class Tesla2 {
 
 	private JFrame frmQuerybuilder;
 	private TableModel tableModel;
-	private ArrayList<Tables> tables;
+	private List<Tables> tables;
 	private JTable table;
 	public static JTextPane textArea = new JTextPane();;
 	List<POJORow> listRow = new ArrayList<>();
 	int caseCount = 0;
 	static int deleteRow = 0;
 
-	public Tesla2(ArrayList<String> tables) {
-		tables.addAll(FileIO.valueHolder);
-		this.tables = Controller.getTablesMetaInfo(tables);
+	public Tesla2(List<String> tempTableNames) {
+		tempTableNames.addAll(FileIO.valueHolder);
+		this.tables = DBUtil.getTablesMetaInfo(tempTableNames);
 		MasterCommon.listTable.clear();
 		MasterCommon.listTable.addAll(this.tables);
 		ColsUtil.setPOJOClass();
@@ -106,8 +106,8 @@ public class Tesla2 {
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2Functions.displyQuery(textArea);
-				MasterCommon.completeQuery = MasterCommon.completeQuery
-						.replaceAll(", $", "").toUpperCase() + " FROM \n";
+				MasterCommon.completeQuery = MasterCommon.completeQuery.replaceAll(", $", "").toUpperCase()
+						+ " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
@@ -116,13 +116,11 @@ public class Tesla2 {
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
-		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class
-				.getResource("/png/transform_flip.png")));
+		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class.getResource("/png/transform_flip.png")));
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 				new TeslaTransforms(rowCase);
 			}
 		});
@@ -137,8 +135,7 @@ public class Tesla2 {
 				Tesla2Functions.displyQuery(textArea);
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Tesla2.class
-				.getResource("/png/refresh.png")));
+		btnNewButton.setIcon(new ImageIcon(Tesla2.class.getResource("/png/refresh.png")));
 		btnNewButton.setBounds(260, 217, 133, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton);
 		TableColumn tableColumn = table.getColumn("TableName");
@@ -146,16 +143,14 @@ public class Tesla2 {
 		tableColumn.setCellRenderer(new TableCellRenderer());
 		tableColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 		columnColumn.setCellRenderer(new ColumnCellRenderer());
-		columnColumn.setCellEditor(new ColumnCellEditor(
-				MasterCommon.listPojoCols));
+		columnColumn.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2Functions.displyQuery(textArea);
 				tableModel.updateUI();
-				table.scrollRectToVisible(table.getCellRect(
-						table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
 
 			}
 

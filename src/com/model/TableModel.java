@@ -25,7 +25,7 @@ public class TableModel extends AbstractTableModel {
 
 		POJOColumn column = new POJOColumn(null);
 		POJOTable pojoTable = new POJOTable(null, column);
-		POJORow row2 = null;
+		POJORow row2;
 		row2 = new POJORow(pojoTable, "");
 		this.listRow.add(row2);
 		this.fireTableDataChanged();
@@ -46,14 +46,15 @@ public class TableModel extends AbstractTableModel {
 	public int getColumnCount() {
 		return columnNames.length;
 	}
-
+	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Class getColumnClass(int column) {
-		Class obj = null;
+		Class obj;
 		obj = getValueAt(0, column).getClass();
 		return obj;
 	}
@@ -65,7 +66,7 @@ public class TableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		POJORow row = null;
+		POJORow row;
 		String tableName = "";
 		POJOTable p = null;
 		row = listRow.get(rowIndex);

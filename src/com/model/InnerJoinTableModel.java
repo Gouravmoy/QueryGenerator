@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.apache.log4j.Logger;
+
 import com.controller.MasterCommon;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
@@ -13,13 +15,14 @@ import com.util.QueryUtil;
 
 public class InnerJoinTableModel extends AbstractTableModel {
 
+	static final Logger LOGGER = Logger.getLogger(InnerJoinTableModel.class);
 	private static final long serialVersionUID = 1L;
 	private String[] columnNames = { "No.", "TableName1", "ColumnName1",
 			"Join Type", "TableName2", "ColumnName2" };
-	private List<InnerJoinRow> innerJoinRow = new ArrayList<InnerJoinRow>();
+	private List<InnerJoinRow> innerJoinRow = new ArrayList<>();
 
-	public InnerJoinTableModel(List<InnerJoinRow> _innerJoinRow) {
-		this.innerJoinRow = _innerJoinRow;
+	public InnerJoinTableModel(List<InnerJoinRow> innerJoinRow) {
+		this.innerJoinRow = innerJoinRow;
 	}
 
 	public void updateUI() {
@@ -29,7 +32,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		POJOTable pojoTable1 = new POJOTable(null, column1);
 		POJOTable pojoTable2 = new POJOTable(null, column2);
 
-		InnerJoinRow row = null;
+		InnerJoinRow row;
 		row = new InnerJoinRow(pojoTable1, pojoTable2,
 				MasterCommon.joinTypes[0]);
 		this.innerJoinRow.add(row);
@@ -39,13 +42,10 @@ public class InnerJoinTableModel extends AbstractTableModel {
 
 	public void removeFromUI() {
 		InnerJoinRow row;
-		// innerJoinRow = new ArrayList<InnerJoinRow>();
-		// MasterCommon.mainQuery.setJoinStmts(new ArrayList<String>());
-		// MasterCommon.innerJoinMap = new HashMap<String, String>();
 
-		if (innerJoinRow.size() > 0) {
+		if (!innerJoinRow.isEmpty()) {
 			row = innerJoinRow.get(innerJoinRow.size() - 1);
-			if (!row.getInnerJoinType().equals("SELECT JOIN")) {
+			if (!("SELECT JOIN").equals(row.getInnerJoinType())) {
 				QueryUtil.removeLastFromInnerJoinMap();
 			}
 			innerJoinRow.remove(innerJoinRow.size() - 1);
@@ -65,25 +65,29 @@ public class InnerJoinTableModel extends AbstractTableModel {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Class getColumnClass(int column) {
-		Class obj = null;
+
+		Class obj;
 		obj = getValueAt(0, column).getClass();
 		return obj;
 	}
 
+	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
 
 	@Override
 	public void setValueAt(Object value, int rowIndex, int columnIndex) {
-		InnerJoinRow row = null;
+		InnerJoinRow row;
 		String tableName = "";
 		POJOTable p = null;
 		try {
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 		} catch (Exception e) {
+			LOGGER.error(e);
 		}
 
 		row = innerJoinRow.get(rowIndex);
@@ -103,6 +107,8 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		case 5:
 			row.getJoinTable2().setColumn((POJOColumn) value);
 			break;
+		default:
+			LOGGER.error("Error in Table Structure");
 		}
 		if (rowIndex < MasterCommon.joinRows.size()) {
 			MasterCommon.joinRows.set(rowIndex, row);
@@ -112,7 +118,7 @@ public class InnerJoinTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		Object returnValue = null;
-		InnerJoinRow row = null;
+		InnerJoinRow row;
 		row = innerJoinRow.get(rowIndex);
 
 		switch (columnIndex) {
@@ -134,11 +140,14 @@ public class InnerJoinTableModel extends AbstractTableModel {
 		case 5:
 			returnValue = row.getJoinTable2().getColumn();
 			break;
+		default:
+			LOGGER.error("Error in Table Structure");
 		}
 
 		return returnValue;
 	}
 
+	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return true;
 	}

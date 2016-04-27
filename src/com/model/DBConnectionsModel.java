@@ -1,6 +1,6 @@
 package com.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -11,9 +11,9 @@ public class DBConnectionsModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
 	private String[] columnNames = { "Connection Names" };
-	private ArrayList<DBDetails> dbDtlsList;
+	private List<DBDetails> dbDtlsList;
 
-	public DBConnectionsModel(ArrayList<DBDetails> dbDtlsList) {
+	public DBConnectionsModel(List<DBDetails> dbDtlsList) {
 		super();
 		this.dbDtlsList = dbDtlsList;
 	}
@@ -23,7 +23,7 @@ public class DBConnectionsModel extends AbstractTableModel {
 		this.fireTableDataChanged();
 	}
 
-	public void updateUI(ArrayList<DBDetails> details) {
+	public void updateUI(List<DBDetails> details) {
 		dbDtlsList.clear();
 		dbDtlsList.addAll(details);
 		this.fireTableDataChanged();
@@ -40,12 +40,14 @@ public class DBConnectionsModel extends AbstractTableModel {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
 	public Class getColumnClass(int column) {
-		Class obj = null;
+		Class obj;
 		obj = getValueAt(0, column).getClass();
 		return obj;
 	}
 
+	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}

@@ -38,7 +38,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 			this.table = (POJOTable) value;
 		}
 
-		JComboBox<POJOTable> comboCountry = new JComboBox<POJOTable>();
+		JComboBox<POJOTable> comboCountry = new JComboBox<>();
 
 		for (POJOTable aTable : listTable) {
 			comboCountry.addItem(aTable);
@@ -64,7 +64,6 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor,
 				.toString());
 		this.table = (POJOTable) comboCountry.getSelectedItem();
 		new ColumnCellEditor(MasterCommon.listPojoCols);
-		//System.out.println(comboCountry.getSelectedItem().toString());
 
 	}
 

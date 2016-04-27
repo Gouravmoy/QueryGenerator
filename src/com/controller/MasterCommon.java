@@ -42,7 +42,7 @@ public class MasterCommon {
 	public static QueryIOUtil queryUtil;
 	public static String selectedDBName;
 
-	public static ArrayList<DBDetails> dbConnection = new ArrayList<DBDetails>();
+	public static List<DBDetails> dbConnection = new ArrayList<DBDetails>();
 
 	public static void updateDBCredentials(String schemaName2, String url,
 			String dbName2, String userName2, String password2) {

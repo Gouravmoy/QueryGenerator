@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.exceptions.DBConnectionError;
 import com.extra.Keys;
 import com.util.DBUtil;
 
@@ -39,7 +40,7 @@ public class Test {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (DBConnectionError e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -54,5 +55,3 @@ public class Test {
 
 	}
 }
-
-

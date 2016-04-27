@@ -37,7 +37,7 @@ public class ColumnCellEditor extends AbstractCellEditor implements
 			this.column = (POJOColumn) value;
 		}
 		ColsUtil.getColumnsForTable(MasterCommon.tableHolder.get(row));
-		JComboBox<POJOColumn> comboCol = new JComboBox<POJOColumn>();
+		JComboBox<POJOColumn> comboCol = new JComboBox<>();
 
 		for (POJOColumn cols : listColumn) {
 			comboCol.addItem(cols);
@@ -60,7 +60,6 @@ public class ColumnCellEditor extends AbstractCellEditor implements
 		JComboBox<POJOColumn> comboLang = (JComboBox<POJOColumn>) event
 				.getSource();
 		this.column = (POJOColumn) comboLang.getSelectedItem();
-		//System.out.println(comboLang.getSelectedItem().toString());
 
 	}
 

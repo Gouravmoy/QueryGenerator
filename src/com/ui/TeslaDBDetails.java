@@ -5,6 +5,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -18,6 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.log4j.Logger;
+
 import com.entity.DBDetails;
 import com.entity.DBTypes;
 import com.exceptions.DBAlreadyExists;
@@ -27,6 +30,8 @@ import com.util.DBConnectionUtil;
 import com.util.DBUtil;
 
 public class TeslaDBDetails extends JFrame {
+
+	static final Logger logger = Logger.getLogger(TeslaDBDetails.class);
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -49,7 +54,7 @@ public class TeslaDBDetails extends JFrame {
 	private JButton btnCancel;
 	private DBDetails dbDetails;
 
-	private ArrayList<String> schemaNameList = new ArrayList<>();
+	private List<String> schemaNameList = new ArrayList<>();
 
 	@SuppressWarnings("rawtypes")
 	JComboBox dbType;
@@ -93,7 +98,7 @@ public class TeslaDBDetails extends JFrame {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		setTitle("New DatabaseConnection");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(565, 386);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -155,27 +160,25 @@ public class TeslaDBDetails extends JFrame {
 		btnSave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				assignDBEntity();
-
-				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
-					try {
+				try {
+					assignDBEntity();
+					if (DBConnectionUtil.checkConnectivity(dbDetails)) {
 						FileIO.saveDBDetails(dbDetails,
 								connectionNameText.isEditable());
 						if (connectionNameText.isEditable())
 							Tesla0.dbConnectionsModel.updateUI(dbDetails);
 						dispose();
-					} catch (DBAlreadyExists e) {
-						JOptionPane.showMessageDialog(null,
-								"Connection Save Failed! " + e.getMessage());
+					} else {
+						JOptionPane
+								.showMessageDialog(null,
+										"Connection Test Failed! Please check the Connection Details");
 					}
-				} else {
-					JOptionPane
-							.showMessageDialog(null,
-									"Connection Test Failed! Please check the Connection Details");
+				} catch (DBConnectionError | DBAlreadyExists e1) {
+					logger.error(e1.getMessage());
+					JOptionPane.showMessageDialog(null,
+							"Connection Save Failed! " + e1.getMessage());
 				}
-
 			}
-
 		});
 		btnSave.setBounds(64, 281, 90, 23);
 		contentPane.add(btnSave);
@@ -203,15 +206,23 @@ public class TeslaDBDetails extends JFrame {
 		btnTest.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				assignDBEntity();
-				if (DBConnectionUtil.checkConnectivity(dbDetails)) {
-					JOptionPane.showMessageDialog(null,
-							"Connection Test Success!");
-				} else {
+				try {
+					assignDBEntity();
+					if (DBConnectionUtil.checkConnectivity(dbDetails)) {
+						JOptionPane.showMessageDialog(null,
+								"Connection Test Success!");
+					} else {
+						JOptionPane
+								.showMessageDialog(null,
+										"Connection Test Failed! Please check the Connection Details");
+					}
+				} catch (DBConnectionError e1) {
+					logger.error(e1.getMessage());
 					JOptionPane
 							.showMessageDialog(null,
 									"Connection Test Failed! Please check the Connection Details");
 				}
+
 			}
 		});
 		btnTest.setBounds(292, 281, 89, 23);
@@ -237,14 +248,6 @@ public class TeslaDBDetails extends JFrame {
 		lblSchema.setBounds(147, 203, 85, 14);
 		contentPane.add(lblSchema);
 
-		/*
-		 * schemaNameText.setColumns(10); schemaNameText.setBounds(224, 203,
-		 * 134, 19); contentPane.add(schemaNameText);
-		 * 
-		 * lblSchema.setVisible(true); schemaNameText.setVisible(true);
-		 */
-
-		// dbType = new JComboBox();
 		dbType.addItemListener(new ItemListener() {
 
 			@Override
@@ -261,7 +264,6 @@ public class TeslaDBDetails extends JFrame {
 			}
 		});
 
-		// dbType.setModel(new DefaultComboBoxModel(DBTypes.values()));
 		dbType.setBounds(247, 84, 134, 20);
 		contentPane.add(dbType);
 
@@ -296,21 +298,17 @@ public class TeslaDBDetails extends JFrame {
 		contentPane.add(schemaCombo);
 	}
 
-	/*
-	 * class ItemChangeListener implements ItemListener {
-	 * 
-	 * @Override public void itemStateChanged(ItemEvent event) { if
-	 * (event.getStateChange() == ItemEvent.SELECTED) { Object item =
-	 * event.getItem(); System.out.println(item.toString()); } } }
-	 */
-
-	public void assignDBEntity() {
-
-		dbDetails = new DBDetails(connectionNameText.getText(),
-				usernameText.getText(), String.valueOf(passwordText
-						.getPassword()), hostNameText.getText(),
-				portNameText.getText(), databaseNameText.getText(), dbType
-						.getSelectedItem().toString(), schemaCombo
-						.getSelectedItem().toString());
+	public void assignDBEntity() throws DBConnectionError {
+		try {
+			dbDetails = new DBDetails(connectionNameText.getText(),
+					usernameText.getText(), String.valueOf(passwordText
+							.getPassword()), hostNameText.getText(),
+					portNameText.getText(), databaseNameText.getText(), dbType
+							.getSelectedItem().toString(), schemaCombo
+							.getSelectedItem().toString());
+		} catch (NullPointerException e) {
+			logger.error("DBDetails Object Setting Error" + e.getMessage());
+			throw new DBConnectionError("Please Enter all the Feilds");
+		}
 	}
 }
