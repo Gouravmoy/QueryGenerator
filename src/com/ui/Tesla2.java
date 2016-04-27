@@ -1,5 +1,6 @@
 package com.ui;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -7,9 +8,11 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
@@ -22,14 +25,12 @@ import com.controller.Controller;
 import com.controller.MasterCommon;
 import com.entity.Tables;
 import com.model.TableModel;
-import com.pojo.CaseRow;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
 import com.service.FileIO;
+import com.service.Tesla2Functions;
 import com.util.ColsUtil;
-import com.util.QueryColorUtil;
-import javax.swing.ImageIcon;
 
 public class Tesla2 {
 
@@ -37,9 +38,10 @@ public class Tesla2 {
 	private TableModel tableModel;
 	private ArrayList<Tables> tables;
 	private JTable table;
-	private static JTextPane textArea = new JTextPane();;
+	public static JTextPane textArea = new JTextPane();;
 	List<POJORow> listRow = new ArrayList<>();
 	int caseCount = 0;
+	static int deleteRow = 0;
 
 	public Tesla2(ArrayList<String> tables) {
 		tables.addAll(FileIO.valueHolder);
@@ -71,17 +73,31 @@ public class Tesla2 {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 772, 174);
 		panel_1.add(scrollPane);
+
+		JPopupMenu popupMenu = new JPopupMenu();
+		JButton btnDelete = new JButton("Delete");
+
 		table = new JTable();
+		addPopup(table, popupMenu);
 		scrollPane.setViewportView(table);
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.setIcon(new ImageIcon(Tesla2.class.getResource("/png/addd.png")));
-		btnAdd.setBounds(174, 216, 121, 37);
+		btnAdd.setBounds(96, 216, 121, 37);
 		frmQuerybuilder.getContentPane().add(btnAdd);
 		tableModel = new TableModel(MasterCommon.selectRows);
 		table.setModel(tableModel);
 		table.setRowHeight(25);
 
-		Tesla2.displyQuery();
+		Tesla2Functions.displyQuery(textArea);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MasterCommon.selectRows.remove(deleteRow);
+				tableModel.updateUI();
+				table.editCellAt(-1, -1);
+				Tesla2Functions.displyQuery(textArea);
+			}
+		});
+		popupMenu.add(btnDelete);
 
 		JButton btnNext = new JButton("NEXT");
 		btnNext.setIcon(new ImageIcon(Tesla2.class.getResource("/png/next.png")));
@@ -89,27 +105,28 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				Tesla2.displyQuery();
-				MasterCommon.completeQuery = MasterCommon.completeQuery.replaceAll(", $", "").toUpperCase()
-						+ " FROM \n";
+				Tesla2Functions.displyQuery(textArea);
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						.replaceAll(", $", "").toUpperCase() + " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
 		});
-		btnNext.setBounds(680, 216, 111, 37);
+		btnNext.setBounds(627, 216, 111, 37);
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
-		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class.getResource("/png/transform_flip.png")));
+		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/transform_flip.png")));
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
-
-				new TeslaCase(rowCase);
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
+				new TeslaTransforms(rowCase);
 			}
 		});
-		btnAddTransformation.setBounds(475, 216, 184, 37);
+		btnAddTransformation.setBounds(423, 216, 184, 37);
 		frmQuerybuilder.getContentPane().add(btnAddTransformation);
 
 		JButton btnNewButton = new JButton("REFRESH");
@@ -117,36 +134,28 @@ public class Tesla2 {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				Tesla2.displyQuery();
+				Tesla2Functions.displyQuery(textArea);
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Tesla2.class.getResource("/png/refresh.png")));
-		btnNewButton.setBounds(319, 217, 133, 36);
+		btnNewButton.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/refresh.png")));
+		btnNewButton.setBounds(260, 217, 133, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton);
-
-		JButton btnNewButton_1 = new JButton("DELETE LAST");
-		btnNewButton_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-
-			}
-		});
-		btnNewButton_1.setIcon(new ImageIcon(Tesla2.class.getResource("/png/list_delete.png")));
-		btnNewButton_1.setBounds(22, 217, 129, 36);
-		frmQuerybuilder.getContentPane().add(btnNewButton_1);
-		TableColumn countryColumn = table.getColumn("TableName");
-		TableColumn languageColumn = table.getColumn("ColumnName");
-		countryColumn.setCellRenderer(new TableCellRenderer());
-		countryColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
-		languageColumn.setCellRenderer(new ColumnCellRenderer());
-		languageColumn.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		TableColumn tableColumn = table.getColumn("TableName");
+		TableColumn columnColumn = table.getColumn("ColumnName");
+		tableColumn.setCellRenderer(new TableCellRenderer());
+		tableColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
+		columnColumn.setCellRenderer(new ColumnCellRenderer());
+		columnColumn.setCellEditor(new ColumnCellEditor(
+				MasterCommon.listPojoCols));
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
-				displyQuery();
+				Tesla2Functions.displyQuery(textArea);
 				tableModel.updateUI();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 
 			}
 
@@ -160,65 +169,25 @@ public class Tesla2 {
 		frmQuerybuilder.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public static void displyQuery() {
-		textArea.setText("");
-		MasterCommon.completeQuery = "Select \n";
-		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
-			POJORow r = MasterCommon.selectRows.get(i);
-			if (r.getTable().getTableName() == null) {
-				MasterCommon.selectRows.remove(i);
-			} else {
-				if (r.getCaseRow().size() == 0) {
-					if (r.getElementname().length() > 0) {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
-					} else {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + ", \n";
-					}
-
-				} else {
-					String caseQuery = "Case \n";
-					for (int j = 0; j < r.getCaseRow().size(); j++) {
-						String value = "";
-						CaseRow r1 = r.getCaseRow().get(j);
-						if (r1.getTableOne().getTableName() == null) {
-							r.getCaseRow().remove(j);
-						} else {
-							if (r1.getConditionString().equals("ELSE")) {
-								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
-								} else {
-									value = "'" + r1.getValueString() + "' \n";
-								}
-								caseQuery = caseQuery + " ELSE " + value;
-
-							} else {
-								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
-								} else {
-									value = "'" + r1.getValueString() + "' \n";
-								}
-								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
-										+ r1.getTableOne().getColumn().getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then " + value;
-							}
-						}
-					}
-
-					// caseQuery = caseQuery + " End Case \n as '" +
-					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
-																							// SQL
-																							// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
 				}
 			}
-		}
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
-		textArea.setCaretPosition(textArea.getDocument().getLength());
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+				deleteRow = e.getY() / 25;
+			}
+		});
 	}
 
 }

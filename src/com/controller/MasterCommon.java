@@ -59,6 +59,8 @@ public class MasterCommon {
 			"GREATER THAN", "GREATER THAN EQ TO", "LESS THAN",
 			"LESS THAN EQ TO", "BETWEEN", "NOT EQUAL" };
 	public static String[] andOrs = { "SELECT", "AND", "OR", "END" };
+	public static String[] stringConditions = { "COUNT(#)", "AVG(#)", "SUM(#)",
+			"LTRIM(#)", "RTRIM(#)", "LTRIM(RTRIM(#))" };
 
 	public static void reInitilizeMasterCommon() {
 		listPojoTable.clear();
