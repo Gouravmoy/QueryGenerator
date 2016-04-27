@@ -40,9 +40,6 @@ public class TeslaCase {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setSize(828, 520);
