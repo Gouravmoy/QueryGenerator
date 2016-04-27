@@ -4,12 +4,14 @@ import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
 import com.celleditor.ColumnCellEditor;
+import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
+import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
 import com.ui.TeslaTransforms;
 import com.util.QueryColorUtil;
@@ -53,6 +55,11 @@ public class TeslaTransFunctions extends TeslaTransforms {
 		col1Column.setCellRenderer(new ColumnCellRenderer());
 		col1Column
 				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+
+		TableColumn joinTypeColumn = tableCase.getColumn("Conditions");
+		joinTypeColumn.setCellRenderer(new DropDownRenderer());
+		joinTypeColumn.setCellEditor(new DropDownCellEditor(
+				MasterCommon.stringConditions));
 
 	}
 
@@ -98,11 +105,18 @@ public class TeslaTransFunctions extends TeslaTransforms {
 	}
 
 	public static void displayCoalesceQuery() {
+		String tableColString = "";
 		query = "COALESCE (";
 		for (int i = 0; i < coalesceRows.size(); i++) {
 			CoalesceRow r2 = coalesceRows.get(i);
-			query += r2.getTableOne().getTableName() + "."
-					+ r2.getTableOne().getColumn().getColumnName() + ",";
+			tableColString = r2.getTableOne().getTableName() + "."
+					+ r2.getTableOne().getColumn().getColumnName();
+			if (!r2.getStringValue().equals("")) {
+				query += r2.getStringValue().replace("#", tableColString);
+			} else {
+				query += tableColString;
+			}
+			query += ",";
 		}
 		textPane.setText(QueryColorUtil.queryColorChange(query));
 	}

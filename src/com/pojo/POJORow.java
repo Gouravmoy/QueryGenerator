@@ -11,10 +11,19 @@ public class POJORow implements Serializable {
 	ArrayList<CoalesceRow> coalesceRow;
 	String coalesceString;
 	String rowType;
+	String conditionString;
 
 	public POJORow(POJOTable table, String elementname) {
 		this.table = table;
 		this.elementname = elementname;
+	}
+
+	public String getConditionString() {
+		return conditionString;
+	}
+
+	public void setConditionString(String conditionString) {
+		this.conditionString = conditionString;
 	}
 
 	public String getCoalesceString() {

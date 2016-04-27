@@ -82,10 +82,17 @@ public class Tesla2Functions {
 				} else if (r.getRowType().equals("Coalesce")) {
 					String coalesceQuery = "COALESCE (";
 					for (int k = 0; k < r.getCoalesceRow().size(); k++) {
+						String tableColString = "";
 						CoalesceRow r2 = r.getCoalesceRow().get(k);
-						coalesceQuery += r2.getTableOne().getTableName() + "."
-								+ r2.getTableOne().getColumn().getColumnName()
-								+ " ,";
+						tableColString += r2.getTableOne().getTableName() + "."
+								+ r2.getTableOne().getColumn().getColumnName();
+						if (!r2.getStringValue().equals("")) {
+							coalesceQuery += r2.getStringValue().replace("#",
+									tableColString);
+						} else {
+							coalesceQuery += tableColString;
+						}
+						coalesceQuery += ",";
 					}
 					if (!r.getCoalesceString().equals("")) {
 						coalesceQuery += "'" + r.getCoalesceString() + "'),";

@@ -12,7 +12,7 @@ import com.pojo.POJOTable;
 public class CoalesceTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-	private String[] columnNames = { "Conditions", "TableOne", "ColumnOne" };
+	private String[] columnNames = { "No","Conditions", "TableOne", "ColumnOne" };
 	private ArrayList<CoalesceRow> listRow = new ArrayList<CoalesceRow>();
 
 	public void updateUI(POJORow pojoRow) {
@@ -62,11 +62,14 @@ public class CoalesceTableModel extends AbstractTableModel {
 		row = listRow.get(rowIndex);
 		switch (columnIndex) {
 		case 1:
+			row.setStringValue((String) value);
+			break;
+		case 2:
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 			row.setTableOne(new POJOTable(tableName, new POJOColumn("")));
 			break;
-		case 2:
+		case 3:
 			row.getTableOne().setColumn((POJOColumn) value);
 			break;
 		}
@@ -84,9 +87,12 @@ public class CoalesceTableModel extends AbstractTableModel {
 			returnValue = rowIndex + 1;
 			break;
 		case 1:
-			returnValue = row.getTableOne();
+			returnValue = row.getStringValue();
 			break;
 		case 2:
+			returnValue = row.getTableOne();
+			break;
+		case 3:
 			returnValue = row.getTableOne().getColumn();
 		}
 
