@@ -7,13 +7,22 @@ public class POJORow implements Serializable {
 	private static final long serialVersionUID = 1L;
 	POJOTable table;
 	String elementname;
-	ArrayList<CaseRow> caseRow = new ArrayList<CaseRow>();
-	ArrayList<CoalesceRow> coalesceRow = new ArrayList<CoalesceRow>();
+	ArrayList<CaseRow> caseRow;
+	ArrayList<CoalesceRow> coalesceRow;
+	String coalesceString;
 	String rowType;
 
 	public POJORow(POJOTable table, String elementname) {
 		this.table = table;
 		this.elementname = elementname;
+	}
+
+	public String getCoalesceString() {
+		return coalesceString;
+	}
+
+	public void setCoalesceString(String coalesceString) {
+		this.coalesceString = coalesceString;
 	}
 
 	public ArrayList<CoalesceRow> getCoalesceRow() {

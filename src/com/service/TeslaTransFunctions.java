@@ -7,6 +7,7 @@ import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
+import com.pojo.CoalesceRow;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.TableCellRenderer;
@@ -55,7 +56,7 @@ public class TeslaTransFunctions extends TeslaTransforms {
 
 	}
 
-	public static void displayQuery() {
+	public static void displayCaseQuery() {
 		textPane.setText("Case \n");
 		query = "Case \n";
 		String when = " When ";
@@ -68,7 +69,8 @@ public class TeslaTransFunctions extends TeslaTransforms {
 			} else {
 				if (r.getConditionString().equals("ELSE")) {
 					if (r.getValueString().length() == 0) {
-						value = r.getTableTwo().getTableName() + "." + r.getTableTwo().getColumn().getColumnName()
+						value = r.getTableTwo().getTableName() + "."
+								+ r.getTableTwo().getColumn().getColumnName()
 								+ " \n";
 					} else {
 						value = "'" + r.getValueString() + "' \n";
@@ -77,21 +79,40 @@ public class TeslaTransFunctions extends TeslaTransforms {
 					break;
 				} else {
 					if (r.getValueString().length() == 0) {
-						value = r.getTableTwo().getTableName() + "." + r.getTableTwo().getColumn().getColumnName()
+						value = r.getTableTwo().getTableName() + "."
+								+ r.getTableTwo().getColumn().getColumnName()
 								+ " \n";
 					} else {
 						value = "'" + r.getValueString() + "' \n";
 					}
 					query = query + when + r.getTableOne().getTableName() + "."
-							+ r.getTableOne().getColumn().getColumnName() + " = '" + r.getConditionString() + "'" + then
+							+ r.getTableOne().getColumn().getColumnName()
+							+ " = '" + r.getConditionString() + "'" + then
 							+ value;
 				}
 			}
 		}
 		query = query + "End Case";
 		textPane.setText(QueryColorUtil.queryColorChange(query));
-	
-		
+
 	}
 
+	public static void displayCoalesceQuery() {
+		query = "COALESCE (";
+		for (int i = 0; i < coalesceRows.size(); i++) {
+			CoalesceRow r2 = coalesceRows.get(i);
+			query += r2.getTableOne().getTableName() + "."
+					+ r2.getTableOne().getColumn().getColumnName() + ",";
+		}
+		textPane.setText(QueryColorUtil.queryColorChange(query));
+	}
+
+	public static void displayCoalesceQuery_1() {
+		if (txtEnterStringField.getText().equals("")) {
+			query = query.substring(0, query.length() - 1);
+		} else {
+			query += "'" + txtEnterStringField.getText() + "')";
+		}
+
+	}
 }

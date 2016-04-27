@@ -5,13 +5,12 @@ import java.io.Serializable;
 public class CoalesceRow implements Serializable {
 	private static final long serialVersionUID = 1L;
 	POJOTable tableOne;
-	POJOColumn columnOne;
 	String stringValue;
 
-	public CoalesceRow(POJOTable tableOne, POJOColumn columnOne, String stringValue) {
+	public CoalesceRow(POJOTable tableOne, POJOColumn columnOne,
+			String stringValue) {
 		super();
 		this.tableOne = tableOne;
-		this.columnOne = columnOne;
 		this.stringValue = stringValue;
 	}
 
@@ -21,14 +20,6 @@ public class CoalesceRow implements Serializable {
 
 	public void setTableOne(POJOTable tableOne) {
 		this.tableOne = tableOne;
-	}
-
-	public POJOColumn getColumnOne() {
-		return columnOne;
-	}
-
-	public void setColumnOne(POJOColumn columnOne) {
-		this.columnOne = columnOne;
 	}
 
 	public String getStringValue() {
@@ -41,7 +32,8 @@ public class CoalesceRow implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CoalesceRow [tableOne=" + tableOne + ", columnOne=" + columnOne + ", stringValue=" + stringValue + "]";
+		return "CoalesceRow [tableOne=" + tableOne + ", stringValue="
+				+ stringValue + "]";
 	}
 
 }

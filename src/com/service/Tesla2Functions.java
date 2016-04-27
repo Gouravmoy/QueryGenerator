@@ -20,11 +20,15 @@ public class Tesla2Functions {
 			} else {
 				if (r.getRowType() == null) {
 					if (r.getElementname().length() > 0) {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery
+								+ r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName()
+								+ " as '" + r.getElementname() + "', \n";
 					} else {
-						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName() + ", \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery
+								+ r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName()
+								+ ", \n";
 					}
 
 				} else if (r.getRowType().equals("Case")) {
@@ -37,8 +41,10 @@ public class Tesla2Functions {
 						} else {
 							if (r1.getConditionString().equals("ELSE")) {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName()
+											+ "."
+											+ r1.getTableTwo().getColumn()
+													.getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
@@ -46,37 +52,55 @@ public class Tesla2Functions {
 
 							} else {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName()
+											+ "."
+											+ r1.getTableTwo().getColumn()
+													.getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
-								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
-										+ r1.getTableOne().getColumn().getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then " + value;
+								caseQuery = caseQuery
+										+ " When "
+										+ r1.getTableOne().getTableName()
+										+ "."
+										+ r1.getTableOne().getColumn()
+												.getColumnName() + " = '"
+										+ r1.getConditionString() + "' Then "
+										+ value;
 							}
 						}
 					}
 
 					// caseQuery = caseQuery + " End Case \n as '" +
 					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
-																							// SQL
-																							// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
+					caseQuery = caseQuery + " End \n as '" + r.getElementname()
+							+ "' , \n";// My
+										// SQL
+										// Syntax
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ caseQuery;
 				} else if (r.getRowType().equals("Coalesce")) {
 					String coalesceQuery = "COALESCE (";
 					for (int k = 0; k < r.getCoalesceRow().size(); k++) {
-						CoalesceRow r2 = r.getCoalesceRow().get(i);
-						coalesceQuery += r2.getTableOne().getTableName() + "." + r2.getColumnOne().getColumnName()
+						CoalesceRow r2 = r.getCoalesceRow().get(k);
+						coalesceQuery += r2.getTableOne().getTableName() + "."
+								+ r2.getTableOne().getColumn().getColumnName()
 								+ " ,";
 					}
-					MasterCommon.completeQuery = MasterCommon.completeQuery + coalesceQuery;
+					if (!r.getCoalesceString().equals("")) {
+						coalesceQuery += "'" + r.getCoalesceString() + "'),";
+					} else {
+						coalesceQuery = coalesceQuery.substring(0,
+								coalesceQuery.length() - 1);
+						coalesceQuery += "),";
+					}
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ coalesceQuery;
 				}
 			}
 		}
-		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
+		textArea.setText(QueryColorUtil.queryColorChange(
+				MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
-
 }

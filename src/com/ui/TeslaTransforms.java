@@ -7,22 +7,21 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.html.HTMLEditorKit;
 
-import com.controller.MasterCommon;
 import com.model.CaseTableModel;
 import com.model.CoalesceTableModel;
 import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
 import com.pojo.POJORow;
 import com.service.TeslaTransFunctions;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
 
 public class TeslaTransforms {
 
@@ -36,7 +35,7 @@ public class TeslaTransforms {
 	protected static String query;
 	JTable tableCase;
 	private JTable tableCoalesce;
-	private JTextField txtEnterStringField;
+	protected static JTextField txtEnterStringField;
 
 	public TeslaTransforms(POJORow pojoRow) {
 		this.pojoRow = pojoRow;
@@ -90,6 +89,8 @@ public class TeslaTransforms {
 		coalesceButtonPanel.setLayout(null);
 
 		JButton coalesceAddBtn = new JButton("ADD");
+		coalesceAddBtn.setIcon(new ImageIcon(TeslaCase.class
+				.getResource("/png/addd.png")));
 		coalesceAddBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (pojoRow.getRowType() == null) {
@@ -97,14 +98,27 @@ public class TeslaTransforms {
 					TeslaTransFunctions.initializeCoalesceTables(tableCoalesce);
 				}
 				tableCoalesce.editCellAt(-1, -1);
-				TeslaTransFunctions.displayQuery();
+				TeslaTransFunctions.displayCoalesceQuery();
 				tableCoalesceModel.updateUI(pojoRow);
-				tableCoalesce.scrollRectToVisible(tableCoalesce.getCellRect(tableCoalesce.getRowCount() - 1, 0, true));
+				tableCoalesce.scrollRectToVisible(tableCoalesce.getCellRect(
+						tableCoalesce.getRowCount() - 1, 0, true));
 
 			}
 		});
 		coalesceAddBtn.setBounds(286, 16, 115, 29);
 		coalesceButtonPanel.add(coalesceAddBtn);
+
+		JButton coalescebtnDone = new JButton("DONE");
+		coalescebtnDone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pojoRow.setCoalesceString(txtEnterStringField.getText());
+				TeslaTransFunctions.displayCoalesceQuery_1();
+				tableCoalesce.editCellAt(-1, -1);
+				frame.setVisible(false);
+			}
+		});
+		coalescebtnDone.setBounds(499, 19, 89, 23);
+		coalesceButtonPanel.add(coalescebtnDone);
 
 		txtEnterStringField = new JTextField();
 		txtEnterStringField.setBounds(287, 158, 146, 26);
@@ -121,7 +135,8 @@ public class TeslaTransforms {
 
 		JButton btnAddCase = new JButton("ADD");
 		btnAddCase.setBounds(288, 11, 89, 23);
-		btnAddCase.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/addd.png")));
+		btnAddCase.setIcon(new ImageIcon(TeslaCase.class
+				.getResource("/png/addd.png")));
 		btnAddCase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (pojoRow.getRowType() == null) {
@@ -129,9 +144,10 @@ public class TeslaTransforms {
 					TeslaTransFunctions.initializeCaseTables(tableCase);
 				}
 				tableCase.editCellAt(-1, -1);
-				TeslaTransFunctions.displayQuery();
+				TeslaTransFunctions.displayCaseQuery();
 				tableCaseModel.updateUI(pojoRow);
-				tableCase.scrollRectToVisible(tableCase.getCellRect(tableCase.getRowCount() - 1, 0, true));
+				tableCase.scrollRectToVisible(tableCase.getCellRect(
+						tableCase.getRowCount() - 1, 0, true));
 
 			}
 		});
@@ -139,13 +155,15 @@ public class TeslaTransforms {
 		panelCaseButton.add(btnAddCase);
 
 		JButton btnNewButton = new JButton("ELSE");
-		btnNewButton.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/Locking.png")));
+		btnNewButton.setIcon(new ImageIcon(TeslaCase.class
+				.getResource("/png/Locking.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tableCase.editCellAt(-1, -1);
-				TeslaTransFunctions.displayQuery();
+				TeslaTransFunctions.displayCaseQuery();
 				tableCaseModel.updateUI1(pojoRow);
-				tableCase.scrollRectToVisible(tableCase.getCellRect(tableCase.getRowCount() - 1, 0, true));
+				tableCase.scrollRectToVisible(tableCase.getCellRect(
+						tableCase.getRowCount() - 1, 0, true));
 
 			}
 		});
@@ -153,10 +171,10 @@ public class TeslaTransforms {
 		panelCaseButton.add(btnNewButton);
 
 		JButton btnElse = new JButton("DONE");
-		btnElse.setIcon(new ImageIcon(TeslaCase.class.getResource("/png/Exit.png")));
+		btnElse.setIcon(new ImageIcon(TeslaCase.class
+				.getResource("/png/Exit.png")));
 		btnElse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MasterCommon.completeCaseQuery = MasterCommon.completeCaseQuery + query;
 				tableCase.editCellAt(-1, -1);
 				frame.setVisible(false);
 

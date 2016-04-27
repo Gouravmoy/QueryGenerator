@@ -19,6 +19,7 @@ public class CoalesceTableModel extends AbstractTableModel {
 		POJOColumn column1 = new POJOColumn(null);
 		POJOTable pojoTable1 = new POJOTable(null, column1);
 		CoalesceRow rowCoalesce = new CoalesceRow(pojoTable1, column1, "");
+		pojoRow.setCoalesceRow(listRow);
 		this.listRow.add(rowCoalesce);
 		this.fireTableDataChanged();
 
