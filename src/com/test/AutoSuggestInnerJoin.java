@@ -57,9 +57,12 @@ public class AutoSuggestInnerJoin {
 			e.printStackTrace();
 		}
 		System.out.println(tables);
+		InnerJoinUtil innerJoinUtil = new InnerJoinUtil(tables);
 		try {
-			System.out.println(InnerJoinUtil.fetchInnerJoinQuery("category",
-					"actor", tables));
+			System.out.println(innerJoinUtil.fetchInnerJoinQuery("store",
+					"customer"));
+			System.out.println(innerJoinUtil.fetchInnerJoinQuery("customer",
+					"store"));
 		} catch (NoJoinPossible e) {
 			e.printStackTrace();
 		}
