@@ -18,9 +18,10 @@ import com.pojo.POJORow;
 import com.pojo.POJOTable;
 import com.test.AutoSuggestInnerJoin;
 import com.test.InnerJoinUtil;
+import com.ui.Tesla2;
 import com.util.QueryColorUtil;
 
-public class Tesla2Functions {
+public class Tesla2Functions extends Tesla2 {
 
 	static final Logger logger = Logger.getLogger(Tesla2Functions.class);
 
@@ -77,7 +78,11 @@ public class Tesla2Functions {
 		}
 	}
 
-	public static void displyQuery(JTextPane textArea) {
+	public Tesla2Functions(ArrayList<String> tables) {
+		super(tables);
+	}
+
+	public static void displyQuery() {
 		textArea.setText("");
 		MasterCommon.completeQuery = "Select \n";
 		for (int i = 0; i < MasterCommon.selectRows.size(); i++) {
@@ -152,6 +157,43 @@ public class Tesla2Functions {
 						coalesceQuery += "),";
 					}
 					MasterCommon.completeQuery = MasterCommon.completeQuery + coalesceQuery;
+					String tableColumn = "";
+					tableColumn = r.getTable().getTableName() + "."
+							+ r.getTable().getColumn().getColumnName();
+					if (r.getConditionString().equals("")) {
+						MasterCommon.completeQuery += tableColumn;
+					} else {
+						MasterCommon.completeQuery += r.getConditionString()
+								.replace("#", tableColumn);
+					}
+					if (r.getElementname().equals("")) {
+						MasterCommon.completeQuery += " , \n";
+					} else {
+						MasterCommon.completeQuery += " as '"
+								+ r.getElementname() + "' ,\n";
+					}
+
+				} else if (r.getRowType().equals("Case")) {
+					String query = TeslaTransFunctions.displayCaseQuery(r
+							.getCaseRow());
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ query + " as '" + r.getElementname() + "' , \n ";
+					textArea.setText(query);
+
+				} else if (r.getRowType().equals("Coalesce")) {
+					String query = "";
+					if (r.getCoalesceString() != null) {
+						query = TeslaTransFunctions.displayCoalesceQuery(r
+								.getCoalesceRow());
+						query += TeslaTransFunctions.displayCoalesceQuery_1(r
+								.getCoalesceString());
+					} else {
+						query = TeslaTransFunctions.displayCoalesceQuery(r
+								.getCoalesceRow());
+					}
+					MasterCommon.completeQuery = MasterCommon.completeQuery
+							+ query + " as '" + r.getElementname() + "' , \n";
+					textArea.setText(query);
 				}
 			}
 		}
