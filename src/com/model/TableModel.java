@@ -13,8 +13,8 @@ import com.pojo.POJOTable;
 public class TableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-	private String[] columnNames = { "No.", "TableName", "ColumnName",
-			"ElementName" };
+	private String[] columnNames = { "No.", "Conditions", "TableName",
+			"ColumnName", "ElementName" };
 	private List<POJORow> listRow = new ArrayList<>();
 
 	public TableModel(List<POJORow> listRow) {
@@ -22,21 +22,21 @@ public class TableModel extends AbstractTableModel {
 	}
 
 	public void updateUI() {
-
 		POJOColumn column = new POJOColumn(null);
 		POJOTable pojoTable = new POJOTable(null, column);
 		POJORow row2 = null;
 		row2 = new POJORow(pojoTable, "");
+		row2.setConditionString("");
 		this.listRow.add(row2);
 		this.fireTableDataChanged();
 	}
 
 	public POJORow updateUI1() {
-
 		POJOColumn column = new POJOColumn("Transform");
 		POJOTable pojoTable = new POJOTable("Transform", column);
 		POJORow row2 = null;
 		row2 = new POJORow(pojoTable, "");
+		row2.setConditionString("");
 		this.listRow.add(row2);
 		this.fireTableDataChanged();
 		return row2;
@@ -71,14 +71,17 @@ public class TableModel extends AbstractTableModel {
 		row = listRow.get(rowIndex);
 		switch (columnIndex) {
 		case 1:
+			row.setConditionString((String) value);
+			break;
+		case 2:
 			p = (POJOTable) value;
 			tableName = p.getTableName();
 			row.setTable(new POJOTable(tableName, new POJOColumn("")));
 			break;
-		case 2:
+		case 3:
 			row.getTable().setColumn((POJOColumn) value);
 			break;
-		case 3:
+		case 4:
 			row.setElementname((String) value);
 			break;
 		}
@@ -97,12 +100,15 @@ public class TableModel extends AbstractTableModel {
 			returnValue = rowIndex + 1;
 			break;
 		case 1:
-			returnValue = row.getTable();
+			returnValue = row.getConditionString();
 			break;
 		case 2:
-			returnValue = row.getTable().getColumn();
+			returnValue = row.getTable();
 			break;
 		case 3:
+			returnValue = row.getTable().getColumn();
+			break;
+		case 4:
 			returnValue = row.getElementname();
 			break;
 		}
@@ -110,6 +116,9 @@ public class TableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		if (listRow.get(rowIndex).getRowType() != null && columnIndex < 4) {
+			return false;
+		}
 		return true;
 	}
 }

@@ -18,7 +18,6 @@ import com.entity.DBDetails;
 import com.exceptions.DBAlreadyExists;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOTable;
-import com.ui.Tesla2;
 import com.util.QueryIOUtil;
 import com.util.QueryUtil;
 
@@ -108,9 +107,11 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit) throws DBAlreadyExists {
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
+			throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = masterPath + "DBCredentials//" + dbDetails.getConnectionName() + ".txt";
+		String path = masterPath + "DBCredentials//"
+				+ dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
 		if (!file.exists() || isEdit == false) {
@@ -161,7 +162,7 @@ public class FileIO extends MasterCommon {
 			tableHolder.put(i, table.getTableName());
 			valueHolder.add(table.getTableName());
 		}
-		Tesla2Functions.displyQuery(Tesla2.textArea);
+		Tesla2Functions.displyQuery();
 	}
 
 	public static ArrayList<DBDetails> getDBConnectionsFromText() {
@@ -195,7 +196,8 @@ public class FileIO extends MasterCommon {
 	public static void deleteDBConnection(String selectedDBName) {
 		try {
 
-			File file = new File(masterPath + "DBCredentials//" + selectedDBName + ".txt");
+			File file = new File(masterPath + "DBCredentials//"
+					+ selectedDBName + ".txt");
 
 			if (file.delete()) {
 				System.out.println(file.getName() + " is deleted!");

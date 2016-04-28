@@ -22,6 +22,7 @@ import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
 import com.pojo.POJORow;
 import com.service.TeslaTransFunctions;
+import com.util.QueryColorUtil;
 
 public class TeslaTransforms {
 
@@ -31,8 +32,8 @@ public class TeslaTransforms {
 	public static ArrayList<CaseRow> caseRows;
 	public static ArrayList<CoalesceRow> coalesceRows;
 	private POJORow pojoRow;
-	protected static JTextPane textPane = new JTextPane();
-	protected static String query;
+	static JTextPane textPane = new JTextPane();
+	static String query;
 	JTable tableCase;
 	private JTable tableCoalesce;
 	protected static JTextField txtEnterStringField;
@@ -47,6 +48,8 @@ public class TeslaTransforms {
 		frame.setSize(828, 520);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
+		textPane.setBounds(10, 5, 772, 125);
+		textPane.setEditorKit(new HTMLEditorKit());
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 11, 792, 301);
@@ -62,6 +65,12 @@ public class TeslaTransforms {
 		caseRows = new ArrayList<CaseRow>();
 		tableCaseModel = new CaseTableModel(caseRows);
 		tableCase.setModel(tableCaseModel);
+
+		JPanel panel_Query = new JPanel();
+		panel_Query.setBounds(10, 323, 792, 141);
+		frame.getContentPane().add(panel_Query);
+		panel_Query.setLayout(null);
+		panel_Query.add(textPane);
 
 		JScrollPane scrollPaneCase = new JScrollPane(tableCase);
 		scrollPaneCase.setBounds(10, 11, 754, 164);
@@ -98,10 +107,22 @@ public class TeslaTransforms {
 					TeslaTransFunctions.initializeCoalesceTables(tableCoalesce);
 				}
 				tableCoalesce.editCellAt(-1, -1);
-				TeslaTransFunctions.displayCoalesceQuery();
-				tableCoalesceModel.updateUI(pojoRow);
-				tableCoalesce.scrollRectToVisible(tableCoalesce.getCellRect(
-						tableCoalesce.getRowCount() - 1, 0, true));
+				if (txtEnterStringField.getText().equals("")) {
+					query = TeslaTransFunctions
+							.displayCoalesceQuery(coalesceRows);
+					textPane.setText(QueryColorUtil.queryColorChange(query));
+					tableCoalesceModel.updateUI(pojoRow);
+					tableCoalesce.scrollRectToVisible(tableCoalesce
+							.getCellRect(tableCoalesce.getRowCount() - 1, 0,
+									true));
+				} else {
+					pojoRow.setCoalesceString(txtEnterStringField.getText());
+					query += TeslaTransFunctions
+							.displayCoalesceQuery_1(txtEnterStringField
+									.getText());
+					tableCoalesce.editCellAt(-1, -1);
+					frame.setVisible(false);
+				}
 
 			}
 		});
@@ -111,8 +132,6 @@ public class TeslaTransforms {
 		JButton coalescebtnDone = new JButton("DONE");
 		coalescebtnDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				pojoRow.setCoalesceString(txtEnterStringField.getText());
-				TeslaTransFunctions.displayCoalesceQuery_1();
 				tableCoalesce.editCellAt(-1, -1);
 				frame.setVisible(false);
 			}
@@ -144,7 +163,8 @@ public class TeslaTransforms {
 					TeslaTransFunctions.initializeCaseTables(tableCase);
 				}
 				tableCase.editCellAt(-1, -1);
-				TeslaTransFunctions.displayCaseQuery();
+				query = TeslaTransFunctions.displayCaseQuery(caseRows);
+				textPane.setText(QueryColorUtil.queryColorChange(query));
 				tableCaseModel.updateUI(pojoRow);
 				tableCase.scrollRectToVisible(tableCase.getCellRect(
 						tableCase.getRowCount() - 1, 0, true));
@@ -160,7 +180,8 @@ public class TeslaTransforms {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tableCase.editCellAt(-1, -1);
-				TeslaTransFunctions.displayCaseQuery();
+				query = TeslaTransFunctions.displayCaseQuery(caseRows);
+				textPane.setText(QueryColorUtil.queryColorChange(query));
 				tableCaseModel.updateUI1(pojoRow);
 				tableCase.scrollRectToVisible(tableCase.getCellRect(
 						tableCase.getRowCount() - 1, 0, true));
@@ -183,11 +204,6 @@ public class TeslaTransforms {
 		btnElse.setBounds(72, 11, 89, 23);
 		panelCaseButton.add(btnElse);
 
-		JPanel panel_Query = new JPanel();
-		panel_Query.setBounds(10, 323, 792, 141);
-		frame.getContentPane().add(panel_Query);
-		textPane.setEditorKit(new HTMLEditorKit());
-		panel_Query.add(textPane);
 		frame.setVisible(true);
 	}
 }
