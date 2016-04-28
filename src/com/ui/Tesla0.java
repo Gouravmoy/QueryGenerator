@@ -150,7 +150,6 @@ public class Tesla0 extends JFrame {
 		connNamesTable.setRowHeight(25);
 		initilizeColumn();
 
-
 		dbNamesPane = new JScrollPane(connNamesTable);
 
 		popupMenu = new JPopupMenu();
@@ -237,12 +236,12 @@ public class Tesla0 extends JFrame {
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-
+				// not required as of now
 			}
 
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-
+				// not required as of now
 			}
 		});
 
@@ -292,12 +291,14 @@ public class Tesla0 extends JFrame {
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
 				}
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);

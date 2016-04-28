@@ -11,9 +11,9 @@ import com.exceptions.NoJoinPossible;
 
 public class AutoSuggestInnerJoin {
 
-	public static void main(String args[]) {
+	public static List<Table> getTableMeta() {
 		String currline;
-		File file = new File("C:/Users/lenovo/Downloads/sakila-db/FK.txt");
+		File file = new File("C:/Users/GMohanty/Desktop/Query/Temp/FOK.txt");
 		List<Table> tables = null;
 		List<String> POK;
 		List<String> FOK;
@@ -63,6 +63,7 @@ public class AutoSuggestInnerJoin {
 		} catch (NoJoinPossible e) {
 			e.printStackTrace();
 		}
+		return tables;
 	}
 
 	private static Table ifTableExists(List<Table> tables, String[] split) {

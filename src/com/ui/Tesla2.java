@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -19,10 +20,13 @@ import javax.swing.JTextPane;
 import javax.swing.table.TableColumn;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.apache.log4j.Logger;
+
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.entity.Tables;
+import com.exceptions.NoJoinPossible;
 import com.model.TableModel;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
@@ -33,6 +37,8 @@ import com.util.ColsUtil;
 import com.util.DBUtil;
 
 public class Tesla2 {
+
+	static final Logger logger = Logger.getLogger(Tesla2.class);
 
 	private JFrame frmQuerybuilder;
 	private TableModel tableModel;
@@ -106,8 +112,8 @@ public class Tesla2 {
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2Functions.displyQuery(textArea);
-				MasterCommon.completeQuery = MasterCommon.completeQuery.replaceAll(", $", "").toUpperCase()
-						+ " FROM \n";
+				MasterCommon.completeQuery = MasterCommon.completeQuery
+						.replaceAll(", $", "").toUpperCase() + " FROM \n";
 				frmQuerybuilder.dispose();
 				new Tesla4().setVisible(true);
 			}
@@ -116,11 +122,13 @@ public class Tesla2 {
 		frmQuerybuilder.getContentPane().add(btnNext);
 
 		JButton btnAddTransformation = new JButton("ADD TRANSFORMATION");
-		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class.getResource("/png/transform_flip.png")));
+		btnAddTransformation.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/transform_flip.png")));
 		btnAddTransformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				POJORow rowCase = tableModel.updateUI1();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 				new TeslaTransforms(rowCase);
 			}
 		});
@@ -135,7 +143,8 @@ public class Tesla2 {
 				Tesla2Functions.displyQuery(textArea);
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Tesla2.class.getResource("/png/refresh.png")));
+		btnNewButton.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/refresh.png")));
 		btnNewButton.setBounds(260, 217, 133, 36);
 		frmQuerybuilder.getContentPane().add(btnNewButton);
 		TableColumn tableColumn = table.getColumn("TableName");
@@ -143,14 +152,23 @@ public class Tesla2 {
 		tableColumn.setCellRenderer(new TableCellRenderer());
 		tableColumn.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 		columnColumn.setCellRenderer(new ColumnCellRenderer());
-		columnColumn.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
+		columnColumn.setCellEditor(new ColumnCellEditor(
+				MasterCommon.listPojoCols));
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2Functions.displyQuery(textArea);
+				try {
+					Tesla2Functions.addAutoSuggesstJoins(textArea);
+				} catch (NoJoinPossible e) {
+					logger.error(e.getMessage());
+					JOptionPane.showMessageDialog(null,
+							"Error in Join Conditions! " + e.getMessage());
+				}
 				tableModel.updateUI();
-				table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));
+				table.scrollRectToVisible(table.getCellRect(
+						table.getRowCount() - 1, 0, true));
 
 			}
 

@@ -1,9 +1,9 @@
-package com.test;
+package com.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.entity.AutoJoinModel;
+import com.entity.Table;
 import com.exceptions.NoJoinPossible;
 
 public class InnerJoinUtil {
@@ -12,31 +12,27 @@ public class InnerJoinUtil {
 	List<Table> tables;
 	List<String> recursiveInnerJoins;
 
-	List<AutoJoinModel> autoJoinModels;
-	AutoJoinModel autoJoinModel;
-
 	public InnerJoinUtil(List<Table> tables) {
 		super();
 		this.recursiveInnerJoins = new ArrayList<>();
 		this.tables = tables;
 	}
 
-	public List<AutoJoinModel> fetchInnerJoinQuery(String table1, String table2)
+	public String fetchInnerJoinQuery(String table1, String table2)
 			throws NoJoinPossible {
+		String joinCondition;
 		String endPoinStatus;
 		String startTable;
 		String endTable;
 		int dirrectRelStatus;
-
-		autoJoinModel = new AutoJoinModel();
-		autoJoinModels = new ArrayList<>();
 		recursiveInnerJoins = new ArrayList<>();
 		endPoinStatus = checkIfTablesEndPoints(table1, table2);
 		if (endPoinStatus.split("\\;").length == 2) {
 			throw new NoJoinPossible("Cannot Join " + table1 + " and " + table2);
 		} else {
-			if (ifBridgeTables(table1, table2)) {
-				return autoJoinModels;
+			joinCondition = ifBridgeTables(table1, table2);
+			if (!joinCondition.isEmpty()) {
+				return joinCondition;
 			}
 			if (endPoinStatus.split("\\;").length == 1
 					&& !endPoinStatus.isEmpty()) {
@@ -60,8 +56,10 @@ public class InnerJoinUtil {
 			}
 			recursiveInnerJoins.add(startTable + " AS " + startTable + "\n");
 			recurseTables(startTable, endTable);
+			for (String joinParts : recursiveInnerJoins)
+				joinCondition += joinParts;
 		}
-		return autoJoinModels;
+		return joinCondition;
 	}
 
 	private String recurseTables(String startTable, String endtable) {
@@ -70,7 +68,6 @@ public class InnerJoinUtil {
 		String refTableName;
 		String refColName;
 		String[] fOKSplit;
-		String joinStmt;
 		for (Table table : tables) {
 			if (startTable.equalsIgnoreCase(table.getTableName())) {
 				fOKs = table.getForeignKeys();
@@ -83,12 +80,10 @@ public class InnerJoinUtil {
 					refTableName = fOKSplit[1];
 					refColName = fOKSplit[2];
 					if (refTableName.equalsIgnoreCase(endtable)) {
-						joinStmt = JOIN_TEXT + endtable + " AS " + endtable
-								+ " ON " + endtable + "." + refColName + "="
-								+ startTable + "." + tableKey;
-						recursiveInnerJoins.add(joinStmt);
-						autoJoinModels.add(new AutoJoinModel(startTable,
-								endtable, tableKey, refColName, joinStmt));
+						recursiveInnerJoins.add(JOIN_TEXT + endtable + " AS "
+								+ endtable + " ON " + endtable + "."
+								+ refColName + "=" + startTable + "."
+								+ tableKey);
 						return "";
 					}
 				}
@@ -125,14 +120,11 @@ public class InnerJoinUtil {
 		return 3;
 	}
 
-	private boolean ifBridgeTables(String table1, String table2) {
+	private String ifBridgeTables(String table1, String table2) {
+		String joinCondition = "";
 		String table1PK = null;
 		String table2PK = null;
 		String bridgeTableName;
-		String joinStmt1;
-		String joinStmt2;
-		AutoJoinModel joinModel1;
-		AutoJoinModel joinModel2;
 		for (Table table : tables) {
 			bridgeTableName = table.getTableName();
 			if (table1.equalsIgnoreCase(bridgeTableName))
@@ -145,23 +137,16 @@ public class InnerJoinUtil {
 			if (table.getPrimarykeys().size() == 2
 					&& table.getPrimarykeys().contains(table1PK)
 					&& table.getPrimarykeys().contains(table2PK)) {
-				joinStmt1 = table1 + " AS " + table1 + JOIN_TEXT
+				joinCondition = table1 + " AS " + table1 + JOIN_TEXT
 						+ bridgeTableName + " AS " + bridgeTableName + " ON "
 						+ table1 + "." + table1PK + "=" + bridgeTableName + "."
-						+ table1PK + "\n";
-				joinStmt2 = JOIN_TEXT + table2 + " AS " + table2 + " ON "
-						+ table2 + "." + table2PK + "=" + bridgeTableName + "."
-						+ table2PK;
-				joinModel1 = new AutoJoinModel(bridgeTableName, table1,
-						table1PK, table1PK, joinStmt1);
-				joinModel2 = new AutoJoinModel(bridgeTableName, table2,
-						table2PK, table2PK, joinStmt2);
-				autoJoinModels.add(joinModel1);
-				autoJoinModels.add(joinModel2);
-				return true;
+						+ table1PK + JOIN_TEXT + table2 + " AS " + table2
+						+ " ON " + table2 + "." + table2PK + "="
+						+ bridgeTableName + "." + table2PK;
+				break;
 			}
 		}
-		return false;
+		return joinCondition;
 	}
 
 	private String checkIfTablesEndPoints(String table1, String table2) {

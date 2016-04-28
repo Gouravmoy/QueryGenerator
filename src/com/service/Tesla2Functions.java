@@ -1,14 +1,88 @@
 package com.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JTextPane;
 
+import org.apache.log4j.Logger;
+
 import com.controller.MasterCommon;
+import com.entity.AutoJoinModel;
+import com.exceptions.NoJoinPossible;
 import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
+import com.pojo.InnerJoinRow;
+import com.pojo.POJOColumn;
 import com.pojo.POJORow;
+import com.pojo.POJOTable;
+import com.test.AutoSuggestInnerJoin;
+import com.test.InnerJoinUtil;
 import com.util.QueryColorUtil;
 
 public class Tesla2Functions {
+
+	static final Logger logger = Logger.getLogger(Tesla2Functions.class);
+
+	public static void addAutoSuggesstJoins(JTextPane textArea)
+			throws NoJoinPossible {
+		String table1;
+		String table2 = null;
+		POJORow lastButOneRow = null;
+		POJORow lastRow;
+		List<String> joinStmts;
+		StringBuilder builder;
+		InnerJoinUtil innerJoinUtil;
+		List<AutoJoinModel> autoJoinModels;
+		innerJoinUtil = new InnerJoinUtil(AutoSuggestInnerJoin.getTableMeta());
+		joinStmts = new ArrayList<>();
+		builder = new StringBuilder();
+		if (!MasterCommon.selectRows.isEmpty()) {
+			lastRow = MasterCommon.selectRows.get(MasterCommon.selectRows
+					.size() - 1);
+			table1 = lastRow.getTable().getTableName();
+			builder.append("FROM \n");
+			if (MasterCommon.selectRows.size() > 1) {
+				lastButOneRow = MasterCommon.selectRows
+						.get(MasterCommon.selectRows.size() - 2);
+				table2 = lastButOneRow.getTable().getTableName();
+			}
+
+			if (lastButOneRow == null) {
+				builder.append(table1 + " AS " + table1 + "\n");
+			} else {
+				builder.append(table1 + " AS " + table1 + "\n");
+				try {
+					autoJoinModels = innerJoinUtil.fetchInnerJoinQuery(table1,
+							table2);
+					for (AutoJoinModel autoJoinModel : autoJoinModels) {
+						builder.append(autoJoinModel.getJoinStmt()
+								.toUpperCase());
+						MasterCommon.joinRows
+								.add(new InnerJoinRow(
+										new POJOTable(autoJoinModel.getTable1()
+												.toUpperCase(), new POJOColumn(
+												autoJoinModel.getColumn1()
+														.toUpperCase())),
+										new POJOTable(autoJoinModel.getTable2()
+												.toUpperCase(), new POJOColumn(
+												autoJoinModel.getColumn2()
+														.toUpperCase())),
+										"INNER JOIN"));
+					}
+				} catch (NoJoinPossible e) {
+					logger.error(e);
+					throw new NoJoinPossible(e.msg);
+				}
+			}
+			// add to JoinPOJO Rows
+			MasterCommon.completeQuery += builder.toString();
+			joinStmts.add(builder.toString());
+			textArea.setText(QueryColorUtil.queryColorChange(
+					MasterCommon.completeQuery).toUpperCase());
+			textArea.setCaretPosition(textArea.getDocument().getLength());
+		}
+	}
 
 	public static void displyQuery(JTextPane textArea) {
 		textArea.setText("");
@@ -110,4 +184,5 @@ public class Tesla2Functions {
 				MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
+
 }
