@@ -24,8 +24,7 @@ public class Tesla2Functions {
 
 	static final Logger logger = Logger.getLogger(Tesla2Functions.class);
 
-	public static void addAutoSuggesstJoins(JTextPane textArea)
-			throws NoJoinPossible {
+	public static void addAutoSuggesstJoins(JTextPane textArea) throws NoJoinPossible {
 		String table1;
 		String table2 = null;
 		POJORow lastButOneRow = null;
@@ -33,53 +32,47 @@ public class Tesla2Functions {
 		List<String> joinStmts;
 		StringBuilder builder;
 		InnerJoinUtil innerJoinUtil;
-		List<AutoJoinModel> autoJoinModels;
 		innerJoinUtil = new InnerJoinUtil(AutoSuggestInnerJoin.getTableMeta());
 		joinStmts = new ArrayList<>();
 		builder = new StringBuilder();
 		if (!MasterCommon.selectRows.isEmpty()) {
-			lastRow = MasterCommon.selectRows.get(MasterCommon.selectRows
-					.size() - 1);
+			lastRow = MasterCommon.selectRows.get(MasterCommon.selectRows.size() - 1);
 			table1 = lastRow.getTable().getTableName();
 			builder.append("FROM \n");
 			if (MasterCommon.selectRows.size() > 1) {
-				lastButOneRow = MasterCommon.selectRows
-						.get(MasterCommon.selectRows.size() - 2);
+				lastButOneRow = MasterCommon.selectRows.get(MasterCommon.selectRows.size() - 2);
 				table2 = lastButOneRow.getTable().getTableName();
 			}
-
 			if (lastButOneRow == null) {
-				builder.append(table1 + " AS " + table1 + "\n");
 			} else {
-				builder.append(table1 + " AS " + table1 + "\n");
 				try {
-					autoJoinModels = innerJoinUtil.fetchInnerJoinQuery(table1,
-							table2);
-					for (AutoJoinModel autoJoinModel : autoJoinModels) {
-						builder.append(autoJoinModel.getJoinStmt()
-								.toUpperCase());
-						MasterCommon.joinRows
-								.add(new InnerJoinRow(
-										new POJOTable(autoJoinModel.getTable1()
-												.toUpperCase(), new POJOColumn(
-												autoJoinModel.getColumn1()
-														.toUpperCase())),
-										new POJOTable(autoJoinModel.getTable2()
-												.toUpperCase(), new POJOColumn(
-												autoJoinModel.getColumn2()
-														.toUpperCase())),
-										"INNER JOIN"));
+					if (!(MasterCommon.innerJoinedTables.contains(table1)
+							&& MasterCommon.innerJoinedTables.contains(table2)))
+						innerJoinUtil.fetchInnerJoinQuery(table1, table2);
+					if (!MasterCommon.innerJoinedTables.contains(table1))
+						MasterCommon.innerJoinedTables.add(table1);
+					if (!MasterCommon.innerJoinedTables.contains(table2))
+						MasterCommon.innerJoinedTables.add(table2);
+					for (int i = 0; i < MasterCommon.autoJoinModels.size(); i++) {
+						AutoJoinModel autoJoinModel = MasterCommon.autoJoinModels.get(i);
+						MasterCommon.joinRows.add(new InnerJoinRow(
+								new POJOTable(autoJoinModel.getTable1().toUpperCase(),
+										new POJOColumn(autoJoinModel.getColumn1().toUpperCase())),
+								new POJOTable(autoJoinModel.getTable2().toUpperCase(),
+										new POJOColumn(autoJoinModel.getColumn2().toUpperCase())),
+								"INNER JOIN"));
 					}
 				} catch (NoJoinPossible e) {
 					logger.error(e);
 					throw new NoJoinPossible(e.msg);
 				}
 			}
-			// add to JoinPOJO Rows
+			for (int i = 0; i < MasterCommon.autoJoinModels.size(); i++) {
+				builder.append(MasterCommon.autoJoinModels.get(i).getJoinStmt().toUpperCase());
+			}
 			MasterCommon.completeQuery += builder.toString();
 			joinStmts.add(builder.toString());
-			textArea.setText(QueryColorUtil.queryColorChange(
-					MasterCommon.completeQuery).toUpperCase());
+			textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
 			textArea.setCaretPosition(textArea.getDocument().getLength());
 		}
 	}
@@ -94,15 +87,11 @@ public class Tesla2Functions {
 			} else {
 				if (r.getRowType() == null) {
 					if (r.getElementname().length() > 0) {
-						MasterCommon.completeQuery = MasterCommon.completeQuery
-								+ r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName()
-								+ " as '" + r.getElementname() + "', \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + " as '" + r.getElementname() + "', \n";
 					} else {
-						MasterCommon.completeQuery = MasterCommon.completeQuery
-								+ r.getTable().getTableName() + "."
-								+ r.getTable().getColumn().getColumnName()
-								+ ", \n";
+						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
+								+ r.getTable().getColumn().getColumnName() + ", \n";
 					}
 
 				} else if (r.getRowType().equals("Case")) {
@@ -115,10 +104,8 @@ public class Tesla2Functions {
 						} else {
 							if (r1.getConditionString().equals("ELSE")) {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName()
-											+ "."
-											+ r1.getTableTwo().getColumn()
-													.getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
@@ -126,33 +113,24 @@ public class Tesla2Functions {
 
 							} else {
 								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName()
-											+ "."
-											+ r1.getTableTwo().getColumn()
-													.getColumnName() + " \n";
+									value = r1.getTableTwo().getTableName() + "."
+											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
 								} else {
 									value = "'" + r1.getValueString() + "' \n";
 								}
-								caseQuery = caseQuery
-										+ " When "
-										+ r1.getTableOne().getTableName()
-										+ "."
-										+ r1.getTableOne().getColumn()
-												.getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then "
-										+ value;
+								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
+										+ r1.getTableOne().getColumn().getColumnName() + " = '"
+										+ r1.getConditionString() + "' Then " + value;
 							}
 						}
 					}
 
 					// caseQuery = caseQuery + " End Case \n as '" +
 					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname()
-							+ "' , \n";// My
-										// SQL
-										// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ caseQuery;
+					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
+																							// SQL
+																							// Syntax
+					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
 				} else if (r.getRowType().equals("Coalesce")) {
 					String coalesceQuery = "COALESCE (";
 					for (int k = 0; k < r.getCoalesceRow().size(); k++) {
@@ -161,8 +139,7 @@ public class Tesla2Functions {
 						tableColString += r2.getTableOne().getTableName() + "."
 								+ r2.getTableOne().getColumn().getColumnName();
 						if (!r2.getStringValue().equals("")) {
-							coalesceQuery += r2.getStringValue().replace("#",
-									tableColString);
+							coalesceQuery += r2.getStringValue().replace("#", tableColString);
 						} else {
 							coalesceQuery += tableColString;
 						}
@@ -171,17 +148,14 @@ public class Tesla2Functions {
 					if (!r.getCoalesceString().equals("")) {
 						coalesceQuery += "'" + r.getCoalesceString() + "'),";
 					} else {
-						coalesceQuery = coalesceQuery.substring(0,
-								coalesceQuery.length() - 1);
+						coalesceQuery = coalesceQuery.substring(0, coalesceQuery.length() - 1);
 						coalesceQuery += "),";
 					}
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ coalesceQuery;
+					MasterCommon.completeQuery = MasterCommon.completeQuery + coalesceQuery;
 				}
 			}
 		}
-		textArea.setText(QueryColorUtil.queryColorChange(
-				MasterCommon.completeQuery).toUpperCase());
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
