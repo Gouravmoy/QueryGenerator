@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -19,11 +20,14 @@ import javax.swing.JTextPane;
 import javax.swing.table.TableColumn;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.apache.log4j.Logger;
+
 import com.celleditor.ColumnCellEditor;
 import com.celleditor.DropDownCellEditor;
 import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.entity.Tables;
+import com.exceptions.NoJoinPossible;
 import com.model.TableModel;
 import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
@@ -34,6 +38,8 @@ import com.util.ColsUtil;
 import com.util.DBUtil;
 
 public class Tesla2 {
+
+	static final Logger logger = Logger.getLogger(Tesla2.class);
 
 	private JFrame frmQuerybuilder;
 	private TableModel tableModel;
@@ -166,6 +172,14 @@ public class Tesla2 {
 			public void mouseClicked(MouseEvent arg0) {
 				table.editCellAt(-1, -1);
 				Tesla2Functions.displyQuery();
+				try {
+					Tesla2Functions.addAutoSuggesstJoins(textArea);
+				} catch (NoJoinPossible e) {
+					logger.error(e.getMessage());
+					JOptionPane.showMessageDialog(null,
+							"Error in Join Conditions! " + e.getMessage());
+				}
+				//Tesla2Functions.displyQuery();
 				tableModel.updateUI();
 				table.scrollRectToVisible(table.getCellRect(
 						table.getRowCount() - 1, 0, true));

@@ -76,8 +76,7 @@ public class Tesla0 extends JFrame {
 
 		JMenuItem mntmLoadQuery = new JMenuItem("Load Query");
 
-		KeyStroke keyStrokeToLoadQuery = KeyStroke.getKeyStroke(KeyEvent.VK_L,
-				KeyEvent.CTRL_DOWN_MASK);
+		KeyStroke keyStrokeToLoadQuery = KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
 		mntmLoadQuery.setAccelerator(keyStrokeToLoadQuery);
 
 		mntmLoadQuery.addActionListener(new ActionListener() {
@@ -86,25 +85,21 @@ public class Tesla0 extends JFrame {
 				String filePath = fileBrowse.getFilePath();
 				if (filePath.length() != 0) {
 					FileIO.getFromTextFile(filePath);
-					if (MasterCommon.selectedDBName != null
-							|| MasterCommon.selectedDBName.length() != 0) {
+					if (MasterCommon.selectedDBName != null || MasterCommon.selectedDBName.length() != 0) {
 						dispose();
 						new Tesla2(selectedTableNames);
 					} else {
-						JOptionPane.showMessageDialog(null,
-								"Please Select a database!");
+						JOptionPane.showMessageDialog(null, "Please Select a database!");
 					}
 				}
 			}
 		});
-		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/load.png")));
+		mntmLoadQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/load.png")));
 		mnFile.add(mntmLoadQuery);
 
 		mntmExecuteQuery = new JMenuItem("Execute Query");
-
-		KeyStroke keyStrokeToExecuteQuery = KeyStroke.getKeyStroke(
-				KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+		mntmExecuteQuery.setToolTipText("Connect Database to Execute Query");
+		KeyStroke keyStrokeToExecuteQuery = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		mntmExecuteQuery.setAccelerator(keyStrokeToExecuteQuery);
 
 		mntmExecuteQuery.setEnabled(false);
@@ -114,8 +109,7 @@ public class Tesla0 extends JFrame {
 				dispose();
 			}
 		});
-		mntmExecuteQuery.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/lightning.png")));
+		mntmExecuteQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/lightning.png")));
 		mnFile.add(mntmExecuteQuery);
 
 		JMenu space = new JMenu("");
@@ -127,12 +121,10 @@ public class Tesla0 extends JFrame {
 
 		JMenuItem mntmAddDatabase = new JMenuItem("New Database Conncetion");
 
-		KeyStroke keyStrokeToNewConnection = KeyStroke.getKeyStroke(
-				KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
+		KeyStroke keyStrokeToNewConnection = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK);
 		mntmAddDatabase.setAccelerator(keyStrokeToNewConnection);
 
-		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/database_add.png")));
+		mntmAddDatabase.setIcon(new ImageIcon(Tesla0.class.getResource("/png/database_add.png")));
 		mntmAddDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new TeslaDBDetails().setVisible(true);
@@ -150,7 +142,6 @@ public class Tesla0 extends JFrame {
 		connNamesTable.setRowHeight(25);
 		initilizeColumn();
 
-
 		dbNamesPane = new JScrollPane(connNamesTable);
 
 		popupMenu = new JPopupMenu();
@@ -162,8 +153,7 @@ public class Tesla0 extends JFrame {
 				btnBuildQuery.setEnabled(true);
 				mntmExecuteQuery.setEnabled(true);
 				tableNames.removeAll(tableNames);
-				tempTableNames = DBUtil.getTables(DBConnectionUtil
-						.getDBDetails(MasterCommon.selectedDBName));
+				tempTableNames = DBUtil.getTables(DBConnectionUtil.getDBDetails(MasterCommon.selectedDBName));
 				tableNames.addAll(tempTableNames);
 				tablesSelects.clear();
 				for (String tableName : tableNames) {
@@ -174,37 +164,30 @@ public class Tesla0 extends JFrame {
 			}
 		});
 
-		mntmConnect.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/database_connect.png")));
+		mntmConnect.setIcon(new ImageIcon(Tesla0.class.getResource("/png/database_connect.png")));
 		popupMenu.add(mntmConnect);
 
 		JMenuItem mntmEditConnection = new JMenuItem("Edit Connection");
 		mntmEditConnection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				MasterCommon.dbConnection = DBConnectionUtil.getAllConnection();
-				new TeslaDBDetails(MasterCommon.selectedDBName)
-						.setVisible(true);
+				new TeslaDBDetails(MasterCommon.selectedDBName).setVisible(true);
 			}
 		});
-		mntmEditConnection.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/edit.png")));
+		mntmEditConnection.setIcon(new ImageIcon(Tesla0.class.getResource("/png/edit.png")));
 		popupMenu.add(mntmEditConnection);
 
 		JMenuItem mntmDeleteConnection = new JMenuItem("Delete Connection");
-		mntmDeleteConnection.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/delete.png")));
+		mntmDeleteConnection.setIcon(new ImageIcon(Tesla0.class.getResource("/png/delete.png")));
 		mntmDeleteConnection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int dialogButton = JOptionPane.YES_NO_OPTION;
 				int dialogResult = JOptionPane.showConfirmDialog(null,
-						"Are you Sure you want to delete this Connection?",
-						"Warning", dialogButton);
+						"Are you Sure you want to delete this Connection?", "Warning", dialogButton);
 
 				if (dialogResult == JOptionPane.YES_OPTION) {
-					DBConnectionUtil
-							.deleteDBConnection(MasterCommon.selectedDBName);
-					MasterCommon.dbConnection = DBConnectionUtil
-							.getAllConnection();
+					DBConnectionUtil.deleteDBConnection(MasterCommon.selectedDBName);
+					MasterCommon.dbConnection = DBConnectionUtil.getAllConnection();
 					dbConnectionsModel.updateUI(MasterCommon.dbConnection);
 				}
 			}
@@ -219,15 +202,11 @@ public class Tesla0 extends JFrame {
 					@Override
 					public void run() {
 						int rowAtPoint = connNamesTable
-								.rowAtPoint(SwingUtilities.convertPoint(
-										popupMenu, new Point(0, 0),
-										connNamesTable));
+								.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), connNamesTable));
 						if (rowAtPoint > -1) {
-							connNamesTable.setRowSelectionInterval(rowAtPoint,
-									rowAtPoint);
+							connNamesTable.setRowSelectionInterval(rowAtPoint, rowAtPoint);
 							selectedDB.setLength(0);
-							selectedDB.append(connNamesTable.getValueAt(
-									rowAtPoint, 0));
+							selectedDB.append(connNamesTable.getValueAt(rowAtPoint, 0));
 							MasterCommon.selectedDBName = selectedDB.toString();
 						}
 					}
@@ -237,12 +216,12 @@ public class Tesla0 extends JFrame {
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-
+				// not required as of now
 			}
 
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-
+				// not required as of now
 			}
 		});
 
@@ -267,18 +246,15 @@ public class Tesla0 extends JFrame {
 					if (tablesSelect.isSelected())
 						tempTableNames.add(tablesSelect.getTableName());
 				}
-				if (MasterCommon.selectedDBName != null
-						|| MasterCommon.selectedDBName.length() != 0) {
+				if (MasterCommon.selectedDBName != null || MasterCommon.selectedDBName.length() != 0) {
 					new Tesla2(tempTableNames);
 					dispose();
 				} else {
-					JOptionPane.showMessageDialog(null,
-							"Please Select a database!");
+					JOptionPane.showMessageDialog(null, "Please Select a database!");
 				}
 			}
 		});
-		btnBuildQuery.setIcon(new ImageIcon(Tesla0.class
-				.getResource("/png/sql-query.png")));
+		btnBuildQuery.setIcon(new ImageIcon(Tesla0.class.getResource("/png/sql-query.png")));
 		btnBuildQuery.setBounds(566, 25, 118, 31);
 		btnBuildQuery.setEnabled(false);
 		contentPane.add(btnBuildQuery);
@@ -292,12 +268,14 @@ public class Tesla0 extends JFrame {
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);
 				}
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					showMenu(e);

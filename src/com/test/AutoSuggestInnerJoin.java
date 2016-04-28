@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.exceptions.NoJoinPossible;
-
 public class AutoSuggestInnerJoin {
 
-	public static void main(String args[]) {
+	public static List<Table> getTableMeta() {
 		String currline;
 		File file = new File("C:/Users/lenovo/Downloads/sakila-db/FK.txt");
 		List<Table> tables = null;
@@ -57,12 +55,7 @@ public class AutoSuggestInnerJoin {
 			e.printStackTrace();
 		}
 		System.out.println(tables);
-		InnerJoinUtil innerJoinUtil = new InnerJoinUtil(tables);
-		try {
-			System.out.println(innerJoinUtil.fetchInnerJoinQuery("staff", "rental"));
-		} catch (NoJoinPossible e) {
-			e.printStackTrace();
-		}
+		return tables;
 	}
 
 	private static Table ifTableExists(List<Table> tables, String[] split) {

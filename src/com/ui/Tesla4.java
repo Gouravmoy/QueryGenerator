@@ -89,9 +89,7 @@ public class Tesla4 extends JFrame {
 		panel.setBounds(10, 11, 792, 199);
 		contentPane.add(panel, BorderLayout.CENTER);
 
-		// textArea.setLineWrap(true);
-
-		JButton btnAddCoulmn = new JButton("ADD COULMN");
+		JButton btnAddCoulmn = new JButton("ADD JOIN");
 		btnAddCoulmn.setIcon(new ImageIcon(Tesla4.class.getResource("/png/addd.png")));
 		btnAddCoulmn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -117,11 +115,6 @@ public class Tesla4 extends JFrame {
 		});
 
 		panel_1.setVisible(true);
-		/*
-		 * String b = textArea.getText().toString(); String htmlText =
-		 * b.replace("select","<font color='#c5c5c5'>select</font>");
-		 * System.out.println(htmlText); textArea.setText(htmlText);
-		 */
 
 		btnAddCoulmn.setBounds(344, 221, 132, 33);
 		contentPane.add(btnAddCoulmn);
