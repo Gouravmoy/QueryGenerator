@@ -1,5 +1,7 @@
 package com.service;
 
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
@@ -9,18 +11,11 @@ import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
-import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
-import com.ui.TeslaTransforms;
-import com.util.QueryColorUtil;
 
-public class TeslaTransFunctions extends TeslaTransforms {
-
-	public TeslaTransFunctions(POJORow pojoRow) {
-		super(pojoRow);
-	}
+public class TeslaTransFunctions {
 
 	public static void initializeCaseTables(JTable tableCase) {
 
@@ -59,13 +54,12 @@ public class TeslaTransFunctions extends TeslaTransforms {
 		TableColumn joinTypeColumn = tableCase.getColumn("Conditions");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
 		joinTypeColumn.setCellEditor(new DropDownCellEditor(
-				MasterCommon.stringConditions));
+				MasterCommon.stringCoalesceConditions));
 
 	}
 
-	public static void displayCaseQuery() {
-		textPane.setText("Case \n");
-		query = "Case \n";
+	public static String displayCaseQuery(ArrayList<CaseRow> caseRows) {
+		String query = " Case \n";
 		String when = " When ";
 		String then = " Then ";
 		for (int i = 0; i < caseRows.size(); i++) {
@@ -99,14 +93,14 @@ public class TeslaTransFunctions extends TeslaTransforms {
 				}
 			}
 		}
-		query = query + "End Case";
-		textPane.setText(QueryColorUtil.queryColorChange(query));
+		return query = query + "End Case \n";
 
 	}
 
-	public static void displayCoalesceQuery() {
+	public static String displayCoalesceQuery(
+			ArrayList<CoalesceRow> coalesceRows) {
 		String tableColString = "";
-		query = "COALESCE (";
+		String query = "COALESCE (";
 		for (int i = 0; i < coalesceRows.size(); i++) {
 			CoalesceRow r2 = coalesceRows.get(i);
 			tableColString = r2.getTableOne().getTableName() + "."
@@ -118,15 +112,18 @@ public class TeslaTransFunctions extends TeslaTransforms {
 			}
 			query += ",";
 		}
-		textPane.setText(QueryColorUtil.queryColorChange(query));
+		return query;
+
 	}
 
-	public static void displayCoalesceQuery_1() {
-		if (txtEnterStringField.getText().equals("")) {
+	public static String displayCoalesceQuery_1(String s) {
+		String query = "";
+		if (s == null) {
 			query = query.substring(0, query.length() - 1);
 		} else {
-			query += "'" + txtEnterStringField.getText() + "')";
+			query += "'" + s + "')";
 		}
+		return query;
 
 	}
 }

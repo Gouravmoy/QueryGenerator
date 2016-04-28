@@ -50,14 +50,15 @@ public class Tesla00 extends JFrame {
 		JWindow window = new JWindow();
 		window.getContentPane().setBackground(new Color(51, 43, 51));
 		window.getContentPane()
-				.add(new JLabel("", new ImageIcon(Tesla00.class.getResource("/png/main2.gif")), SwingConstants.CENTER));
+				.add(new JLabel("", new ImageIcon(Tesla00.class
+						.getResource("/png/main2.gif")), SwingConstants.CENTER));
 		window.setSize(400, 400);
 
 		window.setLocationRelativeTo(null);
 
 		window.setVisible(true);
 		try {
-			/*Thread.sleep(6500);*/
+			/* Thread.sleep(6500); */
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
