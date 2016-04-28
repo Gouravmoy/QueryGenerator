@@ -45,6 +45,7 @@ public class FileIO extends MasterCommon {
 			queryUtil.setSelectTables(listPojoTable);
 			queryUtil.setWhereRows(whereRows);
 			queryUtil.setDbName(MasterCommon.selectedDBName);
+			queryUtil.setAutoJoinModels(autoJoinModels);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
@@ -95,7 +96,8 @@ public class FileIO extends MasterCommon {
 			queryUtil.setConditionRows(joinRows);
 			queryUtil.setSelectTables(listPojoTable);
 			queryUtil.setWhereRows(whereRows);
-			queryUtil.setDbName(MasterCommon.selectedDBName);
+			queryUtil.setDbName(selectedDBName);
+			queryUtil.setAutoJoinModels(autoJoinModels);
 			oos.writeObject(queryUtil);
 			fout.close();
 			oos.close();
@@ -107,11 +109,9 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
-			throws DBAlreadyExists {
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit) throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = masterPath + "DBCredentials//"
-				+ dbDetails.getConnectionName() + ".txt";
+		String path = masterPath + "DBCredentials//" + dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
 		if (!file.exists() || isEdit == false) {
@@ -151,7 +151,8 @@ public class FileIO extends MasterCommon {
 		joinRows.addAll(reconMap.getConditionRows());
 		listPojoTable.addAll(reconMap.getSelectTables());
 		whereRows.addAll(reconMap.getWhereRows());
-		MasterCommon.selectedDBName = reconMap.getDbName();
+		selectedDBName = reconMap.getDbName();
+		autoJoinModels = reconMap.getAutoJoinModels();
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
@@ -196,8 +197,7 @@ public class FileIO extends MasterCommon {
 	public static void deleteDBConnection(String selectedDBName) {
 		try {
 
-			File file = new File(masterPath + "DBCredentials//"
-					+ selectedDBName + ".txt");
+			File file = new File(masterPath + "DBCredentials//" + selectedDBName + ".txt");
 
 			if (file.delete()) {
 				System.out.println(file.getName() + " is deleted!");

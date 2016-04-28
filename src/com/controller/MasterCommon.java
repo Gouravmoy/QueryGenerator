@@ -34,21 +34,20 @@ public class MasterCommon {
 	public static ArrayList<POJORow> caseRows = new ArrayList<POJORow>();
 	public static ArrayList<WhereRow> whereRows = new ArrayList<WhereRow>();
 	public static List<AutoJoinModel> autoJoinModels = new ArrayList<>();
-	public static List<String> innerJoinedTables = new ArrayList<>();  
+	public static List<String> innerJoinedTables = new ArrayList<>();
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 	public static HashMap<String, String> innerJoinMap = new HashMap<String, String>();
 	public static Query mainQuery = new Query();
 	public static String completeQuery = "";
 	public static String completeCaseQuery = "";
-	public static String masterPath = System.getProperty("user.home")
-			+ "//Desktop//Query//";
+	public static String masterPath = System.getProperty("user.home") + "//Desktop//Query//";
 	public static QueryIOUtil queryUtil;
 	public static String selectedDBName;
 
 	public static List<DBDetails> dbConnection = new ArrayList<DBDetails>();
 
-	public static void updateDBCredentials(String schemaName2, String url,
-			String dbName2, String userName2, String password2) {
+	public static void updateDBCredentials(String schemaName2, String url, String dbName2, String userName2,
+			String password2) {
 		schemaName = schemaName2;
 		serverName = url;
 		userName = userName2;
@@ -56,16 +55,14 @@ public class MasterCommon {
 		dbName = dbName2;
 	}
 
-	public static String[] joinTypes = { "SELECT JOIN", "INNER JOIN",
-			"LEFT OUTER JOIN", "RIGHT INNER JOIN", "NO JOIN" };
-	public static String[] relationalOps = { "SELECT RELATION", "EQUAL",
-			"GREATER THAN", "GREATER THAN EQ TO", "LESS THAN",
-			"LESS THAN EQ TO", "BETWEEN", "NOT EQUAL" };
+	public static String[] joinTypes = { "SELECT JOIN", "INNER JOIN", "LEFT OUTER JOIN", "RIGHT INNER JOIN",
+			"NO JOIN" };
+	public static String[] relationalOps = { "SELECT RELATION", "EQUAL", "GREATER THAN", "GREATER THAN EQ TO",
+			"LESS THAN", "LESS THAN EQ TO", "BETWEEN", "NOT EQUAL" };
 	public static String[] andOrs = { "SELECT", "AND", "OR", "END" };
-	public static String[] stringCoalesceConditions = { "", "LTRIM(#)",
-			"RTRIM(#)", "LTRIM(RTRIM(#))" };
-	public static String[] stringConditions = { "", "AVG(#)", "COUNT(#)",
-			"SUM(#)", "LTRIM(#)", "RTRIM(#)", "LTRIM(RTRIM(#))" };
+	public static String[] stringCoalesceConditions = { "", "LTRIM(#)", "RTRIM(#)", "LTRIM(RTRIM(#))" };
+	public static String[] stringConditions = { "", "AVG(#)", "COUNT(#)", "SUM(#)", "LTRIM(#)", "RTRIM(#)",
+			"LTRIM(RTRIM(#))" };
 
 	public static void reInitilizeMasterCommon() {
 		listPojoTable.clear();
@@ -82,6 +79,7 @@ public class MasterCommon {
 		completeCaseQuery = "";
 		queryUtil = new QueryIOUtil();
 		selectedDBName = "";
+		autoJoinModels.clear();
 	}
 
 }
