@@ -28,19 +28,34 @@ public class TeslaTransforms {
 
 	private JFrame frame;
 	private CaseTableModel tableCaseModel;
-	private CoalesceTableModel tableCoalesceModel;
+	protected CoalesceTableModel tableCoalesceModel;
 	public static ArrayList<CaseRow> caseRows;
 	public static ArrayList<CoalesceRow> coalesceRows;
 	private POJORow pojoRow;
 	static JTextPane textPane = new JTextPane();
 	static String query;
-	JTable tableCase;
-	private JTable tableCoalesce;
+	protected static JTable tableCase;
+	protected static JTable tableCoalesce;
 	protected static JTextField txtEnterStringField;
 
 	public TeslaTransforms(POJORow pojoRow) {
 		this.pojoRow = pojoRow;
 		initialize();
+	}
+
+	public TeslaTransforms(POJORow pojoRow, String rowType) {
+		this.pojoRow = pojoRow;
+		initialize();
+		if (rowType.equals("Case")) {
+			caseRows.addAll(pojoRow.getCaseRow());
+			tableCaseModel.fireTableStructureChanged();
+			TeslaTransFunctions.initializeCaseTables();
+		} else if (rowType.equals("Coalesce")) {
+			coalesceRows.addAll(pojoRow.getCoalesceRow());
+			tableCoalesceModel.fireTableStructureChanged();
+			TeslaTransFunctions.initializeCoalesceTables();
+
+		}
 	}
 
 	private void initialize() {
@@ -61,8 +76,8 @@ public class TeslaTransforms {
 
 		tableCase = new JTable();
 		tableCase.setBounds(10, 11, 634, 219);
-		panelCase.add(tableCase);
 		caseRows = new ArrayList<CaseRow>();
+		panelCase.add(tableCase);
 		tableCaseModel = new CaseTableModel(caseRows);
 		tableCase.setModel(tableCaseModel);
 
@@ -104,7 +119,7 @@ public class TeslaTransforms {
 			public void actionPerformed(ActionEvent arg0) {
 				if (pojoRow.getRowType() == null) {
 					pojoRow.setRowType("Coalesce");
-					TeslaTransFunctions.initializeCoalesceTables(tableCoalesce);
+					TeslaTransFunctions.initializeCoalesceTables();
 				}
 				tableCoalesce.editCellAt(-1, -1);
 				if (txtEnterStringField.getText().equals("")) {
@@ -117,9 +132,8 @@ public class TeslaTransforms {
 									true));
 				} else {
 					pojoRow.setCoalesceString(txtEnterStringField.getText());
-					query += TeslaTransFunctions
-							.displayCoalesceQuery_1(txtEnterStringField
-									.getText());
+					query = TeslaTransFunctions.displayCoalesceQuery_1(
+							txtEnterStringField.getText(), query);
 					tableCoalesce.editCellAt(-1, -1);
 					frame.setVisible(false);
 				}
@@ -160,7 +174,7 @@ public class TeslaTransforms {
 			public void actionPerformed(ActionEvent arg0) {
 				if (pojoRow.getRowType() == null) {
 					pojoRow.setRowType("Case");
-					TeslaTransFunctions.initializeCaseTables(tableCase);
+					TeslaTransFunctions.initializeCaseTables();
 				}
 				tableCase.editCellAt(-1, -1);
 				query = TeslaTransFunctions.displayCaseQuery(caseRows);

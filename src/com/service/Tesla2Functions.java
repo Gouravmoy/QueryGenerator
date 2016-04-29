@@ -10,8 +10,6 @@ import org.apache.log4j.Logger;
 import com.controller.MasterCommon;
 import com.entity.AutoJoinModel;
 import com.exceptions.NoJoinPossible;
-import com.pojo.CaseRow;
-import com.pojo.CoalesceRow;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOColumn;
 import com.pojo.POJORow;
@@ -122,9 +120,10 @@ public class Tesla2Functions extends Tesla2 {
 					String query = "";
 					if (r.getCoalesceString() != null) {
 						query = TeslaTransFunctions.displayCoalesceQuery(r.getCoalesceRow());
-						query += TeslaTransFunctions.displayCoalesceQuery_1(r.getCoalesceString());
+						query = TeslaTransFunctions.displayCoalesceQuery_1(r.getCoalesceString(),query);
 					} else {
 						query = TeslaTransFunctions.displayCoalesceQuery(r.getCoalesceRow());
+						query = TeslaTransFunctions.displayCoalesceQuery_1(r.getCoalesceString(),query);
 					}
 					MasterCommon.completeQuery = MasterCommon.completeQuery + query + " as '" + r.getElementname()
 							+ "' , \n";

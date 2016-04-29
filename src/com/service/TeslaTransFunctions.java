@@ -2,7 +2,6 @@ package com.service;
 
 import java.util.ArrayList;
 
-import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
 import com.celleditor.ColumnCellEditor;
@@ -11,13 +10,19 @@ import com.celleditor.TableEditor;
 import com.controller.MasterCommon;
 import com.pojo.CaseRow;
 import com.pojo.CoalesceRow;
+import com.pojo.POJORow;
 import com.renderer.ColumnCellRenderer;
 import com.renderer.DropDownRenderer;
 import com.renderer.TableCellRenderer;
+import com.ui.TeslaTransforms;
 
-public class TeslaTransFunctions {
+public class TeslaTransFunctions extends TeslaTransforms {
 
-	public static void initializeCaseTables(JTable tableCase) {
+	public TeslaTransFunctions(POJORow pojoRow) {
+		super(pojoRow);
+	}
+
+	public static void initializeCaseTables() {
 
 		TableColumn table1Column = tableCase.getColumn("TableOne");
 		table1Column.setCellRenderer(new TableCellRenderer());
@@ -40,18 +45,18 @@ public class TeslaTransFunctions {
 
 	}
 
-	public static void initializeCoalesceTables(JTable tableCase) {
+	public static void initializeCoalesceTables() {
 
-		TableColumn table1Column = tableCase.getColumn("TableOne");
+		TableColumn table1Column = tableCoalesce.getColumn("TableOne");
 		table1Column.setCellRenderer(new TableCellRenderer());
 		table1Column.setCellEditor(new TableEditor(MasterCommon.listPojoTable));
 
-		TableColumn col1Column = tableCase.getColumn("ColumnOne");
+		TableColumn col1Column = tableCoalesce.getColumn("ColumnOne");
 		col1Column.setCellRenderer(new ColumnCellRenderer());
 		col1Column
 				.setCellEditor(new ColumnCellEditor(MasterCommon.listPojoCols));
 
-		TableColumn joinTypeColumn = tableCase.getColumn("Conditions");
+		TableColumn joinTypeColumn = tableCoalesce.getColumn("Conditions");
 		joinTypeColumn.setCellRenderer(new DropDownRenderer());
 		joinTypeColumn.setCellEditor(new DropDownCellEditor(
 				MasterCommon.stringCoalesceConditions));
@@ -116,14 +121,20 @@ public class TeslaTransFunctions {
 
 	}
 
-	public static String displayCoalesceQuery_1(String s) {
-		String query = "";
+	public static String displayCoalesceQuery_1(String s, String query) {
 		if (s == null) {
 			query = query.substring(0, query.length() - 1);
+			query += " )";
 		} else {
 			query += "'" + s + "')";
 		}
 		return query;
 
+	}
+
+	public static void editTableCreate(String rowType) {
+		if (rowType.equals("Case")) {
+
+		}
 	}
 }
