@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.exceptions.DBAlreadyExists;
-import com.exceptions.NoJoinPossible;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOTable;
 import com.util.QueryIOUtil;
