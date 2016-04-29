@@ -48,20 +48,21 @@ public class Tesla2Functions extends Tesla2 {
 			} else {
 				try {
 					if (!(MasterCommon.innerJoinedTables.contains(table1)
-							&& MasterCommon.innerJoinedTables.contains(table2)))
+							&& MasterCommon.innerJoinedTables.contains(table2))) {
 						innerJoinUtil.fetchInnerJoinQuery(table1, table2);
-					if (!MasterCommon.innerJoinedTables.contains(table1))
-						MasterCommon.innerJoinedTables.add(table1);
-					if (!MasterCommon.innerJoinedTables.contains(table2))
-						MasterCommon.innerJoinedTables.add(table2);
-					for (int i = 0; i < MasterCommon.autoJoinModels.size(); i++) {
-						AutoJoinModel autoJoinModel = MasterCommon.autoJoinModels.get(i);
-						MasterCommon.joinRows.add(new InnerJoinRow(
-								new POJOTable(autoJoinModel.getTable1().toUpperCase(),
-										new POJOColumn(autoJoinModel.getColumn1().toUpperCase())),
-								new POJOTable(autoJoinModel.getTable2().toUpperCase(),
-										new POJOColumn(autoJoinModel.getColumn2().toUpperCase())),
-								"INNER JOIN"));
+						if (!MasterCommon.innerJoinedTables.contains(table1))
+							MasterCommon.innerJoinedTables.add(table1);
+						if (!MasterCommon.innerJoinedTables.contains(table2))
+							MasterCommon.innerJoinedTables.add(table2);
+						for (int i = 0; i < MasterCommon.autoJoinModels.size(); i++) {
+							AutoJoinModel autoJoinModel = MasterCommon.autoJoinModels.get(i);
+							MasterCommon.joinRows.add(new InnerJoinRow(
+									new POJOTable(autoJoinModel.getTable1().toUpperCase(),
+											new POJOColumn(autoJoinModel.getColumn1().toUpperCase())),
+									new POJOTable(autoJoinModel.getTable2().toUpperCase(),
+											new POJOColumn(autoJoinModel.getColumn2().toUpperCase())),
+									"INNER JOIN"));
+						}
 					}
 				} catch (NoJoinPossible e) {
 					logger.error(e);
@@ -76,6 +77,17 @@ public class Tesla2Functions extends Tesla2 {
 			textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
 			textArea.setCaretPosition(textArea.getDocument().getLength());
 		}
+	}
+
+	public static void refreshAutoJoinUI(JTextPane textArea) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("FROM \n");
+		for (int i = 0; i < MasterCommon.autoJoinModels.size(); i++) {
+			builder.append(MasterCommon.autoJoinModels.get(i).getJoinStmt().toUpperCase());
+		}
+		MasterCommon.completeQuery += builder.toString();
+		textArea.setText(QueryColorUtil.queryColorChange(MasterCommon.completeQuery).toUpperCase());
+		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
 	public Tesla2Functions(ArrayList<String> tables) {
@@ -98,101 +110,24 @@ public class Tesla2Functions extends Tesla2 {
 						MasterCommon.completeQuery = MasterCommon.completeQuery + r.getTable().getTableName() + "."
 								+ r.getTable().getColumn().getColumnName() + ", \n";
 					}
+				}
 
-				} else if (r.getRowType().equals("Case")) {
-					String caseQuery = "Case \n";
-					for (int j = 0; j < r.getCaseRow().size(); j++) {
-						String value = "";
-						CaseRow r1 = r.getCaseRow().get(j);
-						if (r1.getTableOne().getTableName() == null) {
-							r.getCaseRow().remove(j);
-						} else {
-							if (r1.getConditionString().equals("ELSE")) {
-								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
-								} else {
-									value = "'" + r1.getValueString() + "' \n";
-								}
-								caseQuery = caseQuery + " ELSE " + value;
-
-							} else {
-								if (r1.getValueString().length() == 0) {
-									value = r1.getTableTwo().getTableName() + "."
-											+ r1.getTableTwo().getColumn().getColumnName() + " \n";
-								} else {
-									value = "'" + r1.getValueString() + "' \n";
-								}
-								caseQuery = caseQuery + " When " + r1.getTableOne().getTableName() + "."
-										+ r1.getTableOne().getColumn().getColumnName() + " = '"
-										+ r1.getConditionString() + "' Then " + value;
-							}
-						}
-					}
-
-					// caseQuery = caseQuery + " End Case \n as '" +
-					// r.getElementname() + "' , \n";
-					caseQuery = caseQuery + " End \n as '" + r.getElementname() + "' , \n";// My
-																							// SQL
-																							// Syntax
-					MasterCommon.completeQuery = MasterCommon.completeQuery + caseQuery;
-				} else if (r.getRowType().equals("Coalesce")) {
-					String coalesceQuery = "COALESCE (";
-					for (int k = 0; k < r.getCoalesceRow().size(); k++) {
-						String tableColString = "";
-						CoalesceRow r2 = r.getCoalesceRow().get(k);
-						tableColString += r2.getTableOne().getTableName() + "."
-								+ r2.getTableOne().getColumn().getColumnName();
-						if (!r2.getStringValue().equals("")) {
-							coalesceQuery += r2.getStringValue().replace("#", tableColString);
-						} else {
-							coalesceQuery += tableColString;
-						}
-						coalesceQuery += ",";
-					}
-					if (!r.getCoalesceString().equals("")) {
-						coalesceQuery += "'" + r.getCoalesceString() + "'),";
-					} else {
-						coalesceQuery = coalesceQuery.substring(0, coalesceQuery.length() - 1);
-						coalesceQuery += "),";
-					}
-					MasterCommon.completeQuery = MasterCommon.completeQuery + coalesceQuery;
-					String tableColumn = "";
-					tableColumn = r.getTable().getTableName() + "."
-							+ r.getTable().getColumn().getColumnName();
-					if (r.getConditionString().equals("")) {
-						MasterCommon.completeQuery += tableColumn;
-					} else {
-						MasterCommon.completeQuery += r.getConditionString()
-								.replace("#", tableColumn);
-					}
-					if (r.getElementname().equals("")) {
-						MasterCommon.completeQuery += " , \n";
-					} else {
-						MasterCommon.completeQuery += " as '"
-								+ r.getElementname() + "' ,\n";
-					}
-
-				} else if (r.getRowType().equals("Case")) {
-					String query = TeslaTransFunctions.displayCaseQuery(r
-							.getCaseRow());
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ query + " as '" + r.getElementname() + "' , \n ";
+				 else if (r.getRowType().equals("Case")) {
+					String query = TeslaTransFunctions.displayCaseQuery(r.getCaseRow());
+					MasterCommon.completeQuery = MasterCommon.completeQuery + query + " as '" + r.getElementname()
+							+ "' , \n ";
 					textArea.setText(query);
 
 				} else if (r.getRowType().equals("Coalesce")) {
 					String query = "";
 					if (r.getCoalesceString() != null) {
-						query = TeslaTransFunctions.displayCoalesceQuery(r
-								.getCoalesceRow());
-						query += TeslaTransFunctions.displayCoalesceQuery_1(r
-								.getCoalesceString());
+						query = TeslaTransFunctions.displayCoalesceQuery(r.getCoalesceRow());
+						query += TeslaTransFunctions.displayCoalesceQuery_1(r.getCoalesceString());
 					} else {
-						query = TeslaTransFunctions.displayCoalesceQuery(r
-								.getCoalesceRow());
+						query = TeslaTransFunctions.displayCoalesceQuery(r.getCoalesceRow());
 					}
-					MasterCommon.completeQuery = MasterCommon.completeQuery
-							+ query + " as '" + r.getElementname() + "' , \n";
+					MasterCommon.completeQuery = MasterCommon.completeQuery + query + " as '" + r.getElementname()
+							+ "' , \n";
 					textArea.setText(query);
 				}
 			}
