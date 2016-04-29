@@ -13,9 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.controller.MasterCommon;
 import com.entity.DBDetails;
 import com.exceptions.DBAlreadyExists;
+import com.exceptions.NoJoinPossible;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOTable;
 import com.ui.Tesla2;
@@ -24,6 +27,7 @@ import com.util.QueryUtil;
 
 public class FileIO extends MasterCommon {
 	public static ArrayList<String> valueHolder = new ArrayList<String>();
+	static final Logger logger = Logger.getLogger(FileIO.class);
 
 	public static void writeToText(String filePath) {
 		queryUtil = new QueryIOUtil();
@@ -108,9 +112,11 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit) throws DBAlreadyExists {
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
+			throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = masterPath + "DBCredentials//" + dbDetails.getConnectionName() + ".txt";
+		String path = masterPath + "DBCredentials//"
+				+ dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
 		if (!file.exists() || isEdit == false) {
@@ -195,7 +201,8 @@ public class FileIO extends MasterCommon {
 	public static void deleteDBConnection(String selectedDBName) {
 		try {
 
-			File file = new File(masterPath + "DBCredentials//" + selectedDBName + ".txt");
+			File file = new File(masterPath + "DBCredentials//"
+					+ selectedDBName + ".txt");
 
 			if (file.delete()) {
 				System.out.println(file.getName() + " is deleted!");
