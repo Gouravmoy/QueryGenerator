@@ -174,7 +174,7 @@ public class Tesla2 {
 				try {
 					Tesla2Functions.addAutoSuggesstJoins(textArea);
 				} catch (NoJoinPossible e) {
-					logger.error(e.getMessage());
+					logger.error(e);
 					JOptionPane.showMessageDialog(null, "Error in Join Conditions! " + e.getMessage());
 				}
 				tableModel.updateUI();
