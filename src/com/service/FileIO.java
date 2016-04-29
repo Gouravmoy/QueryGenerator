@@ -21,7 +21,6 @@ import com.exceptions.DBAlreadyExists;
 import com.exceptions.NoJoinPossible;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJOTable;
-import com.ui.Tesla2;
 import com.util.QueryIOUtil;
 import com.util.QueryUtil;
 
@@ -167,7 +166,7 @@ public class FileIO extends MasterCommon {
 			tableHolder.put(i, table.getTableName());
 			valueHolder.add(table.getTableName());
 		}
-		Tesla2Functions.displyQuery(Tesla2.textArea);
+		Tesla2Functions.displyQuery();
 	}
 
 	public static ArrayList<DBDetails> getDBConnectionsFromText() {

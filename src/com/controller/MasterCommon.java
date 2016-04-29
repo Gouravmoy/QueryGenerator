@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import com.entity.AutoJoinModel;
 import com.entity.DBDetails;
 import com.entity.Query;
 import com.entity.Tables;
@@ -32,6 +33,8 @@ public class MasterCommon {
 	public static ArrayList<InnerJoinRow> joinRows = new ArrayList<InnerJoinRow>();
 	public static ArrayList<POJORow> caseRows = new ArrayList<POJORow>();
 	public static ArrayList<WhereRow> whereRows = new ArrayList<WhereRow>();
+	public static List<AutoJoinModel> autoJoinModels = new ArrayList<>();
+	public static List<String> innerJoinedTables = new ArrayList<>();  
 	public static HashMap<Integer, String> tableHolder = new HashMap<Integer, String>();
 	public static HashMap<String, String> innerJoinMap = new HashMap<String, String>();
 	public static Query mainQuery = new Query();
@@ -59,8 +62,10 @@ public class MasterCommon {
 			"GREATER THAN", "GREATER THAN EQ TO", "LESS THAN",
 			"LESS THAN EQ TO", "BETWEEN", "NOT EQUAL" };
 	public static String[] andOrs = { "SELECT", "AND", "OR", "END" };
-	public static String[] stringConditions = { "COUNT(#)", "AVG(#)", "SUM(#)",
-			"LTRIM(#)", "RTRIM(#)", "LTRIM(RTRIM(#))" };
+	public static String[] stringCoalesceConditions = { "", "LTRIM(#)",
+			"RTRIM(#)", "LTRIM(RTRIM(#))" };
+	public static String[] stringConditions = { "", "AVG(#)", "COUNT(#)",
+			"SUM(#)", "LTRIM(#)", "RTRIM(#)", "LTRIM(RTRIM(#))" };
 
 	public static void reInitilizeMasterCommon() {
 		listPojoTable.clear();
