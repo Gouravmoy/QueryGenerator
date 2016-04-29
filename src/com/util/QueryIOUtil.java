@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.entity.AutoJoinModel;
 import com.pojo.InnerJoinRow;
 import com.pojo.POJORow;
 import com.pojo.POJOTable;
@@ -16,7 +17,16 @@ public class QueryIOUtil implements Serializable {
 	List<POJOTable> selectTables;
 	ArrayList<InnerJoinRow> conditionRows;
 	ArrayList<WhereRow> whereRows;
+	List<AutoJoinModel> autoJoinModels;
 	String dbName;
+
+	public List<AutoJoinModel> getAutoJoinModels() {
+		return autoJoinModels;
+	}
+
+	public void setAutoJoinModels(List<AutoJoinModel> autoJoinModels) {
+		this.autoJoinModels = autoJoinModels;
+	}
 
 	public String getDbName() {
 		return dbName;

@@ -29,6 +29,8 @@ public class InnerJoinUtil {
 
 		autoJoinModel = new AutoJoinModel();
 		recursiveInnerJoins = new ArrayList<>();
+		if (table1 == null || table2 == null)
+			return;
 		endPoinStatus = checkIfTablesEndPoints(table1, table2);
 		if (endPoinStatus.split("\\;").length == 2) {
 			throw new NoJoinPossible("Cannot Join " + table1 + " and " + table2);
