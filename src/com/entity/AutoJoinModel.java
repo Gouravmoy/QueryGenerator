@@ -11,8 +11,10 @@ public class AutoJoinModel implements Serializable {
 	String column1;
 	String column2;
 	String joinStmt;
+	boolean isAddedToJoinRow;
 
-	public AutoJoinModel(String table1, String table2, String column1, String column2, String joinStmt) {
+	public AutoJoinModel(String table1, String table2, String column1,
+			String column2, String joinStmt) {
 		super();
 		this.table1 = table1;
 		this.table2 = table2;
@@ -21,14 +23,23 @@ public class AutoJoinModel implements Serializable {
 		this.joinStmt = joinStmt;
 	}
 
+	public boolean isAddedToJoinRow() {
+		return isAddedToJoinRow;
+	}
+
+	public void setAddedToJoinRow(boolean isAddedToJoinRow) {
+		this.isAddedToJoinRow = isAddedToJoinRow;
+	}
+
 	public AutoJoinModel() {
 		super();
 	}
 
 	@Override
 	public String toString() {
-		return "AutoJoinModel [table1=" + table1 + ", table2=" + table2 + ", column1=" + column1 + ", column2="
-				+ column2 + ", joinStmt=" + joinStmt + "]";
+		return "AutoJoinModel [table1=" + table1 + ", table2=" + table2
+				+ ", column1=" + column1 + ", column2=" + column2
+				+ ", joinStmt=" + joinStmt + "]";
 	}
 
 	public String getJoinStmt() {

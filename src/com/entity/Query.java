@@ -51,7 +51,7 @@ public class Query {
 		for (String joinStmt : joinStmts) {
 			query.append(joinStmt + newLine);
 		}
-		if (whereStmts.isEmpty())
+		if (!whereStmts.isEmpty())
 			query.append(" WHERE " + newLine);
 		for (String whereStmt : whereStmts) {
 			query.append(whereStmt + newLine);

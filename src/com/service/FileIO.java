@@ -16,6 +16,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.controller.MasterCommon;
+import com.entity.AutoJoinModel;
 import com.entity.DBDetails;
 import com.exceptions.DBAlreadyExists;
 import com.pojo.InnerJoinRow;
@@ -112,9 +113,11 @@ public class FileIO extends MasterCommon {
 
 	}
 
-	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit) throws DBAlreadyExists {
+	public static void saveDBDetails(DBDetails dbDetails, boolean isEdit)
+			throws DBAlreadyExists {
 		FileOutputStream fout;
-		String path = masterPath + "DBCredentials//" + dbDetails.getConnectionName() + ".txt";
+		String path = masterPath + "DBCredentials//"
+				+ dbDetails.getConnectionName() + ".txt";
 
 		File file = new File(path);
 		if (!file.exists() || isEdit == false) {
@@ -159,6 +162,9 @@ public class FileIO extends MasterCommon {
 		for (InnerJoinRow innerJoinRow : joinRows) {
 			innerJoinRow.setStatus(false);
 		}
+		for (AutoJoinModel autoJoinModel : autoJoinModels) {
+			autoJoinModel.setAddedToJoinRow(false);
+		}
 		QueryUtil.updateInnerJoinMap(joinRows);
 		QueryUtil.buildQuery();
 		for (int i = 0; i < listPojoTable.size(); i++) {
@@ -200,7 +206,8 @@ public class FileIO extends MasterCommon {
 	public static void deleteDBConnection(String selectedDBName) {
 		try {
 
-			File file = new File(masterPath + "DBCredentials//" + selectedDBName + ".txt");
+			File file = new File(masterPath + "DBCredentials//"
+					+ selectedDBName + ".txt");
 
 			if (file.delete()) {
 				System.out.println(file.getName() + " is deleted!");
