@@ -147,6 +147,21 @@ public class TeslaTransforms {
 		coalescebtnDone.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tableCoalesce.editCellAt(-1, -1);
+				if (txtEnterStringField.getText().equals("")) {
+					query = TeslaTransFunctions
+							.displayCoalesceQuery(coalesceRows);
+					textPane.setText(QueryColorUtil.queryColorChange(query));
+					tableCoalesceModel.updateUI(pojoRow);
+					tableCoalesce.scrollRectToVisible(tableCoalesce
+							.getCellRect(tableCoalesce.getRowCount() - 1, 0,
+									true));
+				} else {
+					pojoRow.setCoalesceString(txtEnterStringField.getText());
+					query = TeslaTransFunctions.displayCoalesceQuery_1(
+							txtEnterStringField.getText(), query);
+					tableCoalesce.editCellAt(-1, -1);
+					frame.setVisible(false);
+				}
 				frame.setVisible(false);
 			}
 		});

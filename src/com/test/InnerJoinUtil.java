@@ -95,7 +95,7 @@ public class InnerJoinUtil {
 		return "";
 	}
 
-	private int checkIfDirrectRelExist(String table1, String table2) {
+	public int checkIfDirrectRelExist(String table1, String table2) {
 		List<String> fOKs;
 		String refTableName;
 		String[] fOKSplit;
@@ -103,7 +103,7 @@ public class InnerJoinUtil {
 			if (table1.equalsIgnoreCase(table.getTableName()) || table2.equalsIgnoreCase(table.getTableName())) {
 				fOKs = table.getForeignKeys();
 				if (fOKs == null) {
-
+					return 3;
 				}
 				for (String fOK : fOKs) {
 					fOKSplit = fOK.split("\\|");

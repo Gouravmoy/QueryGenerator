@@ -98,7 +98,7 @@ public class TeslaTransFunctions extends TeslaTransforms {
 				}
 			}
 		}
-		return query = query + "End Case \n";
+		return query = query + "End \n";
 
 	}
 

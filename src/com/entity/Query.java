@@ -47,11 +47,16 @@ public class Query {
 		for (String selectStmt : selectStmts) {
 			query.append(selectStmt + newLine);
 		}
-		query.append(" FROM " + newLine);
+		String queryString = query.toString();
+		if (queryString.endsWith(", \n")) {
+			queryString = queryString.substring(0, queryString.length() - 3);
+		}
+		query = new StringBuilder(queryString);
+		query.append("\n FROM " + newLine);
 		for (String joinStmt : joinStmts) {
 			query.append(joinStmt + newLine);
 		}
-		if (whereStmts.isEmpty())
+		if (!whereStmts.isEmpty())
 			query.append(" WHERE " + newLine);
 		for (String whereStmt : whereStmts) {
 			query.append(whereStmt + newLine);
