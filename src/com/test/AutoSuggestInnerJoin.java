@@ -11,7 +11,7 @@ public class AutoSuggestInnerJoin {
 
 	public static List<Table> getTableMeta() {
 		String currline;
-		File file = new File("C:/Users/VBasidon/Downloads/FOK.txt");
+		File file = new File("C:/Users/GMohanty/Desktop/Query/Temp/FOK.txt");
 		List<Table> tables = null;
 		List<String> POK;
 		List<String> FOK;
