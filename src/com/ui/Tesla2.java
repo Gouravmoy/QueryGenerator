@@ -36,6 +36,7 @@ import com.service.FileIO;
 import com.service.Tesla2Functions;
 import com.util.ColsUtil;
 import com.util.DBUtil;
+import javax.swing.JMenuItem;
 
 public class Tesla2 {
 
@@ -49,8 +50,9 @@ public class Tesla2 {
 	List<POJORow> listRow = new ArrayList<>();
 	int caseCount = 0;
 	static int deleteRow = 0;
-	JButton btnDelete;
-	JButton btnEdit;
+
+	JMenuItem mntmEditTransformation;
+	JMenuItem mntmDeleteTransform;
 
 	public Tesla2(List<String> tempTableNames) {
 		tempTableNames.addAll(FileIO.valueHolder);
@@ -87,6 +89,34 @@ public class Tesla2 {
 
 		table = new JTable();
 		addPopup(table, popupMenu);
+
+		mntmEditTransformation = new JMenuItem("Edit Transform");
+		mntmEditTransformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				popupMenu.setVisible(false);
+				POJORow pojoEditRow = MasterCommon.selectRows.get(deleteRow);
+				new TeslaTransforms(pojoEditRow, MasterCommon.selectRows.get(
+						deleteRow).getRowType());
+			}
+		});
+		mntmEditTransformation.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/edit.png")));
+		popupMenu.add(mntmEditTransformation);
+
+		mntmDeleteTransform = new JMenuItem("Delete Transform");
+		mntmDeleteTransform.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				popupMenu.setVisible(false);
+				MasterCommon.selectRows.remove(deleteRow);
+				tableModel.updateUI();
+				table.editCellAt(-1, -1);
+				Tesla2Functions.displyQuery();
+			}
+		});
+		mntmDeleteTransform.setIcon(new ImageIcon(Tesla2.class
+				.getResource("/png/delete.png")));
+		popupMenu.add(mntmDeleteTransform);
+
 		scrollPane.setViewportView(table);
 		JButton btnAdd = new JButton("ADD");
 		btnAdd.setIcon(new ImageIcon(Tesla2.class.getResource("/png/addd.png")));
@@ -98,28 +128,25 @@ public class Tesla2 {
 
 		Tesla2Functions.displyQuery();
 		Tesla2Functions.refreshAutoJoinUI(textArea);
-		btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				popupMenu.setVisible(false);
-				MasterCommon.selectRows.remove(deleteRow);
-				tableModel.updateUI();
-				table.editCellAt(-1, -1);
-				Tesla2Functions.displyQuery();
-			}
-		});
-		popupMenu.add(btnDelete);
+		/*
+		 * btnDelete = new JButton("Delete"); btnDelete.setIcon(new
+		 * ImageIcon(Tesla2.class.getResource("/png/delete.png")));
+		 * btnDelete.addActionListener(new ActionListener() { public void
+		 * actionPerformed(ActionEvent arg0) { popupMenu.setVisible(false);
+		 * MasterCommon.selectRows.remove(deleteRow); tableModel.updateUI();
+		 * table.editCellAt(-1, -1); Tesla2Functions.displyQuery(); } });
+		 * popupMenu.add(btnDelete);
+		 */
 
-		btnEdit = new JButton("Edit");
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				popupMenu.setVisible(false);
-				POJORow pojoEditRow = MasterCommon.selectRows.get(deleteRow);
-				new TeslaTransforms(pojoEditRow, MasterCommon.selectRows.get(
-						deleteRow).getRowType());
-			}
-		});
-		popupMenu.add(btnEdit);
+		/*
+		 * btnEdit = new JButton("Edit"); btnEdit.setIcon(new
+		 * ImageIcon(Tesla2.class.getResource("/png/edit.png")));
+		 * btnEdit.addActionListener(new ActionListener() { public void
+		 * actionPerformed(ActionEvent arg0) { popupMenu.setVisible(false);
+		 * POJORow pojoEditRow = MasterCommon.selectRows.get(deleteRow); new
+		 * TeslaTransforms(pojoEditRow, MasterCommon.selectRows.get(
+		 * deleteRow).getRowType()); } }); popupMenu.add(btnEdit);
+		 */
 
 		JButton btnNext = new JButton("NEXT");
 		btnNext.setIcon(new ImageIcon(Tesla2.class.getResource("/png/next.png")));
@@ -226,13 +253,12 @@ public class Tesla2 {
 				popup.show(e.getComponent(), e.getX(), e.getY());
 				deleteRow = e.getY() / 25;
 				if (MasterCommon.selectRows.get(deleteRow).getRowType() == null) {
-					btnEdit.setEnabled(false);
+					mntmEditTransformation.setEnabled(false);
 					popup.show(e.getComponent(), e.getX(), e.getY());
 				} else {
-					btnEdit.setEnabled(true);
+					mntmEditTransformation.setEnabled(true);
 				}
 			}
 		});
 	}
-
 }
