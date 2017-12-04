@@ -92,7 +92,7 @@ public class TeslaS extends JFrame {
 		JLabel lblUsername = new JLabel("UserName");
 		lblUsername.setBounds(378, 27, 88, 14);
 		frame.getContentPane().add(lblUsername);
-
+System.out.println("");
 		textUserName = new JTextField();
 		textUserName.setBounds(476, 24, 86, 20);
 		frame.getContentPane().add(textUserName);
